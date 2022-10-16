@@ -81,7 +81,11 @@ export const EntityStatus: React.FC<Props> = ({ status }) => {
   }
 
   if (status === STATUS.WAITING) {
-    return <StatusPending />;
+    return <StatusPending label="Waiting" />;
+  }
+
+  if (status === STATUS.IN_PROGRESS) {
+    return <StatusPending label="In progress" />;
   }
 
   if (status === STATUS.CANCELED) {
