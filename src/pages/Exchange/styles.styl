@@ -1,0 +1,85 @@
+@require '../../variables.styl'
+
+.addressLink {
+    text-decoration none
+    font-family Courier
+    color #47b8eb
+}
+
+.exchangeContainer {
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.04);
+    border-radius: 4px;
+
+    max-width 560px
+    min-width 560px
+    padding 40px
+}
+
+@media (max-width 600px) {
+    .exchangeContainer {
+        max-width 100%
+        min-width 100%
+        padding 30px 10px
+    }
+}
+
+.itemToken {
+    flex-direction row
+    align-items center
+    padding 14px 24px 12px 22px
+    cursor pointer
+    position relative
+    border 1px solid #dedede90;
+    //margin 10px 20px 10px 0px;
+    margin-bottom 12px;
+    border-radius 5px;
+    width 140px
+    color $NWhite
+
+    .imgToken {
+        max-height 22px
+        height: 22px;
+        width: 22px;
+        //margin-right 8px
+        margin-bottom 2px
+    }
+
+    > span {
+        font-size 17px
+        font-weight 500
+        color rgb(33, 45, 94)
+    }
+
+    &.selected {
+        // color #00ADE8
+        // border-bottom 1px solid #00ADE8
+        background: $NGray3;
+        position relative
+        color: $NBlack
+        border: 4px solid #fff;
+
+        &:after {
+            display none
+            position absolute
+            content ''
+            width: 100%
+            height 2px
+            bottom -2px
+            left 0px
+
+            background: linear-gradient(269.98deg, #69FABC -0.02%, #00ADE8 100%);
+        }
+    }
+}
+
+@media (max-width: 350px) {
+    .itemToken {
+        width 120px !important
+        padding 10px 15px
+
+        > span {
+            14px;
+        }
+    }
+}
