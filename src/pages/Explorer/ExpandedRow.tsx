@@ -68,6 +68,13 @@ const getActionFee = (action: IAction): { isEth: boolean; value: number } => {
     const gasLimit = Number(action.payload.gasUsed);
     const gasPrice = Number(action.payload.gasPrice);
 
+    if (action.type === ACTION_TYPE.lockToken) {
+      return { 
+        isEth: true, 
+        value: (gasPrice * gasLimit) / 1e18 + Number(action.payload.value) / 1e18 
+      };
+    }
+
     return { isEth: true, value: (gasPrice * gasLimit) / 1e18 };
   } else {
     const gasLimit = Number(action.payload.gasLimit || action.payload.gas);
@@ -77,6 +84,12 @@ const getActionFee = (action: IAction): { isEth: boolean; value: number } => {
 
     if (action.type === ACTION_TYPE.depositOne) {
       value = (gasPrice * gasLimit) / 1e18 + action.depositAmount;
+    }
+
+    if (action.type === ACTION_TYPE.burnToken) {
+      console.log(action.payload)
+      debugger;
+      value = (gasPrice * gasLimit) / 1e18 + Number(action.payload.value) / 1e18;
     }
 
     return { isEth: false, value };
@@ -239,9 +252,9 @@ export const ExpandedRow = observer((props: IExpandedRowProps) => {
                   {props.data.token === TOKEN.HRC20
                     ? token.symbol.slice(1)
                     : `${NETWORK_PREFIX[props.data.network]}${sliceByLength(
-                        token.symbol,
-                        7,
-                      )}`}
+                      token.symbol,
+                      7,
+                    )}`}
                 </a>
               </Box>
             ) : (
