@@ -6,6 +6,7 @@ const BN = require('bn.js');
 
 import { abi as ProxyERC20Abi } from '../out/ProxyHRC20Abi'
 import { layerZeroConfig, getTokenConfig } from '../../config';
+import { TOKEN } from 'stores/interfaces';
 
 interface IHmyMethodsInitParams {
   web3: Web3;
@@ -169,6 +170,17 @@ export class HmyMethodsERC20Web3 {
 
     console.log('Send Fee: ', sendFee);
 
+    let value;
+
+    switch (token.token) {
+      case TOKEN.ONE:
+        value = mulDecimals(amount, decimals).add(new BN(sendFee.nativeFee))
+        break;
+
+      default:  
+        value = sendFee.nativeFee;
+    }
+
     const response = await proxyContract.methods.sendFrom(
       accounts[0], // from
       token.config.chainId,
@@ -178,7 +190,7 @@ export class HmyMethodsERC20Web3 {
       '0x0000000000000000000000000000000000000000', // const
       adapterParams
     ).send({
-      value: sendFee.nativeFee,
+      value,
       from: accounts[0],
       gasLimit: process.env.GAS_LIMIT,
       gasPrice: Number(process.env.GAS_PRICE),

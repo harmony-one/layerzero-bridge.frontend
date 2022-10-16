@@ -6,11 +6,28 @@ import { Error } from 'ui';
 import cn from 'classnames';
 import * as styles from './feeds.styl';
 import { useStores } from 'stores';
-import { ACTION_TYPE, IAction, IOperation, STATUS, TOKEN } from 'stores/interfaces';
+import { ACTION_TYPE, EXCHANGE_MODE, IAction, IOperation, STATUS, TOKEN } from 'stores/interfaces';
 import { dateTimeFormat, truncateAddressString } from '../../utils';
 import { getStepsTitle } from './steps-constants';
 import axios from 'axios';
+
+const hmyRPCUrl = "https://api.harmony.one";
 // import { AddTokenPanel } from './AddTokenPanel';
+
+const getHmyTransactionByHash = async (hash) => {
+  const res = await axios.post(hmyRPCUrl, {
+    jsonrpc: '2.0',
+    method: 'hmyv2_getTransactionByHash',
+    params: [hash],
+    id: 1,
+  });
+
+  if (!res.data?.result && res.data.error) {
+    throw res.data.error.message;
+  }
+
+  return res.data.result;
+};
 
 interface isLayerZeroOperation {
   "srcUaAddress": string,
@@ -28,34 +45,11 @@ interface isLayerZeroOperation {
   "status": string,
 }
 
-const LayerZeroLink = observer<{ hash: string, textClassName: string }>(({ hash, textClassName }) => {
-  const [loaded, setLoaded] = React.useState(false);
-  const [link, setLink] = React.useState('');
-
-  React.useEffect(() => {
-    axios.get(`https://api-mainnet.layerzero-scan.com/tx/${hash}`)
-      .then((res) => {
-        console.log(111, res, hash);
-
-        const lz: isLayerZeroOperation = res.data?.messages[0] || {};
-
-        setLink(`https://layerzeroscan.com/${lz.srcChainId}/address/${lz.srcUaAddress}/message/${lz.dstChainId}/address/${lz.dstUaAddress}/nonce/${lz.srcUaNonce}`);
-
-        setLoaded(true);
-      })
-  }, []);
-
-  if (!loaded) {
-    return null;
-  }
-
-  return <Box direction="row" justify="between">
-    <Text className={textClassName}>Layer zero tx:</Text>
-    <a href={link} target="_blank">
-      {truncateAddressString(hash, 10)}
-    </a>
-  </Box>
-});
+const layerZeroStatus = {
+  INFLIGHT: 'In progress',
+  DELIVERED: 'Success',
+  waiting: 'Waiting'
+}
 
 const StepRow = observer(
   ({
@@ -80,39 +74,49 @@ const StepRow = observer(
     // const [loaded, setLoaded] = React.useState(false);
     const [link, setLink] = React.useState('');
     const [lz, setLZ] = React.useState({ status: STATUS.WAITING } as isLayerZeroOperation);
+    const [layerZeroHash, setLayerZeroHash] = React.useState('');
 
     const label =
       getStepsTitle(action.type, token, exchange.network) || action.type;
 
-    const isLayerZeroStep = operation.actions[number - 1]?.status === STATUS.SUCCESS && (action.type === ACTION_TYPE.unlockToken || action.type === ACTION_TYPE.mintToken);
+    // operation.actions[number - 1]?.status === STATUS.SUCCESS &&  
+    const isLayerZeroStep = (action.type === ACTION_TYPE.unlockToken || action.type === ACTION_TYPE.mintToken);
 
-    let layerZeroHash = '';
-
-    if (isLayerZeroStep) {
-      layerZeroHash = operation.actions.find(a => a.type === ACTION_TYPE.lockToken || a.type === ACTION_TYPE.burnToken).transactionHash;
-    }
-
-    const load = React.useCallback((stopRepeat = false) => {
+    const load = React.useCallback(async (stopRepeat = false) => {
       if (isLayerZeroStep) {
-        axios.get(`https://api-mainnet.layerzero-scan.com/tx/${layerZeroHash}`)
+        const lzHash = exchange.operation.actions.find(a => a.type === ACTION_TYPE.lockToken || a.type === ACTION_TYPE.burnToken).transactionHash;
+
+        setLayerZeroHash(lzHash);
+
+        let hash = lzHash;
+
+        if (operation.type === EXCHANGE_MODE.ONE_TO_ETH) {
+          const res = await getHmyTransactionByHash(lzHash);
+          hash = res.ethHash;
+        }
+
+        axios.get(`https://api-mainnet.layerzero-scan.com/tx/${hash}`)
           .then((res) => {
             const lz: isLayerZeroOperation = res.data?.messages[0];
 
             if (!lz) {
-              setLZ({ status: 'Not found' } as any);
-              if(!stopRepeat) {
-                setTimeout(() => load(true), 10000);
-              }
+              setLZ({ status: STATUS.WAITING } as any);
+              // if (!stopRepeat) {
+              //   setTimeout(() => load(true), 10000);
+              // }
             } else {
               setLink(`https://layerzeroscan.com/${lz.srcChainId}/address/${lz.srcUaAddress}/message/${lz.dstChainId}/address/${lz.dstUaAddress}/nonce/${lz.srcUaNonce}`);
               setLZ(lz);
             }
           })
       }
-    }, [layerZeroHash, isLayerZeroStep]);
+    }, [isLayerZeroStep, exchange.operation]);
 
     React.useEffect(() => {
+      const intervalId = setInterval(() => load(), 10000);
       load();
+
+      return () => clearInterval(intervalId);
     }, []);
 
     // if (isLayerZeroStep && !loaded) {
@@ -139,7 +143,7 @@ const StepRow = observer(
         <Text className={textClassName}>{number + 1 + '. ' + label}</Text>
         <Box direction="row" justify="between">
           <Text className={textClassName}>
-            Status: {isLayerZeroStep ? lz.status : statuses[action.status]}
+            Status: {isLayerZeroStep ? layerZeroStatus[lz.status] : statuses[action.status]}
           </Text>
           {action.timestamp && (
             <Text className={textClassName}>
@@ -149,7 +153,7 @@ const StepRow = observer(
         </Box>
 
         {
-          isLayerZeroStep &&
+          isLayerZeroStep && link &&
           <Box direction="row" justify="between">
             <Text className={textClassName}>Layer zero tx:</Text>
             <a href={link} target="_blank">
