@@ -101,14 +101,14 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
           return false;
         }
 
-        if (
-          token.erc20Address.toLowerCase() ===
-            '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' ||
-          token.hrc20Address.toLowerCase() ===
-            '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-        ) {
-          return false;
-        }
+        // if (
+        //   token.erc20Address.toLowerCase() ===
+        //     '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' ||
+        //   token.hrc20Address.toLowerCase() ===
+        //     '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+        // ) {
+        //   return false;
+        // }
 
         if (!search) {
           return true;
@@ -197,6 +197,7 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
                   exchange.setToken(token.type);
 
                   await erc20Select.setToken(token.erc20Address);
+                  routing.push(token.type);
                   onClose();
                 }}
               />

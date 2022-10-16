@@ -107,47 +107,45 @@ export const EthBridge = observer((props: any) => {
   }, []);
 
   useEffect(() => {
-    if (props.match.params.token) {
-      if (
-        [
-          TOKEN.ALL,
-          TOKEN.LINK,
-          TOKEN.BUSD,
-          TOKEN.ERC20,
-          TOKEN.ETH,
-          TOKEN.ERC721,
-          TOKEN.HRC721,
-          TOKEN.ERC1155,
-          TOKEN.HRC1155,
-          TOKEN.HRC20,
-          TOKEN.ONE,
-        ].includes(props.match.params.token)
-      ) {
-        exchange.setToken(props.match.params.token);
+    if (!props.match.params.token) {
+      return;
+    }
 
-        if (TOKEN.ETH === props.match.params.token) {
-          user.setHRC20Token(process.env.ETH_HRC20);
-          userMetamask.setTokenDetails({
-            name: 'ETH',
-            decimals: '18',
-            erc20Address: '',
-            symbol: 'ETH',
-          });
-        }
-      } else {
-        routing.push(TOKEN.BUSD);
-      }
+    if (
+      ![
+        TOKEN.ALL,
+        TOKEN.LINK,
+        TOKEN.BUSD,
+        TOKEN.ERC20,
+        TOKEN.ETH,
+        TOKEN.ERC721,
+        TOKEN.HRC721,
+        TOKEN.ERC1155,
+        TOKEN.HRC1155,
+        TOKEN.HRC20,
+        TOKEN.ONE,
+      ].includes(props.match.params.token)
+    ) {
+      routing.push(TOKEN.BUSD);
+      return;
+    }
+
+    exchange.setToken(props.match.params.token);
+
+    if (TOKEN.ETH === props.match.params.token) {
+      user.setHRC20Token(process.env.ETH_HRC20);
+      userMetamask.setTokenDetails({
+        name: 'ETH',
+        decimals: '18',
+        erc20Address: '',
+        symbol: 'ETH',
+      });
     }
 
     if (props.match.params.operationId) {
       exchange.setOperationId(props.match.params.operationId);
       exchange.sendOperation(props.match.params.operationId);
     }
-  }, []);
-
-  useEffect(() => {
-    tokens.init();
-    tokens.fetch();
   }, []);
 
   if (isMobile && false) {

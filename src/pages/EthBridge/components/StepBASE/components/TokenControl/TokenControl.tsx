@@ -1,27 +1,23 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
-import { Text, Icon } from '../../../../../../components/Base';
+import React, { useCallback, useMemo } from 'react';
+import { Icon, Text } from '../../../../../../components/Base';
 import { BridgeControl } from '../../../BridgeControl/BridgeControl';
 import { Button } from 'grommet/components/Button';
 import { Box } from 'grommet';
 import { useStores } from '../../../../../../stores';
-import { ModalIds, ModalRegister } from '../../../../../../modals';
-import { TokenChooseModal } from '../../../TokenChooseModal/TokenChooseModal';
+import { ModalIds } from '../../../../../../modals';
 import { observer } from 'mobx-react';
 import { TOKEN } from '../../../../../../stores/interfaces';
 import { isMultiNFT, isNFT } from '../../../../../../stores/Exchange/helpers';
 
 interface Props {}
 
-const selectAllow = [TOKEN.ERC20, TOKEN.HRC20, TOKEN.ALL];
+const selectAllow = [TOKEN.ERC20, TOKEN.HRC20, TOKEN.ALL, TOKEN.ONE, TOKEN.ETH];
 
 const customTokens = [TOKEN.ERC721, TOKEN.HRC721, TOKEN.HRC1155, TOKEN.ERC1155];
 
 export const TokenControl: React.FC<Props> = observer(() => {
   const { routing, exchange } = useStores();
 
-  const isSelectable = [...selectAllow, ...customTokens].includes(
-    exchange.token,
-  );
   const handleChangeToken = useCallback(() => {
     if (selectAllow.includes(exchange.token)) {
       routing.goToModal(ModalIds.BRIDGE_TOKEN_CHOOSE);
@@ -55,7 +51,7 @@ export const TokenControl: React.FC<Props> = observer(() => {
   const centerContent = (
     <Box direction="row" gap="8px">
       <Text size="large">{title}</Text>
-      {isSelectable && <Icon size="10px" glyph="ArrowDownFilled" />}
+      <Icon size="10px" glyph="ArrowDownFilled" />
     </Box>
   );
   return (
@@ -64,11 +60,7 @@ export const TokenControl: React.FC<Props> = observer(() => {
       gap="8px"
       centerContent={
         <Box height="32px" justify="center">
-          {isSelectable ? (
-            <Button onClick={handleChangeToken}>{centerContent}</Button>
-          ) : (
-            centerContent
-          )}
+          <Button onClick={handleChangeToken}>{centerContent}</Button>
         </Box>
       }
       bottomContent={
