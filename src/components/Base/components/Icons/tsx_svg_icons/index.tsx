@@ -5,7 +5,7 @@ export * from './Price';
 export * from './Calendar';
 export * from './CalendarRusal';
 export * from './ArrowD';
-export * from './ArrowDownFilled';
+export * from './ArrowDFIlled';
 export * from './ArrowU';
 export * from './Time';
 export * from './Right';
