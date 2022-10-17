@@ -20,11 +20,6 @@ export const ConfirmTokenBridge: React.FC<Props> = () => {
           Make sure that the token you are bridging has liquidity (or use) on
           Harmony
         </li>
-        <br />
-        <li>
-          Make sure to select the correct token type (if doubt, go to Need Help
-          or FAQ sections)
-        </li>
       </Text>
     </Box>
   );

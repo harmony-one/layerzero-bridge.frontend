@@ -60,7 +60,6 @@ export const InfoNew2 = ({ title }: { title: string }) => (
         </p>
         Thanks
         <br />
-        Horizon bridge team
       </Text>
     </div>
   </Box>

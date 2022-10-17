@@ -18,7 +18,7 @@ import { Price } from './Components';
 import { useStores } from '../../stores';
 import { NETWORK_ICON, NETWORK_PREFIX } from '../../stores/names';
 
-import { isLayerZeroOperation } from '../Exchange/Steps'
+import { isLayerZeroOperation } from '../Exchange/Steps';
 import axios from 'axios';
 
 export interface IExpandedRowProps {
@@ -75,7 +75,8 @@ const getActionFee = (action: IAction): { isEth: boolean; value: number } => {
     if (action.type === ACTION_TYPE.lockToken) {
       return {
         isEth: true,
-        value: (gasPrice * gasLimit) / 1e18 + Number(action.payload.value) / 1e18
+        value:
+          (gasPrice * gasLimit) / 1e18 + Number(action.payload.value) / 1e18,
       };
     }
 
@@ -91,9 +92,9 @@ const getActionFee = (action: IAction): { isEth: boolean; value: number } => {
     }
 
     if (action.type === ACTION_TYPE.burnToken) {
-      console.log(action.payload)
-      debugger;
-      value = (gasPrice * gasLimit) / 1e18 + Number(action.payload.value) / 1e18;
+      console.log(action.payload);
+      value =
+        (gasPrice * gasLimit) / 1e18 + Number(action.payload.value) / 1e18;
     }
 
     return { isEth: false, value };
@@ -126,41 +127,47 @@ const renderActionFee = (action: IAction): string => {
 
 const LayerZeroLink = ({ action, data }) => {
   const [link, setLink] = React.useState(action.payload?.link);
-  const [lz, setLZ] = React.useState({ status: STATUS.WAITING } as isLayerZeroOperation);
+  const [lz, setLZ] = React.useState({
+    status: STATUS.WAITING,
+  } as isLayerZeroOperation);
 
-  const load = React.useCallback(async (stopRepeat = false) => {
-    let hash = action.transactionHash;
+  const load = React.useCallback(
+    async (stopRepeat = false) => {
+      let hash = action.transactionHash;
 
-    axios.get(`https://api-mainnet.layerzero-scan.com/tx/${hash}`)
-      .then((res) => {
-        const lz: isLayerZeroOperation = res.data?.messages[0];
+      axios
+        .get(`https://api-mainnet.layerzero-scan.com/tx/${hash}`)
+        .then(res => {
+          const lz: isLayerZeroOperation = res.data?.messages[0];
 
-        if (!lz) {
-          setLZ({ status: STATUS.WAITING } as any);
-          // if (!stopRepeat) {
-          //   setTimeout(() => load(true), 10000);
-          // }
-        } else {
-          setLink(`https://layerzeroscan.com/${lz.srcChainId}/address/${lz.srcUaAddress}/message/${lz.dstChainId}/address/${lz.dstUaAddress}/nonce/${lz.srcUaNonce}`);
-          setLZ(lz);
-        }
-      })
-  }, [link]);
+          if (!lz) {
+            setLZ({ status: STATUS.WAITING } as any);
+            // if (!stopRepeat) {
+            //   setTimeout(() => load(true), 10000);
+            // }
+          } else {
+            setLink(
+              `https://layerzeroscan.com/${lz.srcChainId}/address/${lz.srcUaAddress}/message/${lz.dstChainId}/address/${lz.dstUaAddress}/nonce/${lz.srcUaNonce}`,
+            );
+            setLZ(lz);
+          }
+        });
+    },
+    [link],
+  );
 
   React.useEffect(() => {
-    if(!link) { 
+    if (!link) {
       load();
     }
   }, [link]);
 
-  return link ? <a
-    className={styles.addressLink}
-    href={link}
-    target="_blank"
-  >
-    {truncateAddressString(action.transactionHash, 9)}
-  </a> : null
-}
+  return link ? (
+    <a className={styles.addressLink} href={link} target="_blank">
+      {truncateAddressString(action.transactionHash, 9)}
+    </a>
+  ) : null;
+};
 
 // export const ExpandedRow = observer((props: IExpandedRowProps) => {
 //   return (
@@ -215,7 +222,8 @@ export const ExpandedRow = observer((props: IExpandedRowProps) => {
     <Box direction="column" pad={{ bottom: 'small' }}>
       {props.data.actions.map(action => {
         const isLayerZeroStep =
-          (action.type === ACTION_TYPE.unlockToken || action.type === ACTION_TYPE.mintToken);
+          action.type === ACTION_TYPE.unlockToken ||
+          action.type === ACTION_TYPE.mintToken;
 
         return (
           <Box direction="column" margin={{ top: 'small' }} key={action.id}>
@@ -298,9 +306,9 @@ export const ExpandedRow = observer((props: IExpandedRowProps) => {
                     {props.data.token === TOKEN.HRC20
                       ? token.symbol.slice(1)
                       : `${NETWORK_PREFIX[props.data.network]}${sliceByLength(
-                        token.symbol,
-                        7,
-                      )}`}
+                          token.symbol,
+                          7,
+                        )}`}
                   </a>
                 </Box>
               ) : (
@@ -313,24 +321,23 @@ export const ExpandedRow = observer((props: IExpandedRowProps) => {
                     <Box fill={true} margin={{ left: 'small' }} direction="row">
                       skipped
                     </Box>
-                  ) :
-
-                    isLayerZeroStep ?
-                      <LayerZeroLink data={props.data} action={action} /> :
-                      <a
-                        className={styles.addressLink}
-                        href={
-                          (isEth(action.type)
-                            ? exchange.getExplorerByNetwork(props.data.network)
-                            : process.env.HMY_EXPLORER_URL) +
-                          '/tx/' +
-                          action.transactionHash
-                        }
-                        target="_blank"
-                      >
-                        {truncateAddressString(action.transactionHash, 9)}
-                      </a>
-                  }
+                  ) : isLayerZeroStep ? (
+                    <LayerZeroLink data={props.data} action={action} />
+                  ) : (
+                    <a
+                      className={styles.addressLink}
+                      href={
+                        (isEth(action.type)
+                          ? exchange.getExplorerByNetwork(props.data.network)
+                          : process.env.HMY_EXPLORER_URL) +
+                        '/tx/' +
+                        action.transactionHash
+                      }
+                      target="_blank"
+                    >
+                      {truncateAddressString(action.transactionHash, 9)}
+                    </a>
+                  )}
                 </Box>
               )}
 
@@ -352,8 +359,8 @@ export const ExpandedRow = observer((props: IExpandedRowProps) => {
               </Box>
             </Box>
           </Box>
-        )
+        );
       })}
-    </Box >
+    </Box>
   );
 });
