@@ -153,16 +153,16 @@ export const lightTheme: any = {
 
   selectPresetFilter: {
     option: {
-      backgroundColorFocused: palette.NGray,
-      backgroundColorSelected: palette.NGray2,
+      backgroundColorFocused: palette.NGray4,
+      backgroundColorSelected: palette.NGray3,
     },
     control: {
       borderColor: palette.NWhite,
-      backgroundColor: palette.NBlack2,
+      backgroundColor: palette.NWhite,
     },
     menu: {
       borderColor: palette.NWhite,
-      backgroundColor: palette.StandardBlack,
+      backgroundColor: palette.NWhite,
     },
   },
 

@@ -85,6 +85,13 @@ export const Status: React.FC<Props> = observer(() => {
       style={{ background: '#dedede40' }}
     >
       {icon()}
+
+      {exchange.operation && (
+        <Box margin={{ top: 'medium' }} pad={{ horizontal: 'small' }}>
+          <Text align="center">Operation ID:</Text>
+          <Text align="center">{exchange.operation.id}</Text>
+        </Box>
+      )}
       <Box
         className={styles.description}
         margin={{ top: 'medium' }}
