@@ -110,7 +110,7 @@ export const tokensConfigs: ITokenInfo[] = [
         proxyERC20: '0x98e871aB1cC7e3073B6Cc1B661bE7cA678A33f7F',
         proxyHRC20: '0x10681e186C5A9565230BADd8c9422bf26C2D8B21',
         name: 'Binance BUSD',
-        symbol: 'BUSD',
+        symbol: 'bscBUSD',
         decimals: '18',
         totalLocked: '0',
         totalSupply: '0',
