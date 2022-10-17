@@ -6,6 +6,7 @@ import { PageContainer } from 'components/PageContainer';
 import { BaseContainer } from 'components/BaseContainer';
 import { Icon } from 'components/Base/components/Icons';
 import { TOKEN } from '../../stores/interfaces';
+import { LayoutCommon } from '../../components/Layouts/LayoutCommon/LayoutCommon';
 
 const formsConfig = [
   {
@@ -39,53 +40,19 @@ export const SupportPage = () => {
   const [questionId, setQuestionId] = useState(-1);
 
   return (
-    <BaseContainer>
-      <PageContainer>
-        <Box className={styles.faqContainer}>
-          <Box direction="row" justify="center" margin={{ bottom: 'medium' }}>
-            <Title
-              style={{
-                // color: '#47b8eb',
-                fontWeight: 600,
-                letterSpacing: 0.2,
-              }}
-              size="large"
-            >
-              Contact the Support
-            </Title>
-          </Box>
-          <Box
-            style={{ background: 'white', borderRadius: 5 }}
-            pad={{ vertical: 'large', horizontal: 'large' }}
-          >
-            <Text>Please select your error type:</Text>
-            <Box margin={{ top: 'xsmall', bottom: 'large' }}>
-              <Select
-                size="full"
-                options={formsConfig.map((f, idx) => ({
-                  text: f.label,
-                  value: idx,
-                }))}
-                // onChange={v => setTimeout(() => setQuestionId(v), 300)}
-                onChange={setQuestionId}
-              />
-            </Box>
-            <Box>
-              {formsConfig[questionId] && (
-                <iframe
-                  sandbox="allow-scripts allow-popups allow-forms allow-same-origin"
-                  width="100%"
-                  height="800px"
-                  style={{ border: 0, overflow: 'auto' }}
-                  src={formsConfig[questionId].iframeUrl}
-                >
-                  Your browser does not allow embedded content.
-                </iframe>
-              )}
-            </Box>
-          </Box>
-        </Box>
-      </PageContainer>
-    </BaseContainer>
+    <LayoutCommon>
+      <Box width="500px" justify="center" margin={{ top: '30px' }}>
+        <iframe
+          sandbox="allow-scripts allow-popups allow-forms allow-same-origin"
+          width="100%"
+          height="660px"
+          style={{ border: 0, overflow: 'hidden', overflowX: 'auto' }}
+          src="https://forms.helpdesk.com?licenseID=1447433401&contactFormID=495f2b1f-ac01-42fa-b21a-eb0b1f8b9cd7"
+        >
+          {' '}
+          Your browser does not allow embedded content.{' '}
+        </iframe>
+      </Box>
+    </LayoutCommon>
   );
 };
