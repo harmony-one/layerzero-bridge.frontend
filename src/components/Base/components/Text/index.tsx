@@ -68,8 +68,8 @@ const TextWrap = styled.div<ITextProps>`
   ${props => props.margin && getMarginCSS(props.margin, props.theme)}
   
   text-transform: ${props => (props.uppercase ? 'uppercase' : '')};
-  line-height: ${props => props.lh || ''}
-  white-space: ${props => (props.nowrap ? 'nowrap' : '')}
+  line-height: ${props => props.lh || ''};
+  white-space: ${props => (props.nowrap ? 'nowrap' : '')};
 `;
 
 export class Text extends React.Component<ITextProps> {
