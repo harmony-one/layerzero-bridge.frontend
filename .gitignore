@@ -31,3 +31,6 @@ yarn-error.log*
 .firebaserc
 
 artifacts
+
+firebase.json
+/dist
