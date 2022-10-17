@@ -85,9 +85,7 @@ export const Explorer = observer((props: any) => {
             </Box>
           )}
           <Box>
-            <Title size="small" color="NWhite">
-              Latest Transactions
-            </Title>
+            <Title size="small">Latest Transactions</Title>
           </Box>
           <Box direction="row" gap="xsmall" align="center">
             {isAuthorized && (

@@ -115,7 +115,7 @@ export const ERC20Token = observer((props: IERC20TokenProps) => {
       ) : (
         <Box direction="row" align="center" gap="4px">
           <img src={token.image} height="16" width="16" />{' '}
-          <Text size="small" margin={{ top: '2px' }}>
+          <Text nowrap size="small" margin={{ top: '2px' }}>
             {sliceByLength(token.symbol, 9)}
           </Text>
         </Box>
@@ -133,3 +133,5 @@ export const ERC20Token = observer((props: IERC20TokenProps) => {
 
   return <Box>{value ? value.toUpperCase() : '--'}</Box>;
 });
+
+ERC20Token.displayName = 'ERC20Token';

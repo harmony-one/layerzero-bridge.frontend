@@ -36,7 +36,7 @@ function getFont(font: string, theme: any) {
   return font || get(theme, 'fonts.text', defaultFont);
 }
 
-interface ITitleProps {
+export interface ITextProps {
   size?: TTextSize;
   text?: string;
   color?: string;
@@ -52,7 +52,7 @@ interface ITitleProps {
   nowrap?: boolean;
 }
 
-const TextWrap = styled.div<ITitleProps>`
+const TextWrap = styled.div<ITextProps>`
   font-family: ${props => getFont(props.fontFamily, props.theme)}};
   font-size: ${props => getFontSize(props.size, props.theme)};
   font-weight: ${props => (props.bold ? '700' : '500')};
@@ -68,11 +68,11 @@ const TextWrap = styled.div<ITitleProps>`
   ${props => props.margin && getMarginCSS(props.margin, props.theme)}
   
   text-transform: ${props => (props.uppercase ? 'uppercase' : '')};
-  line-height: ${props => props.lh || ''}
-  white-space: ${props => (props.nowrap ? 'nowrap' : '')}
+  line-height: ${props => props.lh || ''};
+  white-space: ${props => (props.nowrap ? 'nowrap' : '')};
 `;
 
-export class Text extends React.Component<ITitleProps> {
+export class Text extends React.Component<ITextProps> {
   render() {
     const { text, children } = this.props;
 

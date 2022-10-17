@@ -1,20 +1,29 @@
 import * as React from 'react';
 import { Box } from 'grommet';
 import { observer } from 'mobx-react-lite';
-import { Text } from 'components/Base';
+import { ITextProps, Text } from 'components/Base';
 import { Error } from 'ui';
 import cn from 'classnames';
 import * as styles from './feeds.styl';
 import { useStores } from 'stores';
-import { ACTION_TYPE, EXCHANGE_MODE, IAction, IOperation, STATUS, TOKEN } from 'stores/interfaces';
+import {
+  ACTION_TYPE,
+  EXCHANGE_MODE,
+  IAction,
+  IOperation,
+  STATUS,
+  TOKEN,
+} from 'stores/interfaces';
 import { dateTimeFormat, truncateAddressString } from '../../utils';
 import { getStepsTitle } from './steps-constants';
 import axios from 'axios';
+import styled from 'styled-components';
+import { lighten } from 'polished';
 
-const hmyRPCUrl = "https://api.harmony.one";
+const hmyRPCUrl = 'https://api.harmony.one';
 // import { AddTokenPanel } from './AddTokenPanel';
 
-export const getHmyTransactionByHash = async (hash) => {
+export const getHmyTransactionByHash = async hash => {
   const res = await axios.post(hmyRPCUrl, {
     jsonrpc: '2.0',
     method: 'hmyv2_getTransactionByHash',
@@ -30,26 +39,39 @@ export const getHmyTransactionByHash = async (hash) => {
 };
 
 export interface isLayerZeroOperation {
-  "srcUaAddress": string,
-  "dstUaAddress": string,
-  "updated": number,
-  "created": number,
-  "srcChainId": number,
-  "dstChainId": number,
-  "dstTxHash": string,
-  "dstTxError": null,
-  "srcTxHash": string,
-  "srcBlockHash": string,
-  "srcBlockNumber": string,
-  "srcUaNonce": number,
-  "status": string,
+  srcUaAddress: string;
+  dstUaAddress: string;
+  updated: number;
+  created: number;
+  srcChainId: number;
+  dstChainId: number;
+  dstTxHash: string;
+  dstTxError: null;
+  srcTxHash: string;
+  srcBlockHash: string;
+  srcBlockNumber: string;
+  srcUaNonce: number;
+  status: string;
 }
 
 const layerZeroStatus = {
   INFLIGHT: 'In progress',
   DELIVERED: 'Success',
-  waiting: 'Waiting'
-}
+  waiting: 'Waiting',
+};
+
+const lightLevel: Record<TextState, number> = {
+  default: 0.3,
+  completed: 0,
+  active: 0.3,
+};
+
+type TextState = 'default' | 'active' | 'completed';
+
+const StyledText = styled(Text)<ITextProps & { state?: TextState }>`
+  color: ${props =>
+    lighten(lightLevel[props.state] || 0.1, props.theme.textColor)};
+`;
 
 const StepRow = observer(
   ({
@@ -73,44 +95,58 @@ const StepRow = observer(
 
     // const [loaded, setLoaded] = React.useState(false);
     const [link, setLink] = React.useState('');
-    const [lz, setLZ] = React.useState({ status: STATUS.WAITING } as isLayerZeroOperation);
+    const [lz, setLZ] = React.useState({
+      status: STATUS.WAITING,
+    } as isLayerZeroOperation);
     const [layerZeroHash, setLayerZeroHash] = React.useState('');
 
     const label =
       getStepsTitle(action.type, token, exchange.network) || action.type;
 
-    // operation.actions[number - 1]?.status === STATUS.SUCCESS &&  
-    const isLayerZeroStep = (action.type === ACTION_TYPE.unlockToken || action.type === ACTION_TYPE.mintToken);
+    // operation.actions[number - 1]?.status === STATUS.SUCCESS &&
+    const isLayerZeroStep =
+      action.type === ACTION_TYPE.unlockToken ||
+      action.type === ACTION_TYPE.mintToken;
 
-    const load = React.useCallback(async (stopRepeat = false) => {
-      if (isLayerZeroStep) {
-        const lzHash = exchange.operation.actions.find(a => a.type === ACTION_TYPE.lockToken || a.type === ACTION_TYPE.burnToken).transactionHash;
+    const load = React.useCallback(
+      async (stopRepeat = false) => {
+        if (isLayerZeroStep) {
+          const lzHash = exchange.operation.actions.find(
+            a =>
+              a.type === ACTION_TYPE.lockToken ||
+              a.type === ACTION_TYPE.burnToken,
+          ).transactionHash;
 
-        setLayerZeroHash(lzHash);
+          setLayerZeroHash(lzHash);
 
-        let hash = lzHash;
+          let hash = lzHash;
 
-        if (operation.type === EXCHANGE_MODE.ONE_TO_ETH) {
-          const res = await getHmyTransactionByHash(lzHash);
-          hash = res.ethHash;
+          if (operation.type === EXCHANGE_MODE.ONE_TO_ETH) {
+            const res = await getHmyTransactionByHash(lzHash);
+            hash = res.ethHash;
+          }
+
+          axios
+            .get(`https://api-mainnet.layerzero-scan.com/tx/${hash}`)
+            .then(res => {
+              const lz: isLayerZeroOperation = res.data?.messages[0];
+
+              if (!lz) {
+                setLZ({ status: STATUS.WAITING } as any);
+                // if (!stopRepeat) {
+                //   setTimeout(() => load(true), 10000);
+                // }
+              } else {
+                setLink(
+                  `https://layerzeroscan.com/${lz.srcChainId}/address/${lz.srcUaAddress}/message/${lz.dstChainId}/address/${lz.dstUaAddress}/nonce/${lz.srcUaNonce}`,
+                );
+                setLZ(lz);
+              }
+            });
         }
-
-        axios.get(`https://api-mainnet.layerzero-scan.com/tx/${hash}`)
-          .then((res) => {
-            const lz: isLayerZeroOperation = res.data?.messages[0];
-
-            if (!lz) {
-              setLZ({ status: STATUS.WAITING } as any);
-              // if (!stopRepeat) {
-              //   setTimeout(() => load(true), 10000);
-              // }
-            } else {
-              setLink(`https://layerzeroscan.com/${lz.srcChainId}/address/${lz.srcUaAddress}/message/${lz.dstChainId}/address/${lz.dstUaAddress}/nonce/${lz.srcUaNonce}`);
-              setLZ(lz);
-            }
-          })
-      }
-    }, [isLayerZeroStep, exchange.operation]);
+      },
+      [isLayerZeroStep, exchange.operation],
+    );
 
     React.useEffect(() => {
       const intervalId = setInterval(() => load(), 10000);
@@ -129,6 +165,12 @@ const StepRow = observer(
       completed ? styles.completed : '',
     );
 
+    const textState: TextState = active
+      ? 'active'
+      : completed
+      ? 'completed'
+      : 'default';
+
     const explorerUrl =
       (isEth(action.type)
         ? exchange.config.explorerURL
@@ -140,40 +182,46 @@ const StepRow = observer(
         style={{ borderBottom: '1px solid #dedede' }}
         margin={{ bottom: 'medium' }}
       >
-        <Text className={textClassName}>{number + 1 + '. ' + label}</Text>
+        <StyledText state={textState}>{number + 1 + '. ' + label}</StyledText>
         <Box direction="row" justify="between">
-          <Text className={textClassName}>
-            Status: {isLayerZeroStep ? layerZeroStatus[lz.status] : statuses[action.status]}
-          </Text>
+          <StyledText state={textState}>
+            Status:{' '}
+            {isLayerZeroStep
+              ? layerZeroStatus[lz.status]
+              : statuses[action.status]}
+          </StyledText>
           {action.timestamp && (
-            <Text className={textClassName}>
+            <StyledText state={textState}>
               {dateTimeFormat(action.timestamp * 1000)}
-            </Text>
+            </StyledText>
           )}
         </Box>
 
-        {
-          isLayerZeroStep && link &&
+        {isLayerZeroStep && link && (
           <Box direction="row" justify="between">
-            <Text className={textClassName}>Layer zero tx:</Text>
+            <StyledText state={textState}>Layer zero tx:</StyledText>
             <a href={link} target="_blank">
               {truncateAddressString(layerZeroHash, 10)}
             </a>
           </Box>
-        }
+        )}
 
-        {(action.transactionHash && action.transactionHash !== 'skip' && !isLayerZeroStep) ? (
+        {action.transactionHash &&
+        action.transactionHash !== 'skip' &&
+        !isLayerZeroStep ? (
           <Box direction="row" justify="between">
-            <Text className={textClassName}>Tx hash: </Text>
+            <StyledText state={textState}>Tx hash: </StyledText>
             <a href={explorerUrl + action.transactionHash} target="_blank">
               {truncateAddressString(action.transactionHash, 10)}
             </a>
           </Box>
         ) : null}
 
-        {(action.transactionHash && action.transactionHash === 'skip' && !isLayerZeroStep) ? (
+        {action.transactionHash &&
+        action.transactionHash === 'skip' &&
+        !isLayerZeroStep ? (
           <Box direction="row" justify="between">
-            <Text className={textClassName}>Operation was skipped</Text>
+            <StyledText state={textState}>Operation was skipped</StyledText>
           </Box>
         ) : null}
 
@@ -209,7 +257,7 @@ const StepRow = observer(
         )}
 
         {action.message && (
-          <Text className={textClassName}>{action.message}</Text>
+          <StyledText state={textState}>{action.message}</StyledText>
         )}
         {!isLayerZeroStep && action.error && <Error error={action.error} />}
         {isLayerZeroStep && lz.dstTxError && <Error error={lz.dstTxError} />}
@@ -299,4 +347,3 @@ export const Steps = observer(() => {
 });
 
 Steps.displayName = 'Steps';
-
