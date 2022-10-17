@@ -14,7 +14,7 @@ import axios from 'axios';
 const hmyRPCUrl = "https://api.harmony.one";
 // import { AddTokenPanel } from './AddTokenPanel';
 
-const getHmyTransactionByHash = async (hash) => {
+export const getHmyTransactionByHash = async (hash) => {
   const res = await axios.post(hmyRPCUrl, {
     jsonrpc: '2.0',
     method: 'hmyv2_getTransactionByHash',
@@ -29,7 +29,7 @@ const getHmyTransactionByHash = async (hash) => {
   return res.data.result;
 };
 
-interface isLayerZeroOperation {
+export interface isLayerZeroOperation {
   "srcUaAddress": string,
   "dstUaAddress": string,
   "updated": number,

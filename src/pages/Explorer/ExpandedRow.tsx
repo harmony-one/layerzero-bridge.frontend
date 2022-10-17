@@ -6,6 +6,7 @@ import {
   EXCHANGE_MODE,
   IAction,
   IOperation,
+  STATUS,
   TOKEN,
 } from 'stores/interfaces';
 import * as styles from './styles.styl';
@@ -16,6 +17,9 @@ import { Text } from '../../components/Base';
 import { Price } from './Components';
 import { useStores } from '../../stores';
 import { NETWORK_ICON, NETWORK_PREFIX } from '../../stores/names';
+
+import { isLayerZeroOperation } from '../Exchange/Steps'
+import axios from 'axios';
 
 export interface IExpandedRowProps {
   data: IOperation;
@@ -69,9 +73,9 @@ const getActionFee = (action: IAction): { isEth: boolean; value: number } => {
     const gasPrice = Number(action.payload.gasPrice);
 
     if (action.type === ACTION_TYPE.lockToken) {
-      return { 
-        isEth: true, 
-        value: (gasPrice * gasLimit) / 1e18 + Number(action.payload.value) / 1e18 
+      return {
+        isEth: true,
+        value: (gasPrice * gasLimit) / 1e18 + Number(action.payload.value) / 1e18
       };
     }
 
@@ -119,6 +123,44 @@ const renderActionFee = (action: IAction): string => {
     return fee.value + ' ONE';
   }
 };
+
+const LayerZeroLink = ({ action, data }) => {
+  const [link, setLink] = React.useState(action.payload?.link);
+  const [lz, setLZ] = React.useState({ status: STATUS.WAITING } as isLayerZeroOperation);
+
+  const load = React.useCallback(async (stopRepeat = false) => {
+    let hash = action.transactionHash;
+
+    axios.get(`https://api-mainnet.layerzero-scan.com/tx/${hash}`)
+      .then((res) => {
+        const lz: isLayerZeroOperation = res.data?.messages[0];
+
+        if (!lz) {
+          setLZ({ status: STATUS.WAITING } as any);
+          // if (!stopRepeat) {
+          //   setTimeout(() => load(true), 10000);
+          // }
+        } else {
+          setLink(`https://layerzeroscan.com/${lz.srcChainId}/address/${lz.srcUaAddress}/message/${lz.dstChainId}/address/${lz.dstUaAddress}/nonce/${lz.srcUaNonce}`);
+          setLZ(lz);
+        }
+      })
+  }, [link]);
+
+  React.useEffect(() => {
+    if(!link) { 
+      load();
+    }
+  }, [link]);
+
+  return link ? <a
+    className={styles.addressLink}
+    href={link}
+    target="_blank"
+  >
+    {truncateAddressString(action.transactionHash, 9)}
+  </a> : null
+}
 
 // export const ExpandedRow = observer((props: IExpandedRowProps) => {
 //   return (
@@ -171,139 +213,147 @@ export const ExpandedRow = observer((props: IExpandedRowProps) => {
 
   return (
     <Box direction="column" pad={{ bottom: 'small' }}>
-      {props.data.actions.map(action => (
-        <Box direction="column" margin={{ top: 'small' }} key={action.id}>
-          <Box
-            direction="row"
-            align="center"
-            justify="end"
-            pad={{ left: 'large' }}
-            style={
-              {
-                // paddingBottom: 16,
-                // borderBottom: '1px solid rgba(222, 222, 222, 0.4)',
+      {props.data.actions.map(action => {
+        const isLayerZeroStep =
+          (action.type === ACTION_TYPE.unlockToken || action.type === ACTION_TYPE.mintToken);
+
+        return (
+          <Box direction="column" margin={{ top: 'small' }} key={action.id}>
+            <Box
+              direction="row"
+              align="center"
+              justify="end"
+              pad={{ left: 'large' }}
+              style={
+                {
+                  // paddingBottom: 16,
+                  // borderBottom: '1px solid rgba(222, 222, 222, 0.4)',
+                }
               }
-            }
-          >
-            <Box
-              className={cn(styles.actionCell, styles.type, styles.first)}
-              style={{ width: 240 }}
-              direction="column"
-              align="start"
             >
-              <Box direction="row" align="center">
-                <img
-                  src={
-                    isEth(action.type)
-                      ? NETWORK_ICON[props.data.network]
-                      : '/one.svg'
-                  }
-                  style={{
-                    marginRight: 15,
-                    marginBottom: 2,
-                    height: isEth(action.type) ? 20 : 18,
-                    width: 'auto',
-                  }}
-                />
-                {getStepsTitle(action, props.data.token)}
-              </Box>
-              {action.error ? <Text color="red">{action.error}</Text> : null}
-            </Box>
-
-            <Box
-              // className={cn(styles.status, styles[action.status])}
-              margin={{ right: '25px' }}
-              style={{ width: 120 }}
-            >
-              <Text color="NWhite">{action.status}</Text>
-            </Box>
-
-            {[
-              ACTION_TYPE.getHRC20Address,
-              ACTION_TYPE.getERC20Address,
-            ].includes(action.type) && !!token ? (
               <Box
-                className={styles.actionCell}
-                style={{ width: 220, paddingLeft: 16 }}
-                align="center"
-                direction="row"
+                className={cn(styles.actionCell, styles.type, styles.first)}
+                style={{ width: 240 }}
+                direction="column"
+                align="start"
               >
-                <a
-                  className={styles.addressLink}
-                  href={
-                    exchange.getExplorerByNetwork(props.data.network) +
-                    '/token/' +
-                    token.erc20Address
-                  }
-                  target="_blank"
-                >
-                  {sliceByLength(token.symbol, 7)}
-                </a>
-                <span style={{ margin: '0 10px' }}>/</span>
-                <a
-                  className={styles.addressLink}
-                  href={
-                    process.env.HMY_EXPLORER_URL +
-                    '/address/' +
-                    token.hrc20Address
-                  }
-                  target="_blank"
-                >
-                  {props.data.token === TOKEN.HRC20
-                    ? token.symbol.slice(1)
-                    : `${NETWORK_PREFIX[props.data.network]}${sliceByLength(
-                      token.symbol,
-                      7,
-                    )}`}
-                </a>
+                <Box direction="row" align="center">
+                  <img
+                    src={
+                      isEth(action.type)
+                        ? NETWORK_ICON[props.data.network]
+                        : '/one.svg'
+                    }
+                    style={{
+                      marginRight: 15,
+                      marginBottom: 2,
+                      height: isEth(action.type) ? 20 : 18,
+                      width: 'auto',
+                    }}
+                  />
+                  {getStepsTitle(action, props.data.token)}
+                </Box>
+                {action.error ? <Text color="red">{action.error}</Text> : null}
               </Box>
-            ) : (
+
               <Box
-                className={styles.actionCell}
-                style={{ width: 220 }}
-                align="center"
+                // className={cn(styles.status, styles[action.status])}
+                margin={{ right: '25px' }}
+                style={{ width: 120 }}
               >
-                {action.transactionHash === 'skip' ? (
-                  <Box fill={true} margin={{ left: 'small' }} direction="row">
-                    skipped
-                  </Box>
-                ) : (
+                <Text color="NWhite">{action.status}</Text>
+              </Box>
+
+              {[
+                ACTION_TYPE.getHRC20Address,
+                ACTION_TYPE.getERC20Address,
+              ].includes(action.type) && !!token ? (
+                <Box
+                  className={styles.actionCell}
+                  style={{ width: 220, paddingLeft: 16 }}
+                  align="center"
+                  direction="row"
+                >
                   <a
                     className={styles.addressLink}
                     href={
-                      (isEth(action.type)
-                        ? exchange.getExplorerByNetwork(props.data.network)
-                        : process.env.HMY_EXPLORER_URL) +
-                      '/tx/' +
-                      action.transactionHash
+                      exchange.getExplorerByNetwork(props.data.network) +
+                      '/token/' +
+                      token.erc20Address
                     }
                     target="_blank"
                   >
-                    {truncateAddressString(action.transactionHash, 9)}
+                    {sliceByLength(token.symbol, 7)}
                   </a>
+                  <span style={{ margin: '0 10px' }}>/</span>
+                  <a
+                    className={styles.addressLink}
+                    href={
+                      process.env.HMY_EXPLORER_URL +
+                      '/address/' +
+                      token.hrc20Address
+                    }
+                    target="_blank"
+                  >
+                    {props.data.token === TOKEN.HRC20
+                      ? token.symbol.slice(1)
+                      : `${NETWORK_PREFIX[props.data.network]}${sliceByLength(
+                        token.symbol,
+                        7,
+                      )}`}
+                  </a>
+                </Box>
+              ) : (
+                <Box
+                  className={styles.actionCell}
+                  style={{ width: 220 }}
+                  align="center"
+                >
+                  {action.transactionHash === 'skip' ? (
+                    <Box fill={true} margin={{ left: 'small' }} direction="row">
+                      skipped
+                    </Box>
+                  ) :
+
+                    isLayerZeroStep ?
+                      <LayerZeroLink data={props.data} action={action} /> :
+                      <a
+                        className={styles.addressLink}
+                        href={
+                          (isEth(action.type)
+                            ? exchange.getExplorerByNetwork(props.data.network)
+                            : process.env.HMY_EXPLORER_URL) +
+                          '/tx/' +
+                          action.transactionHash
+                        }
+                        target="_blank"
+                      >
+                        {truncateAddressString(action.transactionHash, 9)}
+                      </a>
+                  }
+                </Box>
+              )}
+
+              <Box className={styles.actionCell} style={{ width: 160 }}>
+                {action.timestamp
+                  ? dateTimeAgoFormat(action.timestamp * 1000)
+                  : '--'}
+              </Box>
+              <Box className={styles.actionCell} style={{ width: 180 }}>
+                {action.payload ? (
+                  <Price
+                    value={Number(getActionFee(action).value)}
+                    isEth={isEth(action.type)}
+                    network={props.data.network}
+                  />
+                ) : (
+                  '--'
                 )}
               </Box>
-            )}
-
-            <Box className={styles.actionCell} style={{ width: 160 }}>
-              {action.timestamp
-                ? dateTimeAgoFormat(action.timestamp * 1000)
-                : '--'}
-            </Box>
-            <Box className={styles.actionCell} style={{ width: 180 }}>
-              {action.payload ? (
-                <Price
-                  value={Number(getActionFee(action).value)}
-                  isEth={isEth(action.type)}
-                  network={props.data.network}
-                />
-              ) : (
-                '--'
-              )}
             </Box>
           </Box>
-        </Box>
-      ))}
-    </Box>
+        )
+      })}
+    </Box >
   );
 });
