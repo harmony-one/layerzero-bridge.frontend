@@ -62,7 +62,7 @@ function getClientEnvironment(publicUrl) {
         API_MODE: process.env.API_MODE,
         BASE_URL: process.env.BASE_URL,
         HIDE_CONTRACT_BTN: process.env.HIDE_CONTRACT_BTN === 'true',
-        CLIENT_AUTH_HASH: new Buffer(
+        CLIENT_AUTH_HASH: Buffer.from(
           `${process.env.BACKEND_USER}:${process.env.BACKEND_PASSWORD}`,
         ).toString('base64'),
 
