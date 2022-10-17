@@ -106,17 +106,13 @@ export class HmyMethodsERC20Web3 {
     decimals,) => {
     const token = getTokenConfig(hrc20Address);
 
-    console.log(333333, token);
-
     const proxyContract = new this.web3.eth.Contract(
       ProxyERC20Abi as any,
       token.proxyHRC20
     );
 
     // const - 500k gasLimitя
-    const adapterParams = '0x';
-
-    console.log(444, token.config.chainId, userAddr, amount);
+    const adapterParams = token.adapterParams || '0x';
 
     const sendFee = await proxyContract.methods.estimateSendFee(
       token.config.chainId,

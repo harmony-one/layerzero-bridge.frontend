@@ -63,7 +63,7 @@ const isEth = type =>
     'unlockERC1155TokenRollback',
   ].includes(type);
 
-const getActionFee = (action: IAction): { isEth: boolean; value: number } => {
+const getActionFee = (action: IAction, operation: IOperation): { isEth: boolean; value: number } => {
   if (!action || !action.payload || !action.payload.gasPrice) {
     return { isEth: false, value: 0 };
   }
@@ -92,9 +92,13 @@ const getActionFee = (action: IAction): { isEth: boolean; value: number } => {
     }
 
     if (action.type === ACTION_TYPE.burnToken) {
-      console.log(action.payload);
       value =
         (gasPrice * gasLimit) / 1e18 + Number(action.payload.value) / 1e18;
+    }
+
+    if (action.type === ACTION_TYPE.burnToken && operation.token === TOKEN.ONE) {
+      value =
+        (gasPrice * gasLimit) / 1e18 + (Number(action.payload.value) / 1e18 - operation.amount);
     }
 
     return { isEth: false, value };
@@ -105,25 +109,25 @@ export const getOperationFee = (operation: IOperation) => {
   const isEth = operation.type === EXCHANGE_MODE.ETH_TO_ONE;
 
   const actionsFee = operation.actions
-    .map(getActionFee)
+    .map(action => getActionFee(action, operation))
     .filter(a => a.isEth === isEth);
 
   return actionsFee.reduce((acc, action) => acc + action.value, 0);
 };
 
-const renderActionFee = (action: IAction): string => {
-  if (!action || !action.payload || !action.payload.gasPrice) {
-    return '--';
-  }
+// const renderActionFee = (action: IAction): string => {
+//   if (!action || !action.payload || !action.payload.gasPrice) {
+//     return '--';
+//   }
 
-  const fee = getActionFee(action);
+//   const fee = getActionFee(action);
 
-  if (fee.isEth) {
-    return fee.value + ' ETH';
-  } else {
-    return fee.value + ' ONE';
-  }
-};
+//   if (fee.isEth) {
+//     return fee.value + ' ETH';
+//   } else {
+//     return fee.value + ' ONE';
+//   }
+// };
 
 const LayerZeroLink = ({ action, data }) => {
   const [link, setLink] = React.useState(action.payload?.link);
@@ -306,9 +310,9 @@ export const ExpandedRow = observer((props: IExpandedRowProps) => {
                     {props.data.token === TOKEN.HRC20
                       ? token.symbol.slice(1)
                       : `${NETWORK_PREFIX[props.data.network]}${sliceByLength(
-                          token.symbol,
-                          7,
-                        )}`}
+                        token.symbol,
+                        7,
+                      )}`}
                   </a>
                 </Box>
               ) : (
@@ -349,7 +353,7 @@ export const ExpandedRow = observer((props: IExpandedRowProps) => {
               <Box className={styles.actionCell} style={{ width: 180 }}>
                 {action.payload ? (
                   <Price
-                    value={Number(getActionFee(action).value)}
+                    value={Number(getActionFee(action, props.data).value)}
                     isEth={isEth(action.type)}
                     network={props.data.network}
                   />
