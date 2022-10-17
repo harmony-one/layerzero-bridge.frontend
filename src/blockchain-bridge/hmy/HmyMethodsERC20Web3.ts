@@ -158,7 +158,7 @@ export class HmyMethodsERC20Web3 {
     );
 
     // const - 500k gasLimit
-    const adapterParams = '0x';
+    const adapterParams = token.adapterParams || '0x';
 
     const sendFee = await proxyContract.methods.estimateSendFee(
       token.config.chainId,
@@ -195,7 +195,8 @@ export class HmyMethodsERC20Web3 {
       gasLimit: process.env.GAS_LIMIT,
       gasPrice: Number(process.env.GAS_PRICE),
     })
-      .on('transactionHash', sendTxCallback);
+      .on('transactionHash', sendTxCallback
+);
 
     return response;
   };

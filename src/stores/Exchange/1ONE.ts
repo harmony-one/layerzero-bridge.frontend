@@ -98,7 +98,7 @@ export const send1ONEToken = async (params: {
       return;
     }
 
-    const burnToken = getActionByType(ACTION_TYPE.burnToken);
+    const burnToken = getActionByType(ACTION_TYPE.lockToken);
 
     if (burnToken && burnToken.status === STATUS.WAITING) {
       await ethMethods.lockToken(

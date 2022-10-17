@@ -181,7 +181,8 @@ export interface ITokenInfo {
   config?: {
     endpoint: string,
     chainId: number,
-  }
+  },
+  adapterParams?: string;
 }
 
 export interface IIdentityTokenInfo {

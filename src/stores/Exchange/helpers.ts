@@ -11,6 +11,11 @@ export const getContractMethods = (
 
   const exNetwork = getExNetworkMethods();
 
+  return {
+    ethMethods: exNetwork.ethMethodsERC20,
+    hmyMethods: contract.hmyMethodsERC20Web3
+  }
+
   switch (token) {
     case TOKEN.BUSD:
       ethMethods = exNetwork.ethMethodsBUSD;
