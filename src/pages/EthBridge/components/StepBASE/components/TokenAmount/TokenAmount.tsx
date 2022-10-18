@@ -1,13 +1,16 @@
 import React, { useContext } from 'react';
 import { Text } from '../../../../../../components/Base';
 import { BridgeControl } from '../../../BridgeControl/BridgeControl';
-import { isRequired, NumberInput } from '../../../../../../components/Form';
+import {
+  isPositive,
+  isRequired,
+  NumberInput,
+} from '../../../../../../components/Form';
 import { formatWithSixDecimals, moreThanZero } from '../../../../../../utils';
 import { useStores } from '../../../../../../stores';
 import * as s from './TokenAmount.styl';
 import { observer } from 'mobx-react';
 import { TOKEN } from '../../../../../../stores/interfaces';
-import { isNotNFT } from '../../../../../../stores/Exchange/helpers';
 import styled from 'styled-components';
 import cn from 'classnames';
 import { ThemeContext } from '../../../../../../themes/ThemeContext';
@@ -61,6 +64,7 @@ export const TokenAmount: React.FC<Props> = observer(() => {
           border="none"
           delimiter="."
           placeholder="0"
+          rules={[isRequired, isPositive, moreThanZero]}
           style={{ width: '100%', textAlign: 'center' }}
         />
       }

@@ -11,25 +11,12 @@ import { isMultiNFT, isNFT } from '../../../../../../stores/Exchange/helpers';
 
 interface Props {}
 
-const selectAllow = [TOKEN.ERC20, TOKEN.HRC20, TOKEN.ALL, TOKEN.ONE, TOKEN.ETH];
-
-const customTokens = [TOKEN.ERC721, TOKEN.HRC721, TOKEN.HRC1155, TOKEN.ERC1155];
-
 export const TokenControl: React.FC<Props> = observer(() => {
   const { routing, exchange } = useStores();
 
   const handleChangeToken = useCallback(() => {
-    if (selectAllow.includes(exchange.token)) {
-      routing.goToModal(ModalIds.BRIDGE_TOKEN_CHOOSE);
-      return;
-    } else if (customTokens.includes(exchange.token)) {
-      routing.goToModal(ModalIds.BRIDGE_CUSTOM_TOKEN);
-      return;
-    }
-
-    console.error('### unhandled token type', exchange.token);
-    return;
-  }, [routing, exchange, exchange.token]);
+    routing.goToModal(ModalIds.BRIDGE_TOKEN_CHOOSE);
+  }, [routing]);
 
   const title = useMemo(() => {
     const title =

@@ -15,7 +15,11 @@ import * as operationService from 'services';
 import { getDepositAmount, threshold, validators } from 'services';
 
 import * as contract from '../../blockchain-bridge';
-import { getExNetworkMethods, hmyMethodsERC20Web3, initNetworks } from '../../blockchain-bridge';
+import {
+  getExNetworkMethods,
+  hmyMethodsERC20Web3,
+  initNetworks,
+} from '../../blockchain-bridge';
 import { divDecimals, mulDecimals, sleep, uuid } from '../../utils';
 import { sendHrc20Token } from './hrc20';
 import { sendErc721Token } from './erc721';
@@ -29,7 +33,6 @@ import { sendHrc721Token } from './hrc721';
 import { sendHrc1155Token } from './hrc1155';
 import { sendErc1155Token } from './erc1155';
 import * as services from '../../services';
-import { AuthWarning } from '../../components/AuthWarning';
 import { MetamaskWarning } from '../../components/MetamaskWarning';
 import { ValidatorsCountWarning } from '../../components/ValidatorsCountWarning';
 import { ConfirmTokenBridge } from '../../components/ConfirmTokenBridge';
@@ -185,7 +188,8 @@ export class Exchange extends StoreConstructor {
                 !this.stores.userMetamask.isAuthorized)
             ) {
               throw new Error(
-                `Your MetaMask in on the wrong network. Please switch on ${NETWORK_NAME[this.stores.exchange.network]
+                `Your MetaMask in on the wrong network. Please switch on ${
+                  NETWORK_NAME[this.stores.exchange.network]
                 } ${process.env.NETWORK} and try again!`,
               );
             }
@@ -355,13 +359,18 @@ export class Exchange extends StoreConstructor {
                 //   otherOptions,
                 // );
 
-
-                this.depositAmount = Number(((Number(await hmyMethodsERC20Web3.getFee(
-                  this.stores.userMetamask.erc20Address,
-                  this.stores.userMetamask.ethAddress,
-                  this.transaction.amount,
-                  this.stores.userMetamask.erc20TokenDetails.decimals
-                )) / 1e18)).toFixed(0));
+                this.depositAmount = Number(
+                  (
+                    Number(
+                      await hmyMethodsERC20Web3.getFee(
+                        this.stores.userMetamask.erc20Address,
+                        this.stores.userMetamask.ethAddress,
+                        this.transaction.amount,
+                        this.stores.userMetamask.erc20TokenDetails.decimals,
+                      ),
+                    ) / 1e18
+                  ).toFixed(0),
+                );
 
                 this.isFeeLoading = false;
                 break;
@@ -1245,13 +1254,13 @@ export class Exchange extends StoreConstructor {
         this.stores.tokens.allData.some(
           t =>
             t.erc20Address.toLowerCase() ===
-            exchange.transaction.ethAddress.toLowerCase() ||
+              exchange.transaction.ethAddress.toLowerCase() ||
             t.hrc20Address.toLowerCase() ===
-            exchange.transaction.ethAddress.toLowerCase() ||
+              exchange.transaction.ethAddress.toLowerCase() ||
             t.erc20Address.toLowerCase() ===
-            exchange.transaction.oneAddress.toLowerCase() ||
+              exchange.transaction.oneAddress.toLowerCase() ||
             t.hrc20Address.toLowerCase() ===
-            exchange.transaction.oneAddress.toLowerCase(),
+              exchange.transaction.oneAddress.toLowerCase(),
         )
       ) {
         ethBridgeStore.addressValidationError =

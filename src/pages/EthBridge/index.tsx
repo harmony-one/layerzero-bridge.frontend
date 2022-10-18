@@ -111,6 +111,13 @@ export const EthBridge = observer((props: any) => {
       return;
     }
 
+    const tokenTypeFromUrl = props.match.params.token;
+
+    if (tokenTypeFromUrl === TOKEN.ERC20) {
+      routing.push(TOKEN.BUSD);
+      return;
+    }
+
     if (
       ![
         TOKEN.ALL,
@@ -118,21 +125,17 @@ export const EthBridge = observer((props: any) => {
         TOKEN.BUSD,
         TOKEN.ERC20,
         TOKEN.ETH,
-        TOKEN.ERC721,
-        TOKEN.HRC721,
-        TOKEN.ERC1155,
-        TOKEN.HRC1155,
         TOKEN.HRC20,
         TOKEN.ONE,
-      ].includes(props.match.params.token)
+      ].includes(tokenTypeFromUrl)
     ) {
       routing.push(TOKEN.BUSD);
       return;
     }
 
-    exchange.setToken(props.match.params.token);
+    exchange.setToken(tokenTypeFromUrl);
 
-    if (TOKEN.ETH === props.match.params.token) {
+    if (TOKEN.ETH === tokenTypeFromUrl) {
       user.setHRC20Token(process.env.ETH_HRC20);
       userMetamask.setTokenDetails({
         name: 'ETH',
