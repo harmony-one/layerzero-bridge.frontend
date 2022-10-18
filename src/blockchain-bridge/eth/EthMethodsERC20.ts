@@ -7,6 +7,7 @@ const BN = require('bn.js');
 
 import { abi as ProxyERC20Abi } from '../out/ProxyERC20Abi'
 import { layerZeroConfig, getTokenConfig } from '../../config';
+import { TOKEN } from 'stores/interfaces';
 
 export interface IEthMethodsInitParams {
   web3: Web3;
@@ -235,9 +236,11 @@ export class EthMethodsERC20 {
 
     // return transaction.events.Locked;
 
+    const token = getTokenConfig(erc20Address);
+
     const proxyContract = new this.web3.eth.Contract(
       ProxyERC20Abi as any,
-      getTokenConfig(erc20Address).proxyERC20
+      token.proxyERC20
     );
 
     // const - 500k gasLimit
@@ -269,6 +272,17 @@ export class EthMethodsERC20 {
       Number(process.env.ETH_GAS_LIMIT),
     );
 
+    let value;
+
+    switch (token.token) {
+      case TOKEN.ETH:
+        value = mulDecimals(amount, decimals).add(new BN(sendFee.nativeFee))
+        break;
+
+      default:
+        value = sendFee.nativeFee;
+    }
+
     const res = await proxyContract.methods.sendFrom(
       accounts[0], // from user address
       layerZeroConfig.harmony.chainId,
@@ -278,7 +292,7 @@ export class EthMethodsERC20 {
       '0x0000000000000000000000000000000000000000', // const
       adapterParams
     ).send({
-      value: sendFee.nativeFee,
+      value,
       from: accounts[0],
       gas: new BN(gasLimit),
       gasPrice: this.gasPrice ? this.gasPrice : await getGasPrice(this.web3),

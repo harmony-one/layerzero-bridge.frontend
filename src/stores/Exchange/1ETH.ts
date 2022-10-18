@@ -8,7 +8,7 @@ import {
 import { sleep } from 'utils';
 import { ITransaction } from './index';
 import { IStores } from '../index';
-import { hmyMethodsBEP20, hmyMethodsERC20 } from '../../blockchain-bridge/hmy';
+import { hmyMethodsERC20Web3 } from '../../blockchain-bridge/hmy';
 import { getExNetworkMethods } from '../../blockchain-bridge/eth';
 
 export const send1ETHToken = async (params: {
@@ -26,45 +26,25 @@ export const send1ETHToken = async (params: {
     mode,
   } = params;
 
-  let hmyMethodsBase;
-
-  switch (stores.exchange.network) {
-    case NETWORK_TYPE.BINANCE:
-      hmyMethodsBase = hmyMethodsBEP20;
-      break;
-    case NETWORK_TYPE.ETHEREUM:
-      hmyMethodsBase = hmyMethodsERC20;
-      break;
-    default:
-      hmyMethodsBase = hmyMethodsERC20;
-      break;
-  }
-
-  const hmyMethods = stores.user.isMetamask
-    ? hmyMethodsBase.hmyMethodsWeb3
-    : hmyMethodsBase.hmyMethods;
+  let hmyMethods = hmyMethodsERC20Web3;
 
   const externalNetwork = getExNetworkMethods();
 
-  const ethMethods = externalNetwork.ethMethodsBUSD;
+  const ethMethods = externalNetwork.ethMethodsERC20;
 
   if (mode === EXCHANGE_MODE.ETH_TO_ONE) {
+    confirmCallback('skip', ACTION_TYPE.approveEthManger);
+
     const lockToken = getActionByType(ACTION_TYPE.lockToken);
 
     if (lockToken.status === STATUS.WAITING) {
-      if (stores.exchange.network === NETWORK_TYPE.ETHEREUM) {
-        await ethMethods.lockEth(
-          transaction.oneAddress,
-          transaction.amount,
-          hash => confirmCallback(hash, lockToken.type),
-        );
-      } else {
-        await externalNetwork.ethMethodsERC20.lockNative(
-          transaction.oneAddress,
-          transaction.amount,
-          hash => confirmCallback(hash, lockToken.type),
-        );
-      }
+      await ethMethods.lockToken(
+        '',
+        transaction.oneAddress,
+        transaction.amount,
+        18,
+        hash => confirmCallback(hash, lockToken.type),
+      );
     }
 
     return;

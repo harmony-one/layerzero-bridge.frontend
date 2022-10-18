@@ -35,7 +35,7 @@ import { ValidatorsCountWarning } from '../../components/ValidatorsCountWarning'
 import { ConfirmTokenBridge } from '../../components/ConfirmTokenBridge';
 import { EthBridgeStore } from '../../pages/EthBridge/EthBridgeStore';
 import { ITokenInfo } from '../../pages/Exchange';
-import { tokensConfigs } from '../../config';
+import { getTokenConfig, tokensConfigs } from '../../config';
 
 export enum EXCHANGE_STEPS {
   GET_TOKEN_ADDRESS = 'GET_TOKEN_ADDRESS',
@@ -516,7 +516,8 @@ export class Exchange extends StoreConstructor {
     // this.setAddressByMode();
 
     if (token === TOKEN.ETH) {
-      this.stores.user.setHRC20Token(this.config.contracts.nativeTokenHRC20);
+      const token = getTokenConfig('');
+      this.stores.user.setHRC20Token(token.hrc20Address);
       this.stores.userMetamask.erc20Address = '';
 
       this.stores.userMetamask.setTokenDetails({

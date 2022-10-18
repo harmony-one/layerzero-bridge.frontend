@@ -157,6 +157,42 @@ export const tokensConfigs: ITokenInfo[] = [
         image: '/one.svg',
         adapterParams: '0x0001000000000000000000000000000000000000000000000000000000000007a120'
     },
+    {
+        hrc20Address: '0xDC60CcF6Ae05f898F4255EF580E731b4011100Ec',
+        erc20Address: '0x0',
+        proxyERC20: '0x128AEdC7f41ffb82131215e1722D8366faaD0CD4',
+        proxyHRC20: '0x7FFD57563EF54c464f23B5497dd1F54481E4c008',
+        name: 'Binance Coin',
+        symbol: 'BNB',
+        decimals: '18',
+        totalLocked: '0',
+        totalSupply: '0',
+        totalLockedNormal: '0',
+        totalLockedUSD: '0',
+        token: TOKEN.ETH,
+        type: TOKEN.ETH,
+        network: NETWORK_TYPE.BINANCE,
+        image: '/bnb.svg',
+        //  adapterParams: '0x0001000000000000000000000000000000000000000000000000000000000007a120'
+    },
+    {
+        hrc20Address: '0x4cC435d7b9557d54d6EF02d69Bbf72634905Bf11',
+        erc20Address: '0x0',
+        proxyERC20: '0x1Edb8BdeD80E1b87eD19EE7D97Ee80B4fDb615c1',
+        proxyHRC20: '0xA17426d430BCaDb09B0d42992C5BE186f485a4Da',
+        name: 'Ethereum Coin',
+        symbol: 'ETH',
+        decimals: '18',
+        totalLocked: '0',
+        totalSupply: '0',
+        totalLockedNormal: '0',
+        totalLockedUSD: '0',
+        token: TOKEN.ETH,
+        type: TOKEN.ETH,
+        network: NETWORK_TYPE.ETHEREUM,
+        image: '/eth.svg',
+        //  adapterParams: '0x0001000000000000000000000000000000000000000000000000000000000007a120'
+    },
 ];
 
 export const getTokenConfig = (addr: string): ITokenInfo => {
