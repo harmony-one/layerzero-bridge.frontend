@@ -15,6 +15,7 @@ import styled from 'styled-components';
 import { hmyMethodsERC20Web3 } from 'blockchain-bridge/hmy';
 import { getExNetworkMethods } from 'blockchain-bridge/eth';
 import { identity } from 'lodash';
+import { getBech32Address } from '../../blockchain-bridge';
 
 const AssetRow = props => {
   return (
@@ -32,17 +33,29 @@ const AssetRow = props => {
       </Box>
       <Box direction="row" align="center">
         {props.address ? (
-          <a href={props.link}>
-            <Text
-              size="small"
-              style={{
-                fontFamily: 'monospace',
-                cursor: 'pointer',
-                // textDecoration: 'underline',
-              }}
-            >
-              {props.value}
-            </Text>
+          <a
+            href={props.link}
+            target="_blank"
+            style={{ textDecoration: 'none' }}
+          >
+            <Box direction="row">
+              <Text
+                size="small"
+                style={{
+                  fontFamily: 'monospace',
+                  cursor: 'pointer',
+                  // textDecoration: 'underline',
+                }}
+              >
+                {props.value}
+              </Text>
+              <Icon
+                glyph="PrintFormCopy"
+                size="20px"
+                color="NBlue"
+                style={{ marginLeft: 10, width: 20 }}
+              />
+            </Box>
           </a>
         ) : (
           <>
@@ -55,14 +68,6 @@ const AssetRow = props => {
           <Text style={{ marginLeft: 5 }} color="Basic500">
             {props.after}
           </Text>
-        )}
-        {props.address && (
-          <Icon
-            glyph="PrintFormCopy"
-            size="20px"
-            color="NBlue"
-            style={{ marginLeft: 10, width: 20 }}
-          />
         )}
       </Box>
     </Box>
@@ -155,7 +160,7 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
             <AssetRow
               label={`${String(
                 userMetamask.erc20TokenDetails &&
-                userMetamask.erc20TokenDetails.symbol,
+                  userMetamask.erc20TokenDetails.symbol,
               ).toUpperCase()} amount`}
               value={formatWithSixDecimals(
                 exchange.transaction.amount.toString(),
@@ -169,16 +174,16 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
             <>
               {Array.isArray(exchange.transaction.amount)
                 ? exchange.transaction.amount.map((amount, idx) => (
-                  <AssetRow
-                    key={idx}
-                    showIds={true}
-                    label={`${String(
-                      userMetamask.erc20TokenDetails &&
-                      userMetamask.erc20TokenDetails.symbol,
-                    ).toUpperCase()} token ID`}
-                    value={amount}
-                  />
-                ))
+                    <AssetRow
+                      key={idx}
+                      showIds={true}
+                      label={`${String(
+                        userMetamask.erc20TokenDetails &&
+                          userMetamask.erc20TokenDetails.symbol,
+                      ).toUpperCase()} token ID`}
+                      value={amount}
+                    />
+                  ))
                 : null}
             </>
           );
@@ -233,6 +238,7 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
             exchange.transaction.ethAddress,
             isMobile ? 7 : 12,
           )}
+          link={`${exchange.config.explorerURL}/token/${userMetamask.erc20Address}`}
           address={true}
         />
         <AssetRow
@@ -241,13 +247,16 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
             exchange.transaction.oneAddress,
             isMobile ? 7 : 12,
           )}
+          link={`${process.env.HMY_EXPLORER_URL}/address/${getBech32Address(
+            exchange.transaction.oneAddress,
+          )}?activeTab=3`}
           address={true}
         />
         {getAmount()}
 
         {getImage()}
 
-        {exchange.mode === EXCHANGE_MODE.ONE_TO_ETH ?
+        {exchange.mode === EXCHANGE_MODE.ONE_TO_ETH ? (
           <AssetRow label="Comission amount" value="">
             {!exchange.isDepositAmountLoading ? (
               <Price
@@ -258,10 +267,9 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
               />
             ) : (
               <Text>...loading</Text>
-            )
-            }
+            )}
           </AssetRow>
-          : null}
+        ) : null}
 
         {/*<DataItem*/}
         {/*  icon="User"*/}
@@ -317,8 +325,8 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
             ) : null}
 
             {!exchange.isFeeLoading &&
-              exchange.mode === EXCHANGE_MODE.ONE_TO_ETH &&
-              isShowDetail ? (
+            exchange.mode === EXCHANGE_MODE.ONE_TO_ETH &&
+            isShowDetail ? (
               <div style={{ opacity: 1 }}>
                 <AssetRow label="Approve" value="">
                   <Price
@@ -362,8 +370,8 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
             ) : null}
 
             {!exchange.isFeeLoading &&
-              exchange.mode === EXCHANGE_MODE.ETH_TO_ONE &&
-              isShowDetail ? (
+            exchange.mode === EXCHANGE_MODE.ETH_TO_ONE &&
+            isShowDetail ? (
               <div style={{ opacity: 1 }}>
                 <AssetRow label="Approve (~50000 gas)" value="">
                   <Price
@@ -454,7 +462,7 @@ export const TokenDetails = observer<{ showTotal?: boolean; children?: any }>(
           value={userMetamask.erc20TokenDetails.symbol}
         />
         {exchange.mode === EXCHANGE_MODE.ETH_TO_ONE &&
-          userMetamask.ethAddress ? (
+        userMetamask.ethAddress ? (
           <AssetRow
             label="User Ethereum Balance"
             value={formatWithSixDecimals(userMetamask.erc20Balance)}
