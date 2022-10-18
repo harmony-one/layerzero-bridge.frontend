@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import { Text } from '../../../../../../components/Base';
 import { BridgeControl } from '../../../BridgeControl/BridgeControl';
 import {
+  isLess,
   isPositive,
   isRequired,
   NumberInput,
@@ -25,22 +26,31 @@ const BridgeControlStyled = styled(BridgeControl)`
 export const TokenAmount: React.FC<Props> = observer(() => {
   const { exchange } = useStores();
 
-  let maxAmount = '';
-  if (
-    ![TOKEN.ERC721, TOKEN.HRC721, TOKEN.ERC1155, TOKEN.HRC1155].includes(
-      exchange.token,
-    )
-  ) {
-    maxAmount = formatWithSixDecimals(exchange.tokenInfo.maxAmount);
-  } else if ([TOKEN.ERC1155, TOKEN.HRC1155].includes(exchange.token)) {
-    maxAmount = exchange.tokenInfo.maxAmount;
-  }
+  const maxAmount = useMemo(() => {
+    if (
+      ![TOKEN.ERC721, TOKEN.HRC721, TOKEN.ERC1155, TOKEN.HRC1155].includes(
+        exchange.token,
+      )
+    ) {
+      return formatWithSixDecimals(exchange.tokenInfo.maxAmount);
+    }
 
-  const handleMaxAmount = () => {
+    if ([TOKEN.ERC1155, TOKEN.HRC1155].includes(exchange.token)) {
+      return exchange.tokenInfo.maxAmount;
+    }
+
+    return '';
+  }, [exchange.token, exchange.tokenInfo.maxAmount]);
+
+  const handleMaxAmount = useCallback(() => {
     exchange.transaction.amount = maxAmount;
-  };
+  }, [exchange.transaction.amount, maxAmount]);
 
   const themeContext = useContext(ThemeContext);
+
+  const isLessThenMaxAmount = useMemo(() => {
+    return isLess(Number(maxAmount), 'Not enough balance');
+  }, [maxAmount]);
 
   return (
     <BridgeControlStyled
@@ -64,7 +74,7 @@ export const TokenAmount: React.FC<Props> = observer(() => {
           border="none"
           delimiter="."
           placeholder="0"
-          rules={[isRequired, isPositive, moreThanZero]}
+          rules={[isRequired, isPositive, moreThanZero, isLessThenMaxAmount]}
           style={{ width: '100%', textAlign: 'center' }}
         />
       }

@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { autorun } from 'mobx';
+import { autorun, observable } from 'mobx';
 import { observer, PropTypes } from 'mobx-react';
 import * as React from 'react';
 import { checkIsRequired } from '../helpers';
@@ -54,8 +54,7 @@ export class MobxFormItem extends React.Component<IMobxFormItemProps> {
     defaultItemProps: object;
   };
 
-  public displayName = 'MobxFormItem';
-
+  @observable
   public rules: IRuleObj[];
   public isRequired: boolean;
 
@@ -64,6 +63,17 @@ export class MobxFormItem extends React.Component<IMobxFormItemProps> {
   constructor(props: IMobxFormItemProps) {
     super(props);
 
+    this.registerRules(props);
+  }
+
+  componentWillReceiveProps(
+    nextProps: Readonly<IMobxFormItemProps>,
+    nextContext: any,
+  ) {
+    this.registerRules(nextProps);
+  }
+
+  public registerRules(props: IMobxFormItemProps) {
     const cmpRules = _.get(props, 'fieldParams.componentParams.rules', []);
     this.rules = (props.rules || []).concat(cmpRules);
 
