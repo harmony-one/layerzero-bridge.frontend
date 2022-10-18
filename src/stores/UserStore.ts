@@ -123,8 +123,6 @@ export class UserStoreEx extends StoreConstructor {
     }
 
     autorun(() => {
-      console.log(111);
-
       if (this.isNetworkActual && this.isMetamask) {
         this.signInMetamask();
       }
@@ -165,8 +163,6 @@ export class UserStoreEx extends StoreConstructor {
 
   @action.bound
   handleAccountsChanged(...args) {
-    console.log(args);
-
     if (args[0].length === 0) {
       return this.setError('Please connect to MetaMask');
     } else {

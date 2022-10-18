@@ -27,3 +27,5 @@ export const Spinner: React.FC<React.SVGAttributes<SVGElement> & {
     </div>
   );
 };
+
+Spinner.displayName = 'Spinner';

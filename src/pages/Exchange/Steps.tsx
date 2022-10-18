@@ -18,10 +18,8 @@ import { dateTimeFormat, truncateAddressString } from '../../utils';
 import { getStepsTitle } from './steps-constants';
 import axios from 'axios';
 import styled from 'styled-components';
-import { lighten } from 'polished';
 
 const hmyRPCUrl = 'https://api.harmony.one';
-// import { AddTokenPanel } from './AddTokenPanel';
 
 export const getHmyTransactionByHash = async hash => {
   const res = await axios.post(hmyRPCUrl, {
@@ -60,17 +58,20 @@ const layerZeroStatus = {
   waiting: 'Waiting',
 };
 
-const lightLevel: Record<TextState, number> = {
-  default: 0.3,
-  completed: 0,
-  active: 0.3,
+const getTextColor = props => {
+  const colorMap: Record<TextState, string> = {
+    pending: props.theme.palette.NGray3,
+    completed: props.theme.textColor,
+    active: props.theme.palette.Orange500,
+  };
+
+  return colorMap[props.state];
 };
 
-type TextState = 'default' | 'active' | 'completed';
+type TextState = 'pending' | 'active' | 'completed';
 
 const StyledText = styled(Text)<ITextProps & { state?: TextState }>`
-  color: ${props =>
-    lighten(lightLevel[props.state] || 0.1, props.theme.textColor)};
+  color: ${props => getTextColor(props)};
 `;
 
 const StepRow = observer(
@@ -169,7 +170,7 @@ const StepRow = observer(
       ? 'active'
       : completed
       ? 'completed'
-      : 'default';
+      : 'pending';
 
     const explorerUrl =
       (isEth(action.type)
@@ -179,9 +180,10 @@ const StepRow = observer(
     return (
       <Box
         direction="column"
-        style={{ borderBottom: '1px solid #dedede' }}
-        margin={{ bottom: 'medium' }}
+        style={{ paddingBottom: '8px', borderBottom: '1px solid #dedede' }}
+        margin={{ bottom: '12px' }}
       >
+        <StyledText state={textState}>{textState}</StyledText>
         <StyledText state={textState}>{number + 1 + '. ' + label}</StyledText>
         <Box direction="row" justify="between">
           <StyledText state={textState}>

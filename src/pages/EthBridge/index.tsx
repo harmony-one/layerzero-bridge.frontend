@@ -113,11 +113,6 @@ export const EthBridge = observer((props: any) => {
 
     const tokenTypeFromUrl = props.match.params.token;
 
-    if (tokenTypeFromUrl === TOKEN.ERC20) {
-      routing.push(TOKEN.BUSD);
-      return;
-    }
-
     if (
       ![
         TOKEN.ALL,
