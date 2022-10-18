@@ -18,8 +18,8 @@ import { BridgeControl } from '../../../BridgeControl/BridgeControl';
 import { CircleQuestion, StatusWarning } from 'grommet-icons';
 import { Tip } from 'grommet/components/Tip';
 import { ThemeContext } from '../../../../../../themes/ThemeContext';
-import styled from 'styled-components';
 import { TipContent } from 'components/TipContent';
+import { SwitchNetworkButton } from '../../../SwitchNetworkButton';
 
 interface MetamaskButtonProps {
   active: boolean;
@@ -157,6 +157,11 @@ export const Destination: React.FC<Props> = observer(() => {
               . Please change network to {externalSubNetworkName} for transfer{' '}
               {externalNetworkName} -> Harmony with MetaMask.
             </Text>
+          </Box>
+        )}
+        {!userMetamask.isNetworkActual && (
+          <Box>
+            <SwitchNetworkButton />
           </Box>
         )}
       </Box>
