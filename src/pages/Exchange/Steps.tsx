@@ -183,7 +183,6 @@ const StepRow = observer(
         style={{ paddingBottom: '8px', borderBottom: '1px solid #dedede' }}
         margin={{ bottom: '12px' }}
       >
-        <StyledText state={textState}>{textState}</StyledText>
         <StyledText state={textState}>{number + 1 + '. ' + label}</StyledText>
         <Box direction="row" justify="between">
           <StyledText state={textState}>
