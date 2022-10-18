@@ -3,6 +3,7 @@ import { Box } from 'grommet';
 import * as s from './LayoutCommon.styl';
 import { Header } from '../../Header/Header';
 import styled from 'styled-components';
+import { Disclaimer } from '../../../components/DisclaimerWarning';
 
 interface Props {}
 
@@ -41,6 +42,7 @@ export const LayoutCommon: React.FC<Props> = ({ children }) => {
       </Box>
       <HeaderDivider />
       <Box className={s.contentContainer} align="center" justify="center">
+        <Disclaimer />
         {children}
       </Box>
     </StyledBox>

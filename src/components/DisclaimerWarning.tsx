@@ -56,9 +56,9 @@ const styles = {
 export const Disclaimer = () => (
   <CookieBanner
     styles={styles}
-    message="NOTE: All transactions are on the Harmony Testnet and Kovan Test Network. Use at your own risk. If you find a bug, send them here support@harmony.one"
+    message="The bridge is currently in BETA for testing. Please do not use the bridge until the public release."
     onAccept={() => {}}
-    cookie="soccerplayers-accept-no-commerce"
+    cookie=""
     dismissOnScroll={false}
     dismissOnClick={false}
   />
