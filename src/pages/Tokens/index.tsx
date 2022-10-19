@@ -62,7 +62,7 @@ const oneAddress = value => (
   </Box>
 );
 
-const getAssetAddress = (data: ITokenInfo, type) => {
+const getAssetAddress = (data: ITokenInfo, type: 'origin' | 'mapping') => {
   /*
   token type        | type    | address       | component
   ---               | ---     | ---           |
@@ -81,13 +81,13 @@ const getAssetAddress = (data: ITokenInfo, type) => {
       break;
   }
 
-  if (data.type.indexOf(assetPrefix) !== -1) {
+  const isMappingForOne = data.type === TOKEN.ONE && type === 'mapping';
+
+  const isErcOrHrcToken = data.type.indexOf(assetPrefix) !== -1;
+
+  if (isErcOrHrcToken || isMappingForOne) {
     return <EthAddress value={data.erc20Address} network={data.network} />;
   } else {
-    if (data.hrc20Address === '0x0') {
-      return '';
-    }
-
     const address =
       String(data.hrc20Address).toLowerCase() ===
       String(process.env.ONE_HRC20).toLowerCase()

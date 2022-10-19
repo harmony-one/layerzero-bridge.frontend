@@ -33,10 +33,16 @@ export const TokenSymbol = observer((props: TokenSymbolProps) => {
           (t.network === network && t.type === token),
       )
     );
-  }, [erc20Address, hrc20Address, tokens.fetchStatus, tokens.fullTokensList]);
+  }, [
+    erc20Address,
+    hrc20Address,
+    network,
+    token,
+    tokens.fetchStatus,
+    tokens.fullTokensList,
+  ]);
 
   if (!tokenInfo) {
-    console.log('### props', props);
     return <Box>{token}</Box>;
   }
 

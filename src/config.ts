@@ -122,7 +122,7 @@ export const tokensConfigs: ITokenInfo[] = [
     image: '/busd.svg',
   },
   {
-    hrc20Address: '0x0',
+    hrc20Address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     erc20Address: '0x03fF0ff224f904be3118461335064bB48Df47938',
     proxyERC20: '0x2332137Ae0386783FFBCF40d9f17E50890917e15',
     proxyHRC20: '0x5B18a4E73F9A4fe337A072516b317863Ad3046aA',
@@ -141,7 +141,7 @@ export const tokensConfigs: ITokenInfo[] = [
       '0x0001000000000000000000000000000000000000000000000000000000000007a120',
   },
   {
-    hrc20Address: '0x0',
+    hrc20Address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     erc20Address: '0xd5cd84d6f044abe314ee7e414d37cae8773ef9d3',
     proxyERC20: '0x234784eC001Db36C9c22785CAd902221Fd831352',
     proxyHRC20: '0x905582f21fB9855c809d5b8933272a292dfbB138',
@@ -161,7 +161,7 @@ export const tokensConfigs: ITokenInfo[] = [
   },
   {
     hrc20Address: '0xDC60CcF6Ae05f898F4255EF580E731b4011100Ec',
-    erc20Address: '0x0',
+    erc20Address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     proxyERC20: '0x128AEdC7f41ffb82131215e1722D8366faaD0CD4',
     proxyHRC20: '0x7FFD57563EF54c464f23B5497dd1F54481E4c008',
     name: 'Binance Coin',
@@ -179,7 +179,7 @@ export const tokensConfigs: ITokenInfo[] = [
   },
   {
     hrc20Address: '0x4cC435d7b9557d54d6EF02d69Bbf72634905Bf11',
-    erc20Address: '0x0',
+    erc20Address: '0x00eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     proxyERC20: '0x1Edb8BdeD80E1b87eD19EE7D97Ee80B4fDb615c1',
     proxyHRC20: '0xA17426d430BCaDb09B0d42992C5BE186f485a4Da',
     name: 'Ethereum Coin',
