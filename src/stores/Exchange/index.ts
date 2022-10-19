@@ -12,7 +12,7 @@ import {
   TOKEN,
 } from '../interfaces';
 import * as operationService from 'services';
-import { getDepositAmount, threshold, validators } from 'services';
+import { threshold, validators } from 'services';
 
 import * as contract from '../../blockchain-bridge';
 import {
@@ -1237,7 +1237,7 @@ export class Exchange extends StoreConstructor {
 
     if ([TOKEN.ERC721].includes(exchange.token) && !userMetamask.erc20Address) {
       exchange.error = 'No token selected ';
-      throw 'No token selected ';
+      throw new Error('No token selected ');
     }
 
     if (needValidate) {

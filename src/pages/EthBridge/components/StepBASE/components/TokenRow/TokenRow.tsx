@@ -1,15 +1,13 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Tip } from 'grommet';
 import { Text } from '../../../../../../components/Base';
 import { TokenControl } from '../TokenControl/TokenControl';
 import { TokenAmount } from '../TokenAmount/TokenAmount';
-import { TokenSettings } from '../TokenSettings/TokenSettings';
 import { observer } from 'mobx-react';
 import { useStores } from '../../../../../../stores';
 import { BridgeControl } from '../../../BridgeControl/BridgeControl';
 import { TOKEN } from '../../../../../../stores/interfaces';
 import { truncateAddressString } from '../../../../../../utils';
-import { isNFT } from '../../../../../../stores/Exchange/helpers';
 import { CircleQuestion } from 'grommet-icons';
 import { TipContent } from '../../../../../../components/TipContent';
 import { Link } from 'components/Link';
@@ -48,7 +46,7 @@ export const TokenRow: React.FC<Props> = observer(() => {
         </Box>
         <Box pad={{ top: '12px' }}>
           {exchange.tokenInfo && (
-            <img src={exchange.tokenInfo.image} width="40" />
+            <img alt="token" src={exchange.tokenInfo.image} width="40" />
           )}
         </Box>
         <Box basis="0" flex="grow" align="center">
