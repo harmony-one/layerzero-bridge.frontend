@@ -43,12 +43,10 @@ export const Head: React.FC<IStyledChildrenProps<BoxProps>> = withTheme(
     const goToBridge = () => {
       if (exchange.operation && exchange.operation.id) {
         routing.push(
-          `/${exchange.token || TOKEN.BUSD}/operations/${
-            exchange.operation.id
-          }`,
+          `/${exchange.token || TOKEN.ONE}/operations/${exchange.operation.id}`,
         );
       } else {
-        routing.push(`/${exchange.token || TOKEN.BUSD}`);
+        routing.push(`/${exchange.token || TOKEN.ONE}`);
       }
     };
 

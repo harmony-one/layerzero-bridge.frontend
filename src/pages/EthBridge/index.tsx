@@ -98,7 +98,14 @@ const NetworkButton = observer(({ type }: { type: NETWORK_TYPE }) => {
 });
 
 export const EthBridge = observer((props: any) => {
-  const { user, exchange, routing, userMetamask, tokens } = useStores();
+  const {
+    user,
+    exchange,
+    routing,
+    userMetamask,
+    tokens,
+    erc20Select,
+  } = useStores();
   const isMobile = useMediaQuery({ query: '(max-width: 600px)' });
 
   useEffect(() => {
@@ -113,22 +120,15 @@ export const EthBridge = observer((props: any) => {
 
     const tokenTypeFromUrl = props.match.params.token;
 
-    if (
-      ![
-        TOKEN.ALL,
-        TOKEN.LINK,
-        TOKEN.BUSD,
-        TOKEN.ERC20,
-        TOKEN.ETH,
-        TOKEN.HRC20,
-        TOKEN.ONE,
-      ].includes(tokenTypeFromUrl)
-    ) {
-      routing.push(TOKEN.BUSD);
+    if (![TOKEN.ERC20, TOKEN.ETH, TOKEN.ONE].includes(tokenTypeFromUrl)) {
+      routing.push(TOKEN.ONE);
+      erc20Select.setToken('0xd5cd84d6f044abe314ee7e414d37cae8773ef9d3');
       return;
     }
 
     exchange.setToken(tokenTypeFromUrl);
+
+    erc20Select.setToken('0xd5cd84d6f044abe314ee7e414d37cae8773ef9d3');
 
     if (TOKEN.ETH === tokenTypeFromUrl) {
       user.setHRC20Token(process.env.ETH_HRC20);

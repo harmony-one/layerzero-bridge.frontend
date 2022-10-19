@@ -1378,6 +1378,7 @@ export class Exchange extends StoreConstructor {
         };
 
       case TOKEN.ONE:
+      default:
         return {
           label: 'ONE',
           maxAmount:
@@ -1388,18 +1389,16 @@ export class Exchange extends StoreConstructor {
           image: '/one.svg',
           address: '',
         };
-
-      default:
-        return {
-          label: 'BUSD',
-          maxAmount:
-            exchange.mode === EXCHANGE_MODE.ONE_TO_ETH
-              ? user.hmyBUSDBalance
-              : userMetamask.ethBUSDBalance,
-          symbol: 'BUSD',
-          image: '/busd.svg',
-          address: '',
-        };
+      // return {
+      //   label: 'BUSD',
+      //   maxAmount:
+      //     exchange.mode === EXCHANGE_MODE.ONE_TO_ETH
+      //       ? user.hmyBUSDBalance
+      //       : userMetamask.ethBUSDBalance,
+      //   symbol: 'BUSD',
+      //   image: '/busd.svg',
+      //   address: '',
+      // };
     }
   }
 
