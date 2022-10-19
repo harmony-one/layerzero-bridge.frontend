@@ -46,18 +46,14 @@ export const TokenRow: React.FC<Props> = observer(() => {
         <Box basis="0" flex="grow">
           <TokenControl />
         </Box>
-        {!isNFT(exchange.token) && (
-          <Box pad={{ top: '12px' }}>
-            {exchange.tokenInfo && (
-              <img src={exchange.tokenInfo.image} width="40" />
-            )}
-          </Box>
-        )}
-        {!isNFT(exchange.token) && (
-          <Box basis="0" flex="grow" align="center">
-            <TokenAmount />
-          </Box>
-        )}
+        <Box pad={{ top: '12px' }}>
+          {exchange.tokenInfo && (
+            <img src={exchange.tokenInfo.image} width="40" />
+          )}
+        </Box>
+        <Box basis="0" flex="grow" align="center">
+          <TokenAmount />
+        </Box>
       </Box>
       {displayTokenAddress && (
         <Box justify="center" align="center" pad={{ top: 'xsmall' }}>

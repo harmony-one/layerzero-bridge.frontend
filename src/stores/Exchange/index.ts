@@ -28,7 +28,7 @@ import { send1ETHToken } from './1ETH';
 import { send1ONEToken } from './1ONE';
 import { getChainConfig, getContractMethods } from './helpers';
 import { defaultEthClient } from './defaultConfig';
-import { NETWORK_BASE_TOKEN, NETWORK_NAME } from '../names';
+import { NETWORK_BASE_TOKEN, NETWORK_ICON, NETWORK_NAME } from '../names';
 import { sendHrc721Token } from './hrc721';
 import { sendHrc1155Token } from './hrc1155';
 import { sendErc1155Token } from './erc1155';
@@ -1373,7 +1373,7 @@ export class Exchange extends StoreConstructor {
               ? user.hrc20Balance
               : userMetamask.ethBalance,
           symbol: NETWORK_BASE_TOKEN[exchange.network],
-          image: '/eth.svg',
+          image: NETWORK_ICON[exchange.network],
           address: '',
         };
 
