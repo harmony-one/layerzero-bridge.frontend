@@ -53,7 +53,7 @@ export const TokenSymbol = observer((props: TokenSymbolProps) => {
     </Box>
   ) : (
     <Box direction="row" align="center" gap="4px">
-      <img src={tokenInfo.image} height="16" width="16" />{' '}
+      <img alt="token" src={tokenInfo.image} height="16" width="16" />{' '}
       <Text nowrap size="small" margin={{ top: '2px' }}>
         {sliceByLength(tokenInfo.symbol, 9)}
       </Text>

@@ -33,6 +33,7 @@ const EthAddress = observer(
         style={{ marginTop: 4 }}
       >
         <img
+          alt="network"
           className={styles.imgToken}
           style={{ height: 20 }}
           src={NETWORK_ICON[network]}
@@ -41,6 +42,7 @@ const EthAddress = observer(
           className={styles.addressLink}
           href={`${exchange.getExplorerByNetwork(network)}/token/${value}`}
           target="_blank"
+          rel="noreferrer"
         >
           {truncateAddressString(value, TRUNCATE_ADDRESS)}
         </a>
@@ -51,7 +53,12 @@ const EthAddress = observer(
 
 const oneAddress = value => (
   <Box direction="row" justify="start" align="center" style={{ marginTop: 4 }}>
-    <img className={styles.imgToken} style={{ height: 18 }} src="/one.svg" />
+    <img
+      alt="harmony address"
+      className={styles.imgToken}
+      style={{ height: 18 }}
+      src="/one.svg"
+    />
     <a
       className={styles.addressLink}
       href={`${process.env.HMY_EXPLORER_URL}/address/${value}?activeTab=3`}
