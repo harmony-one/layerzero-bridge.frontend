@@ -3,6 +3,7 @@ import { NETWORK_TYPE } from './interfaces';
 export const NETWORK_NAME = {
   [NETWORK_TYPE.ETHEREUM]: 'Ethereum',
   [NETWORK_TYPE.BINANCE]: 'Binance',
+  [NETWORK_TYPE.HARMONY]: 'Harmony',
 };
 
 export const NETWORK_ICON = {
@@ -19,7 +20,6 @@ export const NETWORK_ERC20_TOKEN = {
   [NETWORK_TYPE.ETHEREUM]: 'ERC20',
   [NETWORK_TYPE.BINANCE]: 'BEP20',
 };
-
 
 export const NETWORK_PREFIX = {
   [NETWORK_TYPE.ETHEREUM]: '1',

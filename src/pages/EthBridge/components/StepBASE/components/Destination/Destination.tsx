@@ -1,25 +1,21 @@
 import React, { useCallback, useContext, useMemo, useRef } from 'react';
 import { useStores } from '../../../../../../stores';
 import { Box } from 'grommet/components/Box';
-import { Icon, Text } from '../../../../../../components/Base';
+import { Text } from '../../../../../../components/Base';
 import { Button } from 'grommet/components/Button';
 import * as s from './Destination.styl';
 import { observer } from 'mobx-react';
 import { ethBridgeStore } from '../../../../EthBridgeStore';
 import { Input, isRequired, isValidEthAddress } from 'components/Form';
 import cn from 'classnames';
-import {
-  EXCHANGE_MODE,
-  NETWORK_TYPE,
-} from '../../../../../../stores/interfaces';
-import { NETWORK_NAME } from '../../../../../../stores/names';
-import { getChainName } from '../../../../../../stores/Exchange/helpers';
+import { EXCHANGE_MODE } from '../../../../../../stores/interfaces';
 import { BridgeControl } from '../../../BridgeControl/BridgeControl';
-import { CircleQuestion, StatusWarning } from 'grommet-icons';
+import { CircleQuestion } from 'grommet-icons';
 import { Tip } from 'grommet/components/Tip';
 import { ThemeContext } from '../../../../../../themes/ThemeContext';
 import { TipContent } from 'components/TipContent';
 import { SwitchNetworkButton } from '../../../SwitchNetworkButton';
+import { WalletNetworkWarn } from '../WalletNetworkWarn';
 
 interface MetamaskButtonProps {
   active: boolean;
@@ -65,21 +61,6 @@ export const Destination: React.FC<Props> = observer(() => {
 
   const inputName =
     exchange.mode === EXCHANGE_MODE.ONE_TO_ETH ? 'ethAddress' : 'oneAddress';
-
-  const externalNetworkName = NETWORK_NAME[exchange.network];
-
-  const metamaskChainName = useMemo(() => {
-    return getChainName(userMetamask.metamaskChainId);
-  }, [userMetamask.metamaskChainId]);
-
-  const externalSubNetworkName =
-    exchange.network === NETWORK_TYPE.ETHEREUM
-      ? process.env.NETWORK === 'mainnet'
-        ? 'mainnet'
-        : 'kovan'
-      : process.env.NETWORK === 'mainnet'
-      ? 'mainnet'
-      : 'testnet';
 
   const themeContext = useContext(ThemeContext);
 
@@ -146,18 +127,7 @@ export const Destination: React.FC<Props> = observer(() => {
           onClick={handleClickMetamask}
         />
         {userMetamask.isAuthorized && !userMetamask.isNetworkActual && (
-          <Box direction="row" gap="xsmall" align="center">
-            <StatusWarning color="#FF0000" />
-            <Text size="xsmall">
-              You have authorised with MetaMask, but the selected network does
-              not match{' '}
-              <span style={{ color: 'rgb(0, 173, 232)' }}>
-                {externalNetworkName}: {externalSubNetworkName}
-              </span>
-              . Please change network to {externalSubNetworkName} for transfer{' '}
-              {externalNetworkName} -> Harmony with MetaMask.
-            </Text>
-          </Box>
+          <WalletNetworkWarn />
         )}
         {!userMetamask.isNetworkActual && (
           <Box>
