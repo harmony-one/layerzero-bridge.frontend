@@ -17,7 +17,7 @@ import { FilterTokenType } from './components/FilterTokenType/FilterTokenType';
 import { FilterNetworkType } from './components/FilterNetworkType/FilterNetworkType';
 import { TokensHeader } from './components/TokensHeader/TokensHeader';
 import styled from 'styled-components';
-import { ERC20Token } from '../Explorer/Components';
+import { TokenSymbol } from '../Explorer/TokenSymbol';
 
 const TRUNCATE_ADDRESS = 6;
 
@@ -126,8 +126,8 @@ const getColumns = ({ hmyLINKBalanceManager }): IColumn<ITokenInfo>[] => [
     width: 180,
     className: styles.leftHeader,
     render: (value, data) => (
-      <ERC20Token
-        value={data.type}
+      <TokenSymbol
+        token={data.type}
         erc20Address={data.erc20Address}
         hrc20Address={data.hrc20Address}
         network={data.network}

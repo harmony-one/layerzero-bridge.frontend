@@ -6,9 +6,8 @@ import {
   truncateAddressString,
 } from 'utils';
 import * as styles from './styles.styl';
-import cn from 'classnames';
 import { getOperationFee } from './ExpandedRow';
-import { ERC20Token, Price } from './Components';
+import { Price } from './Components';
 import { NETWORK_ICON } from '../../stores/names';
 import { getChecksumAddress } from '../../blockchain-bridge';
 import { observer } from 'mobx-react-lite';
@@ -18,6 +17,7 @@ import { IColumn } from '../../components/Table';
 import { ManageButton } from './ManageButton';
 import { Text } from '../../components/Base';
 import { EntityStatus } from '../../components/EntityStatus';
+import { TokenSymbol } from './TokenSymbol';
 
 const EthAddress = observer<any>(
   (params: { address; operation: IOperation }) => {
@@ -144,8 +144,8 @@ export const getColumns = (
       dataIndex: 'token',
       width: 100,
       render: (value, data) => (
-        <ERC20Token
-          value={value}
+        <TokenSymbol
+          token={data.token}
           erc20Address={data.erc20Address}
           hrc20Address={data.hrc20Address}
           network={data.network}
