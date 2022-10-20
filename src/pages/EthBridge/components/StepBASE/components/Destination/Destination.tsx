@@ -129,7 +129,7 @@ export const Destination: React.FC<Props> = observer(() => {
         {userMetamask.isAuthorized && !userMetamask.isNetworkActual && (
           <WalletNetworkWarn />
         )}
-        {!userMetamask.isNetworkActual && (
+        {!userMetamask.isNetworkActual && userMetamask.isAuthorized && (
           <Box>
             <SwitchNetworkButton />
           </Box>
