@@ -28,9 +28,9 @@ export const TokenSymbol = observer((props: TokenSymbolProps) => {
       tokens.fetchStatus !== 'init' &&
       tokens.fullTokensList.find(
         t =>
-          t.erc20Address.toLowerCase() === erc20Address.toLowerCase() ||
-          t.hrc20Address.toLowerCase() === hrc20Address.toLowerCase() ||
-          (t.network === network && t.type === token),
+          (t.erc20Address.toLowerCase() === erc20Address.toLowerCase() ||
+            t.hrc20Address.toLowerCase() === hrc20Address.toLowerCase()) &&
+          network === t.network,
       )
     );
   }, [
