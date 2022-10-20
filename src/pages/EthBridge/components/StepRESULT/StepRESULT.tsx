@@ -18,7 +18,8 @@ export const StepRESULT: React.FC<Props> = () => {
 
   const handleClickBack = useCallback(() => {
     const conf = exchange.step.buttons[0];
-    exchange.onClickHandler(conf.validate, conf.onClick, ethBridgeStore);
+    conf.onClick();
+    //exchange.onClickHandler(conf.validate, conf.onClick, ethBridgeStore);
   }, [exchange]);
 
   return (
