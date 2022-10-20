@@ -26,7 +26,7 @@ export const TokenRow: React.FC<Props> = observer(() => {
 
   const mappedAddressLink =
     exchange.token !== TOKEN.HRC20
-      ? `${process.env.HMY_EXPLORER_URL}/address/${erc20Select.tokenAddress}`
+      ? `${process.env.HMY_EXPLORER_URL}/address/${erc20Select.tokenAddress}?activeTab=3`
       : `${exchange.config.explorerURL}/token/${erc20Select.tokenAddress}`;
 
   const displayTokenAddress =
@@ -45,7 +45,7 @@ export const TokenRow: React.FC<Props> = observer(() => {
           <TokenControl />
         </Box>
         <Box pad={{ top: '12px' }}>
-          {exchange.tokenInfo && (
+          {exchange.tokenInfo && exchange.tokenInfo.image && (
             <img alt="token" src={exchange.tokenInfo.image} width="40" />
           )}
         </Box>
