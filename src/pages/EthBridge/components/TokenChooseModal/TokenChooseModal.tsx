@@ -7,7 +7,6 @@ import { useStores } from '../../../../stores';
 import { observer } from 'mobx-react';
 import { TextInput } from 'grommet';
 import { ModalIds } from '../../../../modals';
-import { TokenVertical } from './components/TokenVertical';
 import { TokenHorizontal } from './components/TokenHorizontal';
 import { tokensMainnetImageMap } from '../../../Exchange/tokens';
 import { NETWORK_BASE_TOKEN, NETWORK_ICON } from '../../../../stores/names';
@@ -188,11 +187,7 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
                 symbol={token.symbol}
                 label={`${token.name} - ${token.type}`}
                 balance={formatWithTwoDecimals(balance)}
-                icon={getImage(
-                  token.erc20Address,
-                  token.hrc20Address,
-                  token.network,
-                )}
+                icon={token.image}
                 onClick={async () => {
                   exchange.setToken(token.type);
 

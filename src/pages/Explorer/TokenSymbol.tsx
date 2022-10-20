@@ -7,6 +7,7 @@ import { Box } from 'grommet';
 import { sliceByLength } from '../../utils';
 import { Text } from '../../components/Base';
 import { NETWORK_TYPE, TOKEN } from '../../stores/interfaces';
+import { findTokenConfig } from '../../config';
 
 interface TokenSymbolProps {
   token: TOKEN;
@@ -24,23 +25,8 @@ export const TokenSymbol = observer((props: TokenSymbolProps) => {
   });
 
   const tokenInfo = useMemo(() => {
-    return (
-      tokens.fetchStatus !== 'init' &&
-      tokens.fullTokensList.find(
-        t =>
-          (t.erc20Address.toLowerCase() === erc20Address.toLowerCase() ||
-            t.hrc20Address.toLowerCase() === hrc20Address.toLowerCase()) &&
-          network === t.network,
-      )
-    );
-  }, [
-    erc20Address,
-    hrc20Address,
-    network,
-    token,
-    tokens.fetchStatus,
-    tokens.fullTokensList,
-  ]);
+    return findTokenConfig({ erc20Address, hrc20Address, network });
+  }, [erc20Address, hrc20Address, network]);
 
   if (!tokenInfo) {
     return <Box>{token}</Box>;
