@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Box, Image } from 'grommet';
+import { Box, Button, Image } from 'grommet';
 import { observer } from 'mobx-react-lite';
 import { Icon, Text } from 'components/Base';
 import { useStores } from 'stores';
 import { formatWithSixDecimals, truncateAddressString } from 'utils';
 import { EXCHANGE_MODE, NETWORK_TYPE, TOKEN } from '../../stores/interfaces';
 import { Price } from '../Explorer/Components';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { SliceTooltip } from '../../ui/SliceTooltip';
 import { NETWORK_BASE_TOKEN, NETWORK_NAME } from '../../stores/names';
 import { useMediaQuery } from 'react-responsive';
@@ -16,6 +16,49 @@ import { hmyMethodsERC20Web3 } from 'blockchain-bridge/hmy';
 import { getExNetworkMethods } from 'blockchain-bridge/eth';
 import { identity } from 'lodash';
 import { getBech32Address } from '../../blockchain-bridge';
+import { ONE_SECOND } from '../../constants/dates';
+
+interface AssetRowAddressProps {
+  link: string;
+  address: string;
+}
+
+const AssetRowAddress: React.FC<AssetRowAddressProps> = props => {
+  const handleClickCopy = useCallback(() => {
+    navigator.clipboard.writeText(props.address);
+  }, [props.address]);
+
+  const isMobile = useMediaQuery({ query: '(max-width: 600px)' });
+  const truncatedAddress = truncateAddressString(
+    props.address,
+    isMobile ? 7 : 12,
+  );
+
+  return (
+    <>
+      <a href={props.link} target="_blank" style={{ textDecoration: 'none' }}>
+        <Text
+          size="small"
+          style={{
+            fontFamily: 'monospace',
+            cursor: 'pointer',
+            // textDecoration: 'underline',
+          }}
+        >
+          {truncatedAddress}
+        </Text>
+      </a>
+      <Button onClick={handleClickCopy}>
+        <Icon
+          glyph="PrintFormCopy"
+          size="20px"
+          color="NBlue"
+          style={{ marginLeft: 10, width: 20 }}
+        />
+      </Button>
+    </>
+  );
+};
 
 const AssetRow = props => {
   return (
@@ -33,30 +76,7 @@ const AssetRow = props => {
       </Box>
       <Box direction="row" align="center">
         {props.address ? (
-          <a
-            href={props.link}
-            target="_blank"
-            style={{ textDecoration: 'none' }}
-          >
-            <Box direction="row">
-              <Text
-                size="small"
-                style={{
-                  fontFamily: 'monospace',
-                  cursor: 'pointer',
-                  // textDecoration: 'underline',
-                }}
-              >
-                {props.value}
-              </Text>
-              <Icon
-                glyph="PrintFormCopy"
-                size="20px"
-                color="NBlue"
-                style={{ marginLeft: 10, width: 20 }}
-              />
-            </Box>
-          </a>
+          <AssetRowAddress link={props.link} address={props.value} />
         ) : (
           <>
             {props.value ? <Text size="small">{props.value}</Text> : null}
@@ -234,23 +254,17 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
       <Box direction="column">
         <AssetRow
           label={`${NETWORK_BASE_TOKEN[exchange.network]} address`}
-          value={truncateAddressString(
-            exchange.transaction.ethAddress,
-            isMobile ? 7 : 12,
-          )}
-          link={`${exchange.config.explorerURL}/token/${userMetamask.erc20Address}`}
-          address={true}
+          value={exchange.transaction.ethAddress}
+          link={`${exchange.config.explorerURL}/token/${exchange.transaction.ethAddress}`}
+          address
         />
         <AssetRow
           label="ONE address"
-          value={truncateAddressString(
-            exchange.transaction.oneAddress,
-            isMobile ? 7 : 12,
-          )}
+          value={exchange.transaction.oneAddress}
           link={`${process.env.HMY_EXPLORER_URL}/address/${getBech32Address(
             exchange.transaction.oneAddress,
           )}?activeTab=3`}
-          address={true}
+          address
         />
         {getAmount()}
 
@@ -427,8 +441,8 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
           <Box direction="column" margin={{ top: 'large' }}>
             <AssetRow
               label="Transaction hash"
-              value={truncateAddressString(exchange.txHash, isMobile ? 7 : 12)}
-              address={true}
+              value={exchange.txHash}
+              address
             />
           </Box>
         ) : null}

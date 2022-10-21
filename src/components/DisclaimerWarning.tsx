@@ -16,7 +16,7 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    zIndex: 999,
+    zIndex: 19,
     borderRadius: 5,
     // marginBottom: -10,
     // marginTop: -10
