@@ -49,6 +49,7 @@ export class UserStoreMetamask extends StoreConstructor {
   @observable public isMetaMask = false;
   private provider: any;
 
+  @observable public balance = '0';
   @observable public ethAddress: string;
   @observable public ethBalance: string = '0';
   @observable public ethBUSDBalance: string = '0';
@@ -142,6 +143,20 @@ export class UserStoreMetamask extends StoreConstructor {
       return this.setError('Please connect to MetaMask');
     } else {
       this.ethAddress = accounts[0];
+
+      try {
+        this.provider
+          .request({
+            method: 'eth_getBalance',
+            params: [this.ethAddress, 'latest'],
+          })
+          .then(balanceHex => {
+            const balance = Number(balanceHex);
+            this.balance = balance.toString();
+          });
+      } catch (err) {
+        console.log('### err', err);
+      }
 
       const inputName =
         this.stores.exchange.mode === EXCHANGE_MODE.ONE_TO_ETH
@@ -253,6 +268,7 @@ export class UserStoreMetamask extends StoreConstructor {
 
       this.stores.user.signInMetamask();
     } catch (e) {
+      console.log('### sign in error', e);
       return this.setError(e.message);
     }
   }
