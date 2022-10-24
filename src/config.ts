@@ -107,7 +107,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.ETHEREUM,
-    image: '/wbtc.svg',
+    image: '/wbtc_icon.svg',
   },
   {
     proxyERC20: '0xEe381e476b4335B8584A2026f3E845edaC2c69de',
@@ -227,7 +227,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.ETHEREUM,
-    image: '/aag.svg',
+    image: '/aag_icon.svg',
   },
   {
     hrc20Address: '0xd9E290C1Cb1cAF57ca12A4F03fC3eE5689bF2D83',
@@ -244,7 +244,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.ETHEREUM,
-    image: '/frax.svg',
+    image: '/frax_icon.svg',
   },
   {
     hrc20Address: '0xbea6830380Dfb0283A699B0E085309215A24d9cc',
@@ -261,7 +261,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.ETHEREUM,
-    image: '/frax-share.svg',
+    image: '/frax_share_fxs_icon.svg',
   },
   {
     hrc20Address: '0x41b7199da8276DbdEd449D717BAFFaB8C43A6a10',
@@ -278,7 +278,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.ETHEREUM,
-    image: '/sushi.svg',
+    image: '/sushi_icon.svg',
   },
   {
     hrc20Address: '0x41b7199da8276DbdEd449D717BAFFaB8C43A6a10',
@@ -295,7 +295,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.ETHEREUM,
-    image: '/sushi.svg',
+    image: '/sushi_icon.svg',
   },
   {
     hrc20Address: '0x4caC2771ab80107a5035bFEc0aB7E745ed598D8D',
@@ -312,7 +312,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.ETHEREUM,
-    image: '/xsushi.svg',
+    image: '/xsushi_icon.svg',
   },
   {
     hrc20Address: '0x8fD86715C0939138ff8D268B3fbF23043856a52e',
@@ -329,8 +329,8 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.ETHEREUM,
-    image: '/aave.svg',
-  }
+    image: '/aave_icon.svg',
+  },
 ];
 
 export const getTokenConfig = (addr: string): ITokenInfo => {
