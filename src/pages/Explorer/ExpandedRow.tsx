@@ -20,6 +20,8 @@ import { NETWORK_ICON, NETWORK_PREFIX } from '../../stores/names';
 
 import { isLayerZeroOperation } from '../Exchange/Steps';
 import axios from 'axios';
+import { Status } from '../EthBridge/components/Status/Status';
+import { EntityStatus } from '../../components/EntityStatus';
 
 export interface IExpandedRowProps {
   data: IOperation;
@@ -63,7 +65,10 @@ const isEth = type =>
     'unlockERC1155TokenRollback',
   ].includes(type);
 
-const getActionFee = (action: IAction, operation: IOperation): { isEth: boolean; value: number } => {
+const getActionFee = (
+  action: IAction,
+  operation: IOperation,
+): { isEth: boolean; value: number } => {
   if (!action || !action.payload || !action.payload.gasPrice) {
     return { isEth: false, value: 0 };
   }
@@ -96,9 +101,13 @@ const getActionFee = (action: IAction, operation: IOperation): { isEth: boolean;
         (gasPrice * gasLimit) / 1e18 + Number(action.payload.value) / 1e18;
     }
 
-    if (action.type === ACTION_TYPE.burnToken && operation.token === TOKEN.ONE) {
+    if (
+      action.type === ACTION_TYPE.burnToken &&
+      operation.token === TOKEN.ONE
+    ) {
       value =
-        (gasPrice * gasLimit) / 1e18 + (Number(action.payload.value) / 1e18 - operation.amount);
+        (gasPrice * gasLimit) / 1e18 +
+        (Number(action.payload.value) / 1e18 - operation.amount);
     }
 
     return { isEth: false, value };
@@ -273,7 +282,9 @@ export const ExpandedRow = observer((props: IExpandedRowProps) => {
                 margin={{ right: '25px' }}
                 style={{ width: 120 }}
               >
-                <Text color="NWhite">{action.status}</Text>
+                <Text color="NWhite">
+                  <EntityStatus status={action.status} />
+                </Text>
               </Box>
 
               {[
@@ -310,9 +321,9 @@ export const ExpandedRow = observer((props: IExpandedRowProps) => {
                     {props.data.token === TOKEN.HRC20
                       ? token.symbol.slice(1)
                       : `${NETWORK_PREFIX[props.data.network]}${sliceByLength(
-                        token.symbol,
-                        7,
-                      )}`}
+                          token.symbol,
+                          7,
+                        )}`}
                   </a>
                 </Box>
               ) : (
