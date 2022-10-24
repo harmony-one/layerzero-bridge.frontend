@@ -179,12 +179,12 @@ export const Pager: React.FunctionComponent<IPagerProps> = props => {
 };
 
 function getBgColor(props: any) {
-  const { type, theme, activeColor } = props;
+  const { type, theme } = props;
   if (type === 'dots') {
     return 'transparent';
   }
   if (type === 'active') {
-    return theme.palette[activeColor] || theme.palette.Purple500 || activeColor;
+    return theme.pager.cellActive.bgColor;
   }
 
   return 'transparent';
@@ -200,14 +200,19 @@ const StyledPageCell = styled.div<any>`
   border-radius: 15px;
   border: ${props =>
     `4px solid ${
-      props.type === 'active' ? props.theme.palette.NWhite : 'transparent'
+      props.type === 'active'
+        ? props.theme.pager.cellActive.borderColor
+        : props.theme.pager.cellDefault.borderColor
     }`};
   background-color: ${getBgColor};
   color: ${props =>
     props.type === 'active'
-      ? props.theme.palette.NBlack
-      : props.theme.palette.NWhite};
-  cursor: ${props => (props.type === 'default' ? 'pointer' : 'auto')};
+      ? props.theme.pager.cellActive.color
+      : props.theme.pager.cellDefault.color};
+  cursor: ${props =>
+    props.type === 'default'
+      ? props.theme.pager.cellDefault.cursor
+      : props.theme.pager.cellActive.cursor};
   margin-right: 8px;
   font-size: 14px;
 `;

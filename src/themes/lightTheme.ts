@@ -171,6 +171,20 @@ export const lightTheme: any = {
     border: `1px solid ${palette.NGray}`,
   },
 
+  pager: {
+    cellDefault: {
+      borderColor: 'transparent',
+      color: palette.NBlack,
+      cursor: 'pointer',
+    },
+    cellActive: {
+      bgColor: 'transparent',
+      borderColor: palette.NGray,
+      color: palette.NBlack,
+      cursor: 'auto',
+    },
+  },
+
   // storybook theming
   colorPrimary: 'black',
   colorSecondary: 'lightblue',

@@ -171,6 +171,21 @@ export const baseTheme: any = {
     border: `1px solid ${palette.NBlack}`,
   },
 
+  pager: {
+    cellDefault: {
+      bgColor: 'transparent',
+      borderColor: 'transparent',
+      color: palette.NWhite,
+      cursor: 'pointer',
+    },
+    cellActive: {
+      bgColor: 'transparent',
+      borderColor: palette.NWhite,
+      color: palette.NWhite,
+      cursor: 'auto',
+    },
+  },
+
   // storybook theming
   colorPrimary: 'black',
   colorSecondary: 'lightblue',

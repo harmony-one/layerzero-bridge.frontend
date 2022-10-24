@@ -41,7 +41,7 @@ const StyledTextInput = styled(TextInput)`
 `;
 
 const ModalContent = styled(Box)`
-  max-height: 480px;
+  max-height: 650px;
   border: 1px solid ${props => props.theme.modal.borderColor};
   background-color: ${props => props.theme.modal.bgColor};
   border-radius: 10px;
