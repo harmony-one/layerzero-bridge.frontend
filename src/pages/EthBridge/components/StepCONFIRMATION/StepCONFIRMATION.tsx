@@ -15,7 +15,7 @@ import { StepContainer } from '../StepContainer';
 interface Props {}
 
 export const StepCONFIRMATION: React.FC<Props> = observer(() => {
-  const { exchange } = useStores();
+  const { exchange, userMetamask } = useStores();
 
   const handleClickBack = useCallback(() => {
     const conf = exchange.step.buttons[0];
@@ -26,6 +26,9 @@ export const StepCONFIRMATION: React.FC<Props> = observer(() => {
     const conf = exchange.step.buttons[1];
     exchange.onClickHandler(conf.validate, conf.onClick, ethBridgeStore);
   }, [exchange]);
+
+  const isBalanceEnough =
+    exchange.networkFee <= Number(userMetamask.balance) / 1e18;
 
   return (
     <StepContainer>
@@ -54,8 +57,7 @@ export const StepCONFIRMATION: React.FC<Props> = observer(() => {
             direction="row"
             justify="end"
             margin={{
-              top:
-                exchange.mode === EXCHANGE_MODE.ETH_TO_ONE ? 'medium' : '0px',
+              top: 'medium',
             }}
             fill={true}
           >
@@ -63,6 +65,13 @@ export const StepCONFIRMATION: React.FC<Props> = observer(() => {
               You will be prompted to sign several transactions
             </Text>
           </Box>
+          {!isBalanceEnough && (
+            <Box margin={{ top: 'medium' }}>
+              <Text color="Red500" style={{ textAlign: 'right' }}>
+                You don't have enough balance
+              </Text>
+            </Box>
+          )}
         </>
       </Box>
       <Box direction="row" height="66px">
@@ -76,6 +85,7 @@ export const StepCONFIRMATION: React.FC<Props> = observer(() => {
         </Button>
         <Button
           fontSize="14px"
+          disabled={!isBalanceEnough}
           className={s.buttonContainer}
           buttonClassName={s.bridgeButton}
           onClick={handleClickContinue}
