@@ -26,21 +26,7 @@ const BridgeControlStyled = styled(BridgeControl)`
 export const TokenAmount: React.FC<Props> = observer(() => {
   const { exchange } = useStores();
 
-  const maxAmount = useMemo(() => {
-    if (
-      ![TOKEN.ERC721, TOKEN.HRC721, TOKEN.ERC1155, TOKEN.HRC1155].includes(
-        exchange.token,
-      )
-    ) {
-      return formatWithSixDecimals(exchange.tokenInfo.maxAmount);
-    }
-
-    if ([TOKEN.ERC1155, TOKEN.HRC1155].includes(exchange.token)) {
-      return exchange.tokenInfo.maxAmount;
-    }
-
-    return '';
-  }, [exchange.token, exchange.tokenInfo.maxAmount]);
+  const maxAmount = exchange.tokenInfo.maxAmount;
 
   const handleMaxAmount = useCallback(() => {
     exchange.transaction.amount = maxAmount;
@@ -81,7 +67,7 @@ export const TokenAmount: React.FC<Props> = observer(() => {
       bottomContent={
         <Button onClick={handleMaxAmount}>
           <Text size="xxsmall" color="NBlue">
-            {maxAmount} Max Available
+            {formatWithSixDecimals(maxAmount)} Max Available
           </Text>
         </Button>
       }
