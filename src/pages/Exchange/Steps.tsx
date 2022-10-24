@@ -18,6 +18,7 @@ import { dateTimeFormat, truncateAddressString } from '../../utils';
 import { getStepsTitle } from './steps-constants';
 import axios from 'axios';
 import styled from 'styled-components';
+import { EntityStatus } from '../../components/EntityStatus';
 
 const hmyRPCUrl = 'https://api.harmony.one';
 
@@ -51,6 +52,20 @@ export interface isLayerZeroOperation {
   srcUaNonce: number;
   status: string;
 }
+
+const statuses: Record<STATUS, string> = {
+  waiting: 'Waiting',
+  success: 'Success',
+  in_progress: 'In progress',
+  error: 'Error',
+  canceled: 'Canceled',
+};
+
+const layerZeroStatusMap = {
+  INFLIGHT: STATUS.IN_PROGRESS,
+  DELIVERED: STATUS.SUCCESS,
+  waiting: STATUS.WAITING,
+};
 
 const layerZeroStatus = {
   INFLIGHT: 'In progress',
@@ -185,12 +200,20 @@ const StepRow = observer(
       >
         <StyledText state={textState}>{number + 1 + '. ' + label}</StyledText>
         <Box direction="row" justify="between">
-          <StyledText state={textState}>
-            Status:{' '}
-            {isLayerZeroStep
-              ? layerZeroStatus[lz.status]
-              : statuses[action.status]}
-          </StyledText>
+          <Box direction="row" gap="8px">
+            <StyledText state={textState}>Status: </StyledText>
+            {isLayerZeroStep ? (
+              <EntityStatus
+                status={layerZeroStatusMap[lz.status]}
+                label={layerZeroStatus[lz.status]}
+              />
+            ) : (
+              <EntityStatus
+                status={action.status}
+                label={statuses[action.status]}
+              />
+            )}
+          </Box>
           {action.timestamp && (
             <StyledText state={textState}>
               {dateTimeFormat(action.timestamp * 1000)}
@@ -306,14 +329,6 @@ const isEth = type =>
     'unlockERC1155Token',
     'unlockERC1155TokenRollback',
   ].includes(type);
-
-const statuses: Record<STATUS, string> = {
-  waiting: 'Waiting',
-  success: 'Success',
-  in_progress: 'In progress',
-  error: 'Error',
-  canceled: 'Canceled',
-};
 
 export const Steps = observer(() => {
   const { exchange, user } = useStores();

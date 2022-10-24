@@ -9,10 +9,6 @@ import { Box } from 'grommet';
 import { Text } from 'components/Base';
 import { STATUS } from '../stores/interfaces';
 
-interface Props {
-  status: STATUS;
-}
-
 const boxProps = {
   direction: 'row',
   align: 'center',
@@ -75,24 +71,32 @@ export const StatusCompleted: React.FC<{ label?: string }> = ({ label }) => {
 
 StatusCompleted.displayName = 'StatusCompleted';
 
-export const EntityStatus: React.FC<Props> = ({ status }) => {
+interface EntityStatusProps {
+  status: STATUS;
+  label?: string;
+}
+
+export const EntityStatus: React.FC<EntityStatusProps> = ({
+  status,
+  label = '',
+}) => {
   if (status === STATUS.SUCCESS) {
-    return <StatusCompleted />;
+    return <StatusCompleted label={label} />;
   }
 
   if (status === STATUS.WAITING) {
-    return <StatusPending label="Waiting" />;
+    return <StatusPending label={label || 'Waiting'} />;
   }
 
   if (status === STATUS.IN_PROGRESS) {
-    return <StatusPending label="In progress" />;
+    return <StatusPending label={label || 'In progress'} />;
   }
 
   if (status === STATUS.CANCELED) {
-    return <StatusCanceled />;
+    return <StatusCanceled label={label} />;
   }
 
-  return <StatusError />;
+  return <StatusError label={label} />;
 };
 
 EntityStatus.displayName = 'EntityStatus';
