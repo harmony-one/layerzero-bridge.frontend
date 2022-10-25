@@ -268,7 +268,7 @@ export class EthMethodsERC20 {
     //   .estimateGas({ from: accounts[0] });
 
     const gasLimit = Math.max(
-      300000,
+      500000,
       Number(process.env.ETH_GAS_LIMIT),
     );
 
