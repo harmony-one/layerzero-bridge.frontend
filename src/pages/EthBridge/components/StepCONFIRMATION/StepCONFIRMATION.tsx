@@ -11,6 +11,7 @@ import { ethBridgeStore } from '../../EthBridgeStore';
 import { Networks } from '../Networks/Networks';
 import { Divider } from '../../../../components/Divider/Divider';
 import { StepContainer } from '../StepContainer';
+import { StatusWarning } from 'grommet-icons';
 
 interface Props {}
 
@@ -35,6 +36,22 @@ export const StepCONFIRMATION: React.FC<Props> = observer(() => {
       <Networks />
 
       <Divider />
+
+      {isBalanceEnough && (
+        <Box
+          direction="row"
+          gap="xsmall"
+          align="center"
+          justify="center"
+          margin={{ top: 'medium' }}
+        >
+          <StatusWarning color="#FF0000" />
+
+          <Text color="Red500" style={{ textAlign: 'right' }}>
+            You don't have enough balance
+          </Text>
+        </Box>
+      )}
 
       <Box pad="60px">
         <Details showTotal={true} />
@@ -65,13 +82,6 @@ export const StepCONFIRMATION: React.FC<Props> = observer(() => {
               You will be prompted to sign several transactions
             </Text>
           </Box>
-          {!isBalanceEnough && (
-            <Box margin={{ top: 'medium' }}>
-              <Text color="Red500" style={{ textAlign: 'right' }}>
-                You don't have enough balance
-              </Text>
-            </Box>
-          )}
         </>
       </Box>
       <Box direction="row" height="66px">
