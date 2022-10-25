@@ -291,7 +291,7 @@ export class MobxForm<T = {}> extends React.Component<IMobxFormProps & T, any> {
         return o;
       }, {});
 
-      validator.validate(flattenValue, (err: IErrorField[], fields: IErrorFields) => {
+      validator.validate(flattenValue, undefined, (err: IErrorField[], fields: IErrorFields) => {
         if (fields) {
           this.resetErrors();
           return reject(fields);
