@@ -22,11 +22,9 @@ import Web3 from 'web3';
 import { NETWORK_ERC20_TOKEN, NETWORK_NAME } from './names';
 import { isAddressEqual } from './UserStore';
 import * as services from '../services';
-import { loadUsedTokenList } from '../services';
 import { getChainConfig, numberToHex } from './Exchange/helpers';
 import {
   buildTokenId,
-  buildUsedTokenId,
   getAssetOriginAddress,
   getAssetsMappingAddress,
 } from '../utils/token';
@@ -313,28 +311,36 @@ export class UserStoreMetamask extends StoreConstructor {
 
   @action.bound public async loadTokenListBalance(tokens: ITokenInfo[]) {
     const walletAddress = this.stores.userMetamask.ethAddress;
-    const usedTokenList = await loadUsedTokenList(walletAddress);
+    // const usedTokenList = await loadUsedTokenList(walletAddress);
+    //
+    // const usedTokenMap = usedTokenList.reduce((acc, item) => {
+    //   return {
+    //     ...acc,
+    //     [buildUsedTokenId(item)]: item,
+    //   };
+    // }, {});
 
-    const usedTokenMap = usedTokenList.reduce((acc, item) => {
-      return {
-        ...acc,
-        [buildUsedTokenId(item)]: item,
-      };
-    }, {});
-
-    for (let i = 0; i < tokens.length; i++) {
-      const token = tokens[i];
+    for (let i = 0; i < this.stores.tokens.allData.length; i++) {
+      const token = this.stores.tokens.allData[i];
 
       const tokenId = buildTokenId(token);
-      const usedToken = usedTokenMap[tokenId];
 
-      if (usedToken) {
-        const balance = await this.loadTokenBalance(token, walletAddress);
-        this.balances[tokenId] = divDecimals(balance, token.decimals);
-      }
+      this.loadTokenBalance(token, walletAddress)
+        .then(balance => {
+          this.updateTokenBalance(
+            tokenId,
+            divDecimals(balance, token.decimals),
+          );
+        })
+        .catch(ex => {
+          console.error('### loadTokenBalance', ex);
+        });
     }
+  }
 
-    this.balances = { ...this.balances };
+  @action.bound
+  updateTokenBalance(tokenId: string, balance) {
+    this.balances[tokenId] = balance;
   }
 
   @action.bound public async loadTokenBalance(
@@ -345,125 +351,154 @@ export class UserStoreMetamask extends StoreConstructor {
       return 0;
     }
 
-    const isHarmonyNetwork =
-      this.stores.exchange.network === NETWORK_TYPE.HARMONY;
-    const isNetworkOriginForToken =
-      this.stores.exchange.network === token.network;
-    if (!isHarmonyNetwork && !isNetworkOriginForToken) {
-      return 0;
-    }
+    const exchangeModeDirection = this.stores.exchange.mode;
+    if (exchangeModeDirection === EXCHANGE_MODE.ONE_TO_ETH) {
+      if (token.token === TOKEN.ONE) {
+        // native token balance = ONE
+        const res = await getHmyBalance(walletAddress);
 
-    try {
-      if (token.network === NETWORK_TYPE.HARMONY) {
-        const contractAddress = getAssetsMappingAddress(token);
-
-        switch (token.token) {
-          case TOKEN.ONE:
-            return await getHmyBalance(walletAddress);
-          case TOKEN.ETH:
-            return await hmyMethodsERC20.hmyMethodsWeb3.checkHmyBalance(
-              contractAddress,
-              walletAddress,
-            );
-          case TOKEN.ERC20:
-            return await hmyMethodsERC20.hmyMethodsWeb3.checkHmyBalance(
-              contractAddress,
-              walletAddress,
-            );
-          case TOKEN.HRC20:
-            const hrc20ContractAddress = getAssetOriginAddress(token);
-            return await hmyMethodsHRC20.hmyMethodsWeb3.checkHmyBalance(
-              hrc20ContractAddress,
-              walletAddress,
-            );
-          case TOKEN.LINK:
-            return await hmyMethodsLINK.hmyMethodsWeb3.checkHmyBalance(
-              walletAddress,
-            );
-          case TOKEN.BUSD:
-            return await hmyMethodsBUSD.hmyMethodsWeb3.checkHmyBalance(
-              walletAddress,
-            );
-          case TOKEN.HRC721:
-            return await hmyMethodsHRC721.hmyMethodsWeb3.checkHmyBalance(
-              contractAddress,
-              walletAddress,
-            );
-          case TOKEN.ERC721:
-            return await hmyMethodsERC721.hmyMethodsWeb3.checkHmyBalance(
-              contractAddress,
-              walletAddress,
-            );
-          case TOKEN.HRC1155:
-            return await hmyMethodsHRC1155.hmyMethodsWeb3.balanceOf(
-              contractAddress,
-              walletAddress,
-            );
-          case TOKEN.ERC1155:
-            return await hmyMethodsERC1155.hmyMethodsWeb3.balanceOf(
-              contractAddress,
-              walletAddress,
-            );
-        }
+        return Number(res.result).toString();
       }
 
-      const exNetwork = getExNetworkMethods(token.network);
-      const contractAddress = getAssetOriginAddress(token);
-      switch (token.token) {
-        case TOKEN.ONE:
-          const extContractAddress = getAssetsMappingAddress(token);
-          return await exNetwork.ethMethodsERC20.checkEthBalance(
-            extContractAddress,
-            walletAddress,
-          );
-        case TOKEN.ETH:
-          return await exNetwork.getEthBalance(walletAddress);
-        case TOKEN.ERC20:
-          return await exNetwork.ethMethodsERC20.checkEthBalance(
-            contractAddress,
-            walletAddress,
-          );
-        case TOKEN.HRC20:
-          let address = await exNetwork.ethMethodsHRC20.getMappingFor(
-            contractAddress,
-            false,
-          );
-
-          return await exNetwork.ethMethodsHRC20.checkEthBalance(
-            address,
-            walletAddress,
-          );
-        case TOKEN.LINK:
-          return await exNetwork.ethMethodsLINK.checkEthBalance(walletAddress);
-        case TOKEN.BUSD:
-          return await exNetwork.ethMethodsBUSD.checkEthBalance(walletAddress);
-        case TOKEN.HRC721:
-          return await exNetwork.ethMethodsHRC721.checkEthBalance(
-            contractAddress,
-            walletAddress,
-          );
-        case TOKEN.ERC721:
-          return await exNetwork.ethMethodsERС721.checkEthBalance(
-            contractAddress,
-            walletAddress,
-          );
-        case TOKEN.HRC1155:
-          return await exNetwork.ethMethodsHRC1155.checkEthBalance(
-            contractAddress,
-            walletAddress,
-          );
-        case TOKEN.ERC1155:
-          return await exNetwork.ethMethodsERC1155.checkEthBalance(
-            contractAddress,
-            walletAddress,
-          );
-      }
-    } catch (err) {
-      console.log('### ========');
-      console.log(`### err ${token.token} ${token.network}`, err.message);
-
-      return 0;
+      // hrc20 balance
+      return await hmyMethodsERC20.hmyMethodsWeb3.checkHmyBalance(
+        token.hrc20Address,
+        walletAddress,
+      );
     }
+
+    const exNetwork = getExNetworkMethods(token.network);
+
+    if (exchangeModeDirection === EXCHANGE_MODE.ETH_TO_ONE) {
+      if (token.token === TOKEN.ETH) {
+        return await exNetwork.getEthBalance(walletAddress);
+      }
+
+      return await exNetwork.ethMethodsERC20.checkEthBalance(
+        token.erc20Address,
+        walletAddress,
+      );
+    }
+
+    // const isHarmonyNetwork =
+    //   this.stores.exchange.network === NETWORK_TYPE.HARMONY;
+    // const isNetworkOriginForToken =
+    //   this.stores.exchange.network === token.network;
+    // if (!isHarmonyNetwork && !isNetworkOriginForToken) {
+    //   return 0;
+    // }
+    //
+    // try {
+    //   if (token.network === NETWORK_TYPE.HARMONY) {
+    //     const contractAddress = getAssetsMappingAddress(token);
+    //
+    //     switch (token.token) {
+    //       case TOKEN.ONE:
+    //         return await getHmyBalance(walletAddress);
+    //       case TOKEN.ETH:
+    //         return await hmyMethodsERC20.hmyMethodsWeb3.checkHmyBalance(
+    //           contractAddress,
+    //           walletAddress,
+    //         );
+    //       case TOKEN.ERC20:
+    //         return await hmyMethodsERC20.hmyMethodsWeb3.checkHmyBalance(
+    //           contractAddress,
+    //           walletAddress,
+    //         );
+    //       case TOKEN.HRC20:
+    //         const hrc20ContractAddress = getAssetOriginAddress(token);
+    //         return await hmyMethodsHRC20.hmyMethodsWeb3.checkHmyBalance(
+    //           hrc20ContractAddress,
+    //           walletAddress,
+    //         );
+    //       case TOKEN.LINK:
+    //         return await hmyMethodsLINK.hmyMethodsWeb3.checkHmyBalance(
+    //           walletAddress,
+    //         );
+    //       case TOKEN.BUSD:
+    //         return await hmyMethodsBUSD.hmyMethodsWeb3.checkHmyBalance(
+    //           walletAddress,
+    //         );
+    //       case TOKEN.HRC721:
+    //         return await hmyMethodsHRC721.hmyMethodsWeb3.checkHmyBalance(
+    //           contractAddress,
+    //           walletAddress,
+    //         );
+    //       case TOKEN.ERC721:
+    //         return await hmyMethodsERC721.hmyMethodsWeb3.checkHmyBalance(
+    //           contractAddress,
+    //           walletAddress,
+    //         );
+    //       case TOKEN.HRC1155:
+    //         return await hmyMethodsHRC1155.hmyMethodsWeb3.balanceOf(
+    //           contractAddress,
+    //           walletAddress,
+    //         );
+    //       case TOKEN.ERC1155:
+    //         return await hmyMethodsERC1155.hmyMethodsWeb3.balanceOf(
+    //           contractAddress,
+    //           walletAddress,
+    //         );
+    //     }
+    //   }
+    //
+    //   const exNetwork = getExNetworkMethods(token.network);
+    //   const contractAddress = getAssetOriginAddress(token);
+    //   switch (token.token) {
+    //     case TOKEN.ONE:
+    //       const extContractAddress = getAssetsMappingAddress(token);
+    //       return await exNetwork.ethMethodsERC20.checkEthBalance(
+    //         extContractAddress,
+    //         walletAddress,
+    //       );
+    //     case TOKEN.ETH:
+    //       return await exNetwork.getEthBalance(walletAddress);
+    //     case TOKEN.ERC20:
+    //       return await exNetwork.ethMethodsERC20.checkEthBalance(
+    //         contractAddress,
+    //         walletAddress,
+    //       );
+    //     case TOKEN.HRC20:
+    //       let address = await exNetwork.ethMethodsHRC20.getMappingFor(
+    //         contractAddress,
+    //         false,
+    //       );
+    //
+    //       return await exNetwork.ethMethodsHRC20.checkEthBalance(
+    //         address,
+    //         walletAddress,
+    //       );
+    //     case TOKEN.LINK:
+    //       return await exNetwork.ethMethodsLINK.checkEthBalance(walletAddress);
+    //     case TOKEN.BUSD:
+    //       return await exNetwork.ethMethodsBUSD.checkEthBalance(walletAddress);
+    //     case TOKEN.HRC721:
+    //       return await exNetwork.ethMethodsHRC721.checkEthBalance(
+    //         contractAddress,
+    //         walletAddress,
+    //       );
+    //     case TOKEN.ERC721:
+    //       return await exNetwork.ethMethodsERС721.checkEthBalance(
+    //         contractAddress,
+    //         walletAddress,
+    //       );
+    //     case TOKEN.HRC1155:
+    //       return await exNetwork.ethMethodsHRC1155.checkEthBalance(
+    //         contractAddress,
+    //         walletAddress,
+    //       );
+    //     case TOKEN.ERC1155:
+    //       return await exNetwork.ethMethodsERC1155.checkEthBalance(
+    //         contractAddress,
+    //         walletAddress,
+    //       );
+    //   }
+    // } catch (err) {
+    //   console.log('### ========');
+    //   console.log(`### err ${token.token} ${token.network}`, err.message);
+    //
+    //   return 0;
+    // }
   }
 
   @action.bound public getBalances = async () => {

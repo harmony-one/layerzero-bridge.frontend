@@ -90,6 +90,17 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
     return true;
   };
 
+  const sortByBalance = useMemo(() => {
+    return (a: ITokenInfo, b: ITokenInfo) => {
+      const tokenIdA = buildTokenId(a);
+      const balanceA = userMetamask.balances[tokenIdA] || 0;
+      const tokenIdB = buildTokenId(b);
+      const balanceB = userMetamask.balances[tokenIdB] || 0;
+
+      return Number(balanceB) - Number(balanceA);
+    };
+  }, [userMetamask.balances, Object.values(userMetamask.balances).toString()]);
+
   const tokenlist = useMemo(() => {
     console.log('TOKENS', tokens);
 
@@ -124,22 +135,8 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
           token.name.toLowerCase().includes(search.toLowerCase())
         );
       })
-      .sort((a, b) => {
-        // sort by balance
-        const tokenIdA = buildTokenId(a);
-        const balanceA = userMetamask.balances[tokenIdA] || 0;
-        const tokenIdB = buildTokenId(b);
-        const balanceB = userMetamask.balances[tokenIdB] || 0;
-
-        return Number(balanceB) - Number(balanceA);
-      });
-  }, [
-    exchange.network,
-    exchange.token,
-    search,
-    tokens.allData,
-    userMetamask.balances,
-  ]);
+      .sort(sortByBalance);
+  }, [exchange.network, exchange.token, search, sortByBalance, tokens]);
 
   return (
     <Box

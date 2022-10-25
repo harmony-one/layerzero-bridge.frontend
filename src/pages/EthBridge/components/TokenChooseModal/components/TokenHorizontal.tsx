@@ -38,11 +38,11 @@ export const TokenHorizontal: React.FC<TokenHorizontalProps> = ({
           {label}
         </Text>
       </Box>
-      {/*<Box margin={{ left: 'auto' }}>*/}
-      {/*  <Text size="xsmall" lh="19px">*/}
-      {/*    {balance}*/}
-      {/*  </Text>*/}
-      {/*</Box>*/}
+      <Box margin={{ left: 'auto' }}>
+        <Text size="xsmall" lh="19px">
+          {balance}
+        </Text>
+      </Box>
     </Box>
   );
 };
