@@ -114,6 +114,7 @@ export const Header: React.FC<Props> = React.memo(() => {
         flex={{ grow: 0, shrink: 0 }}
         align="center"
         basis="150px"
+        justify="end"
         direction="row"
       >
         <ThemeButton />
