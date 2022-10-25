@@ -37,7 +37,7 @@ export const StepCONFIRMATION: React.FC<Props> = observer(() => {
 
       <Divider />
 
-      {isBalanceEnough && (
+      {!isBalanceEnough && (
         <Box
           direction="row"
           gap="xsmall"
