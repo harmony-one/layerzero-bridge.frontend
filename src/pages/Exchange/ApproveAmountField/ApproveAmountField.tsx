@@ -58,7 +58,8 @@ export const ApproveAmountField = observer<any>(({ tokenInfo }) => {
               // wrapperClassName={'wrapperClassN'}
               disabled={!customAmount}
               name="approveAmount"
-              type="integer"
+              type="decimal"
+              min="0"
               precision="6"
               border="none"
               delimiter="."
