@@ -6,15 +6,12 @@ import { Button } from 'grommet/components/Button';
 import { useStores } from '../../../../stores';
 import { observer } from 'mobx-react';
 import { TextInput } from 'grommet';
-import { ModalIds } from '../../../../modals';
 import { TokenHorizontal } from './components/TokenHorizontal';
-import { tokensMainnetImageMap } from '../../../Exchange/tokens';
-import { NETWORK_BASE_TOKEN, NETWORK_ICON } from '../../../../stores/names';
-import { ITokenInfo, NETWORK_TYPE, TOKEN } from '../../../../stores/interfaces';
+import { ITokenInfo, TOKEN } from '../../../../stores/interfaces';
 import styled from 'styled-components';
 import { LoadableContent } from '../../../../components/LoadableContent';
 import { buildTokenId } from '../../../../utils/token';
-import { formatWithTwoDecimals } from '../../../../utils';
+import { formatWithSixDecimals } from '../../../../utils';
 
 interface Props {
   onClose?: () => void;
@@ -155,7 +152,7 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
                 className={s.borderBottom}
                 symbol={token.symbol}
                 label={`${token.name} - ${token.type}`}
-                balance={formatWithTwoDecimals(balance)}
+                balance={formatWithSixDecimals(balance)}
                 icon={token.image}
                 onClick={async () => {
                   exchange.setToken(token.type);

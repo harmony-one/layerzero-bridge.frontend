@@ -6,15 +6,10 @@ import {
   getExNetworkMethods,
   getHmyBalance,
   hmyMethodsBEP20,
-  hmyMethodsBUSD,
   hmyMethodsERC1155,
   hmyMethodsERC20,
   hmyMethodsERC721,
   hmyMethodsERC721Hmy,
-  hmyMethodsHRC1155,
-  hmyMethodsHRC20,
-  hmyMethodsHRC721,
-  hmyMethodsLINK,
 } from '../blockchain-bridge';
 import { divDecimals } from '../utils';
 import { EXCHANGE_MODE, ITokenInfo, NETWORK_TYPE, TOKEN } from './interfaces';
@@ -23,11 +18,7 @@ import { NETWORK_ERC20_TOKEN, NETWORK_NAME } from './names';
 import { isAddressEqual } from './UserStore';
 import * as services from '../services';
 import { getChainConfig, numberToHex } from './Exchange/helpers';
-import {
-  buildTokenId,
-  getAssetOriginAddress,
-  getAssetsMappingAddress,
-} from '../utils/token';
+import { buildTokenId } from '../utils/token';
 
 const defaults = {};
 
@@ -136,6 +127,17 @@ export class UserStoreMetamask extends StoreConstructor {
   }
 
   @action.bound
+  async updateBalance() {
+    const balanceHex = await this.provider.request({
+      method: 'eth_getBalance',
+      params: [this.ethAddress, 'latest'],
+    });
+
+    const balance = Number(balanceHex);
+    this.balance = balance.toString();
+  }
+
+  @action.bound
   handleAccountsChanged(accounts) {
     if (accounts.length === 0) {
       return this.setError('Please connect to MetaMask');
@@ -143,15 +145,7 @@ export class UserStoreMetamask extends StoreConstructor {
       this.ethAddress = accounts[0];
 
       try {
-        this.provider
-          .request({
-            method: 'eth_getBalance',
-            params: [this.ethAddress, 'latest'],
-          })
-          .then(balanceHex => {
-            const balance = Number(balanceHex);
-            this.balance = balance.toString();
-          });
+        this.updateBalance();
       } catch (err) {
         console.log('### err', err);
       }
@@ -310,8 +304,12 @@ export class UserStoreMetamask extends StoreConstructor {
   @action.bound public async loadTokenListBalance() {
     const walletAddress = this.stores.userMetamask.ethAddress;
 
-    for (let i = 0; i < this.stores.tokens.allData.length; i++) {
-      const token = this.stores.tokens.allData[i];
+    const tokens = this.stores.tokens.allData.filter(item => {
+      return item.network === this.stores.exchange.network;
+    });
+
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
 
       const tokenId = buildTokenId(token);
 
@@ -361,7 +359,8 @@ export class UserStoreMetamask extends StoreConstructor {
 
     if (exchangeModeDirection === EXCHANGE_MODE.ETH_TO_ONE) {
       if (token.token === TOKEN.ETH) {
-        return await exNetwork.getEthBalance(walletAddress);
+        await this.updateBalance();
+        return this.balance;
       }
 
       return await exNetwork.ethMethodsERC20.checkEthBalance(

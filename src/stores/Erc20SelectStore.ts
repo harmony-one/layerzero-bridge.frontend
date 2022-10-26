@@ -21,11 +21,11 @@ export class Erc20SelectStore extends StoreConstructor {
       }
     });
 
-    autorun(() => {
-      if (stores.exchange.mode && this.tokenAddress) {
-        this.setToken(this.tokenAddress);
-      }
-    });
+    // autorun(() => {
+    //   if (stores.exchange.mode && this.tokenAddress) {
+    //     this.setToken(this.tokenAddress);
+    //   }
+    // });
 
     autorun(() => {
       if (stores.exchange.token) {

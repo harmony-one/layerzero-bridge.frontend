@@ -1405,4 +1405,10 @@ export class Exchange extends StoreConstructor {
   getChainConfig() {
     return getChainConfig(this.mode, this.network);
   }
+
+  getDefaultToken() {
+    return tokensConfigs.find(token => {
+      return token.network === this.stores.exchange.network;
+    });
+  }
 }
