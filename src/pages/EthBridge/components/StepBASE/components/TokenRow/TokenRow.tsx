@@ -11,23 +11,63 @@ import { truncateAddressString } from '../../../../../../utils';
 import { CircleQuestion } from 'grommet-icons';
 import { TipContent } from '../../../../../../components/TipContent';
 import { Link } from 'components/Link';
+import { getTokenConfig } from '../../../../../../config';
+
+const TokenAddresses = observer(() => {
+  const { exchange, erc20Select } = useStores();
+
+  const tokenConfig = getTokenConfig(erc20Select.tokenAddress);
+
+  const originalAddress =
+    exchange.token === TOKEN.HRC20
+      ? tokenConfig.hrc20Address
+      : tokenConfig.erc20Address;
+
+  const mappedAddress =
+    exchange.token !== TOKEN.HRC20
+      ? tokenConfig.hrc20Address
+      : tokenConfig.erc20Address;
+
+  const originAddressLink =
+    exchange.token === TOKEN.HRC20
+      ? `${process.env.HMY_EXPLORER_URL}/address/${tokenConfig.hrc20Address}`
+      : `${exchange.config.explorerURL}/token/${tokenConfig.erc20Address}`;
+
+  const mappedAddressLink =
+    exchange.token !== TOKEN.HRC20
+      ? `${process.env.HMY_EXPLORER_URL}/address/${tokenConfig.hrc20Address}?activeTab=3`
+      : `${exchange.config.explorerURL}/token/${tokenConfig.erc20Address}`;
+
+  return (
+    <Box>
+      <Text bold>
+        <Link
+          monospace
+          href={originAddressLink}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {truncateAddressString(erc20Select.tokenAddress, 8)}
+        </Link>
+      </Text>
+      <Text bold>
+        <Link
+          monospace
+          href={mappedAddressLink}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {truncateAddressString(mappedAddress, 8)}
+        </Link>
+      </Text>
+    </Box>
+  );
+});
 
 interface Props {}
 
 export const TokenRow: React.FC<Props> = observer(() => {
-  const { exchange, erc20Select, tokens } = useStores();
-
-  const mappedAddress = tokens.getMappedAddress(erc20Select.tokenAddress);
-
-  const originAddressLink =
-    exchange.token === TOKEN.HRC20
-      ? `${process.env.HMY_EXPLORER_URL}/address/${erc20Select.tokenAddress}`
-      : `${exchange.config.explorerURL}/token/${erc20Select.tokenAddress}`;
-
-  const mappedAddressLink =
-    exchange.token !== TOKEN.HRC20
-      ? `${process.env.HMY_EXPLORER_URL}/address/${erc20Select.tokenAddress}?activeTab=3`
-      : `${exchange.config.explorerURL}/token/${erc20Select.tokenAddress}`;
+  const { exchange, erc20Select } = useStores();
 
   const displayTokenAddress =
     [TOKEN.ERC20, TOKEN.HRC20].includes(exchange.token) &&
@@ -84,30 +124,7 @@ export const TokenRow: React.FC<Props> = observer(() => {
                 </Tip>
               </Box>
             }
-            centerContent={
-              <Box>
-                <Text bold>
-                  <Link
-                    monospace
-                    href={originAddressLink}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {truncateAddressString(erc20Select.tokenAddress, 8)}
-                  </Link>
-                </Text>
-                <Text bold>
-                  <Link
-                    monospace
-                    href={mappedAddressLink}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {truncateAddressString(mappedAddress, 8)}
-                  </Link>
-                </Text>
-              </Box>
-            }
+            centerContent={<TokenAddresses />}
           />
         </Box>
       )}

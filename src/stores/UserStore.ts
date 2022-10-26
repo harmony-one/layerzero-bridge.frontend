@@ -84,7 +84,7 @@ export class UserStoreEx extends StoreConstructor {
 
     setInterval(() => this.getBalances(), ONE_SECOND * 3);
 
-    this.getRates();
+    setInterval(() => this.getRates(), ONE_SECOND * 30);
 
     // @ts-ignore
     this.isOneWallet = window.onewallet && window.onewallet.isOneWallet;

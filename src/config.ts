@@ -335,6 +335,10 @@ export const getTokenConfig = (addr: string): ITokenInfo => {
     );
   }
 
+  if (!token) {
+    return null;
+  }
+
   const config = layerZeroConfig[token.network.toLowerCase()];
 
   return { ...token, config };
