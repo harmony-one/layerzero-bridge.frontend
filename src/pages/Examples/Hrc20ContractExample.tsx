@@ -44,8 +44,8 @@ export const Hrc20ContractExample = () => {
     provider.on('chainIdChanged', chainId =>
       console.log('chainIdChanged', chainId),
     );
-    provider.on('networkChanged', chainId =>
-      console.log('networkChanged', chainId),
+    provider.on('chainChanged', chainId =>
+      console.log('chainChanged', chainId),
     );
 
     provider

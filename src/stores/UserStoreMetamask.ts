@@ -218,18 +218,12 @@ export class UserStoreMetamask extends StoreConstructor {
         this.ethAddress = null;
       });
 
-      this.provider.on(
-        'chainIdChanged',
-        chainId => (this.metamaskChainId = chainId),
-      );
-      this.provider.on(
-        'chainChanged',
-        chainId => (this.metamaskChainId = chainId),
-      );
-      this.provider.on(
-        'networkChanged',
-        chainId => (this.metamaskChainId = chainId),
-      );
+      const handleChangeNetwork = chainId => {
+        this.metamaskChainId = chainId;
+      };
+
+      this.provider.on('chainIdChanged', handleChangeNetwork);
+      this.provider.on('chainChanged', handleChangeNetwork);
 
       this.provider
         .request({ method: 'eth_requestAccounts' })
