@@ -15,11 +15,14 @@ import { TokenChooseModal } from '../TokenChooseModal/TokenChooseModal';
 import { autorun } from 'mobx';
 import { TOKEN } from '../../../../stores/interfaces';
 import { StepContainer } from '../StepContainer';
+import { WalletNetworkWarn } from './components/WalletNetworkWarn';
+import { SwitchNetworkButton } from '../SwitchNetworkButton';
+import { MetamaskButton } from '../../../../components/MetamaskButton';
 
 interface Props {}
 
 export const StepBASE: React.FC<Props> = observer(() => {
-  const { exchange } = useStores();
+  const { exchange, userMetamask } = useStores();
 
   const handleClickReset = useCallback(() => {
     exchange.clear();
@@ -59,9 +62,36 @@ export const StepBASE: React.FC<Props> = observer(() => {
     });
   }, []);
 
+  const handleClickMetamask = useCallback(() => {
+    if (userMetamask.isAuthorized) {
+      // return userMetamask.signOut();
+    }
+
+    return userMetamask.signIn();
+  }, [userMetamask]);
+
   return (
     <StepContainer>
       <NetworkRow />
+      <Box gap="24px" pad={{ horizontal: '30px', bottom: '20px' }}>
+        <Box direction="column" gap="16px" justify="center" align="center">
+          <MetamaskButton
+            active={userMetamask.isAuthorized}
+            onClick={handleClickMetamask}
+          />
+        </Box>
+        {userMetamask.isAuthorized && !userMetamask.isNetworkActual && (
+          <Box align="center" gap="16px">
+            <WalletNetworkWarn />
+            {!userMetamask.isNetworkActual && userMetamask.isAuthorized && (
+              <Box>
+                <SwitchNetworkButton />
+              </Box>
+            )}
+          </Box>
+        )}
+      </Box>
+
       <Divider />
       <Box pad={{ vertical: '30px' }}>
         <TokenRow />
@@ -70,6 +100,7 @@ export const StepBASE: React.FC<Props> = observer(() => {
       <Box align="center" pad={{ vertical: '30px', horizontal: '20px' }}>
         <Destination />
       </Box>
+
       <Box direction="row" height="66px">
         {/*<Button*/}
         {/*  fontSize="14px"*/}

@@ -39,15 +39,16 @@ export const WalletNetworkWarn: React.FC<Props> = observer(() => {
 
   return (
     <Box direction="row" gap="xsmall" align="center">
-      <StatusWarning color="#FF0000" />
-      <Text size="xsmall">
+      {/*<StatusWarning color="#FF0000" />*/}
+      <Text size="xsmall" align="center">
         You have authorised with MetaMask, but the selected network does not
-        match{' '}
+        match&nbsp;
         <span style={{ color: 'rgb(0, 173, 232)' }}>
           {externalNetworkName}: {externalSubNetworkName}
         </span>
-        . Please change network to {externalSubNetworkName} for transfer{' '}
-        {externalNetworkName} -> {destinationNetworkName} with MetaMask.
+        . Please change network to {externalSubNetworkName} for transfer&nbsp;
+        {externalNetworkName}&nbsp;->&nbsp;{destinationNetworkName} with
+        MetaMask.
       </Text>
     </Box>
   );

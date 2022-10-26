@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useRef } from 'react';
+import React, { useCallback, useContext, useRef } from 'react';
 import { useStores } from '../../../../../../stores';
 import { Box } from 'grommet/components/Box';
 import { Text } from '../../../../../../components/Base';
@@ -14,46 +14,12 @@ import { CircleQuestion } from 'grommet-icons';
 import { Tip } from 'grommet/components/Tip';
 import { ThemeContext } from '../../../../../../themes/ThemeContext';
 import { TipContent } from 'components/TipContent';
-import { SwitchNetworkButton } from '../../../SwitchNetworkButton';
-import { WalletNetworkWarn } from '../WalletNetworkWarn';
-
-interface MetamaskButtonProps {
-  active: boolean;
-  onClick: () => void;
-}
-
-const MetamaskButton: React.FC<MetamaskButtonProps> = ({ active, onClick }) => {
-  return (
-    <Button
-      className={cn(s.metamaskButton, { [s.active]: active })}
-      onClick={onClick}
-    >
-      <Box direction="row" gap="8px" align="center">
-        <Box>
-          <img src="/metamask-fox-wordmark-horizontal.svg" height="42" />
-        </Box>
-        {/*<Text color="NWhite" size="xxsmall" lh="24px">*/}
-        {/*  {label}*/}
-        {/*</Text>*/}
-        {/*{active && <Icon glyph="CloseCircle" />}*/}
-        {/*{!active && <Icon glyph="AddCircle" />}*/}
-      </Box>
-    </Button>
-  );
-};
+import { MetamaskButton } from '../../../../../../components/MetamaskButton';
 
 interface Props {}
 
 export const Destination: React.FC<Props> = observer(() => {
   const { userMetamask, exchange } = useStores();
-
-  const handleClickMetamask = useCallback(() => {
-    if (userMetamask.isAuthorized) {
-      // return userMetamask.signOut();
-    }
-
-    return userMetamask.signIn();
-  }, [userMetamask]);
 
   const handleClickUseMyAddress = useCallback(() => {
     exchange.setDestinationAddressByMode(userMetamask.ethAddress);
@@ -121,20 +87,12 @@ export const Destination: React.FC<Props> = observer(() => {
         </Text>
       )}
 
-      <Box direction="column" gap="16px" justify="center" align="center">
-        <MetamaskButton
-          active={userMetamask.isAuthorized}
-          onClick={handleClickMetamask}
-        />
-        {userMetamask.isAuthorized && !userMetamask.isNetworkActual && (
-          <WalletNetworkWarn />
-        )}
-        {!userMetamask.isNetworkActual && userMetamask.isAuthorized && (
-          <Box>
-            <SwitchNetworkButton />
-          </Box>
-        )}
-      </Box>
+      {/*<Box direction="column" gap="16px" justify="center" align="center">*/}
+      {/*  <MetamaskButton*/}
+      {/*    active={userMetamask.isAuthorized}*/}
+      {/*    onClick={handleClickMetamask}*/}
+      {/*  />*/}
+      {/*</Box>*/}
     </Box>
   );
 });

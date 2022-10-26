@@ -9,7 +9,10 @@ interface MetamaskButtonProps {
   onClick: () => void;
 }
 
-export const MetamaskButton: React.FC<MetamaskButtonProps> = ({ active, onClick }) => {
+export const MetamaskButton: React.FC<MetamaskButtonProps> = ({
+  active,
+  onClick,
+}) => {
   return (
     <Button
       className={cn(s.metamaskButton, { [s.active]: active })}
