@@ -39,7 +39,7 @@ export const BaseContainer: React.FC<IStyledChildrenProps<
             }}
             {...props}
           >
-            <Disclaimer />
+            {/* <Disclaimer /> */}
             {children}
           </Box>
         </div>

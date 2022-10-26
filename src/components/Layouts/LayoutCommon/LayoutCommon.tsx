@@ -42,7 +42,7 @@ export const LayoutCommon: React.FC<Props> = ({ children }) => {
       </Box>
       <HeaderDivider />
       <Box className={s.contentContainer} align="center" justify="center">
-        <Disclaimer />
+        {/* <Disclaimer /> */}
         {children}
       </Box>
     </StyledBox>
