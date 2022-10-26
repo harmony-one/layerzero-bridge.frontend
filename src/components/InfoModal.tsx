@@ -43,8 +43,7 @@ export const InfoModal = observer(() => {
         width: '800px',
         showOther: true,
         applyButtonProps: {
-          fill: true,
-          style: { height: '30px' },
+          style: { padding: '12px 40px' },
         },
         onApply: () => {
           user.setInfoNewReading();
