@@ -274,7 +274,7 @@ export class UserStoreMetamask extends StoreConstructor {
         params: [{ chainId: config.chainId }],
       });
 
-      console.log('### success');
+      await this.tokenBalanceWatcher();
     } catch (switchError) {
       if (switchError.code === 4902) {
         try {
@@ -303,16 +303,12 @@ export class UserStoreMetamask extends StoreConstructor {
     );
   }
 
-  @action.bound public async loadTokenListBalance(tokens: ITokenInfo[]) {
+  @action.bound public async tokenBalanceWatcher() {
+    this.loadTokenListBalance();
+  }
+
+  @action.bound public async loadTokenListBalance() {
     const walletAddress = this.stores.userMetamask.ethAddress;
-    // const usedTokenList = await loadUsedTokenList(walletAddress);
-    //
-    // const usedTokenMap = usedTokenList.reduce((acc, item) => {
-    //   return {
-    //     ...acc,
-    //     [buildUsedTokenId(item)]: item,
-    //   };
-    // }, {});
 
     for (let i = 0; i < this.stores.tokens.allData.length; i++) {
       const token = this.stores.tokens.allData[i];

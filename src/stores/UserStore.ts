@@ -18,6 +18,7 @@ import { EXCHANGE_MODE, IOperation, NETWORK_TYPE, TOKEN } from './interfaces';
 import { divDecimals } from '../utils';
 import { HarmonyAddress } from '@harmony-js/crypto';
 import { NETWORK_ERC20_TOKEN, NETWORK_NAME } from './names';
+import { ONE_SECOND } from '../constants/dates';
 
 const Web3 = require('web3');
 
@@ -79,9 +80,9 @@ export class UserStoreEx extends StoreConstructor {
 
       // await this.getBalances();
       // await this.getOneBalance();
-    }, 3000);
+    }, ONE_SECOND * 3);
 
-    setInterval(() => this.getBalances(), 3 * 1000);
+    setInterval(() => this.getBalances(), ONE_SECOND * 3);
 
     this.getRates();
 
@@ -302,7 +303,7 @@ export class UserStoreEx extends StoreConstructor {
           this.hmyLINKBalance = divDecimals(resBalance, 18);
         }
       } catch (e) {
-        console.error(e);
+        console.error('getBalances', e);
       }
     }
   };

@@ -59,36 +59,11 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
 
   useEffect(() => {
     if (tokens.allData.length) {
-      userMetamask.loadTokenListBalance(tokens.allData);
+      userMetamask.loadTokenListBalance();
     }
   }, [tokens.allData, userMetamask]);
 
-  const handleClickCustom = useCallback(() => {
-    routing.goToModal(ModalIds.BRIDGE_CUSTOM_TOKEN);
-  }, [routing]);
-
-  const getImage = (
-    ethAddress: string,
-    hrcAddress: string,
-    network: NETWORK_TYPE,
-  ) => {
-    return (
-      tokensMainnetImageMap[ethAddress.toLowerCase()] ||
-      tokensMainnetImageMap[hrcAddress.toLowerCase()] ||
-      NETWORK_ICON[network]
-    );
-  };
-
-  const filterExtraToken = (token: ITokenInfo) => {
-    // if (
-    //   token.symbol.toLowerCase() === TOKEN.BUSD ||
-    //   token.symbol.toLowerCase() === TOKEN.LINK
-    // ) {
-    //   return false;
-    // }
-
-    return true;
-  };
+  const sortCashKey = Object.values(userMetamask.balances).toString();
 
   const sortByBalance = useMemo(() => {
     return (a: ITokenInfo, b: ITokenInfo) => {
@@ -99,13 +74,10 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
 
       return Number(balanceB) - Number(balanceA);
     };
-  }, [userMetamask.balances, Object.values(userMetamask.balances).toString()]);
+  }, [userMetamask.balances, sortCashKey]);
 
   const tokenlist = useMemo(() => {
-    console.log('TOKENS', tokens);
-
     return tokens.allData
-      .filter(filterExtraToken)
       .filter(token => {
         if (token.network !== exchange.network) {
           return false;
