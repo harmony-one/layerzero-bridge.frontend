@@ -17,6 +17,7 @@ const StyledLink = styled.a`
   font-weight: bold;
   padding: 12px 12px;
   text-decoration: none;
+  cursor: pointer;
 `;
 
 const StyledNavLink = styled(NavLink)`
