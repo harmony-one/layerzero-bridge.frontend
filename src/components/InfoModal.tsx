@@ -34,7 +34,7 @@ export const InfoModal = observer(() => {
   // }, [user.isInfoReading]);
   //
   useEffect(() => {
-    if (user.isInfoNewReading) {
+    if (!user.isInfoNewReading) {
       actionModals.open(() => <InfoNew2 title="Important Notice" />, {
         title: 'Important Notice',
         applyText: 'Got it',
@@ -52,3 +52,5 @@ export const InfoModal = observer(() => {
 
   return <></>;
 });
+
+InfoModal.displayName = 'InfoModal';
