@@ -65,7 +65,7 @@ export const StepCONFIRMATION: React.FC<Props> = observer(() => {
             >
               <Text color="Red500" style={{ textAlign: 'right' }}>
                 The metamask may ask you to sign with slightly higher fee due to
-                150000 gas limit estimate, however you will be charged similar
+                500000 gas limit estimate, however you will be charged similar
                 to the above estimate based on the actual gas used.
               </Text>
             </Box>

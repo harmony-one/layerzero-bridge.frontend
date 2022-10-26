@@ -344,7 +344,7 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
               <div style={{ opacity: 1 }}>
                 <AssetRow label="Approve" value="">
                   <Price
-                    value={0.0067219}
+                    value={0.97219}
                     isEth={false}
                     boxProps={{ pad: {} }}
                     network={exchange.network}
@@ -362,7 +362,7 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
                 ) : (
                   <AssetRow label="Burn" value="">
                     <Price
-                      value={0.0067219}
+                      value={0.97219}
                       isEth={false}
                       boxProps={{ pad: {} }}
                       network={exchange.network}
@@ -405,9 +405,9 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
                     />
                   </AssetRow>
                 ) : (
-                  <AssetRow label="Lock token (~50000 gas)" value="">
+                  <AssetRow label="Lock token (~500000 gas)" value="">
                     <Price
-                      value={exchange.networkFee / 2}
+                      value={exchange.networkFee * 2.8}
                       isEth={exchange.mode === EXCHANGE_MODE.ETH_TO_ONE}
                       boxProps={{ pad: {} }}
                       network={exchange.network}
