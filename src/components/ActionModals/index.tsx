@@ -130,6 +130,7 @@ export const ActionModal = observer<{
             accent
             disabled={isActionLoading || !actionData.isValid}
             onClick={handleClickApply}
+            {...options.applyButtonProps}
           >
             {options.applyText || 'Ok'}
           </ModalButton>

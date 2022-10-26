@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { action, observable } from 'mobx';
 import { guid } from 'utils';
-import {statusFetching} from "../constants";
+import { statusFetching } from '../constants';
+import { ButtonType } from 'grommet';
 
 export type ActionModalBody = (data: {
   actionData?: any;
@@ -18,6 +19,7 @@ export interface ActionModalOptions {
   noValidation?: boolean;
   initData?: any;
   showOther?: boolean;
+  applyButtonProps?: ButtonType;
 }
 
 export interface ActionModalConfig {

@@ -42,6 +42,10 @@ export const InfoModal = observer(() => {
         noValidation: true,
         width: '800px',
         showOther: true,
+        applyButtonProps: {
+          fill: true,
+          style: { height: '30px' },
+        },
         onApply: () => {
           user.setInfoNewReading();
           return Promise.resolve();

@@ -12,6 +12,7 @@ export const ModalButton = styled(Button)<Props>`
   border-radius: 15px;
   padding: 4px 20px;
   font-size: 14px;
+  text-align: center;
   color: ${props => props.theme.palette.NWhite};
 `;
 
