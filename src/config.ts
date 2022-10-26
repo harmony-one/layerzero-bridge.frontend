@@ -95,7 +95,7 @@ export const tokensConfigs: ITokenInfo[] = [
   {
     hrc20Address: '0x118f50d23810c5E09Ebffb42d7D3328dbF75C2c2',
     erc20Address: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
-    proxyERC20: '0x7A49bede3363304D69A0e09548B8B4c5EfD84ba4',
+    proxyERC20: '0xab6Ebe9472e2e4B6FE720Dad16701F32ab905CC6',
     proxyHRC20: '0x116C8344f79C334EB6cd0D55Ec603b6BA36f67A2',
     name: 'Wrapped BTC',
     symbol: 'WBTC',
