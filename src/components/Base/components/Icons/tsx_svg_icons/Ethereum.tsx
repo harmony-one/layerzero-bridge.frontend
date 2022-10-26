@@ -9,7 +9,7 @@ export const Ethereum = (props: React.SVGProps<SVGSVGElement>) => (
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
-    <g clip-path="url(#clip0_439_1051)">
+    <g clipPath="url(#clip0_439_1051)">
       <path d="M9.99629 0L0 16.2966L9.99629 11.8331V0Z" fill="#8A92B2" />
       <path
         d="M9.99629 11.8331L0 16.2966L9.99629 22.1031V11.8331Z"

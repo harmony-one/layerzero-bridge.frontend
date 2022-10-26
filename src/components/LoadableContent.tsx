@@ -17,9 +17,9 @@ const StyledBox = styled(Box)<Props>`
   background-color: rgba(0, 0, 0, 0.5);
 `;
 
-export const LoadableContent: React.FC<Props> = ({ loading }) => {
+export const LoadableContent: React.FC<Props> = ({ loading = false }) => {
   return (
-    <StyledBox loading={loading}>
+    <StyledBox loading={loading ? loading : undefined}>
       <Box justify="center" fill align="center">
         <Spinner size="medium" />
       </Box>

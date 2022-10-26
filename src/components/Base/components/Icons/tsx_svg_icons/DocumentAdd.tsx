@@ -16,14 +16,14 @@ export const DocumentAdd = (props: React.SVGProps<SVGSVGElement>) => (
       fill="currentColor"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M23.1466 18.5C23.791 18.5 24.3133 19.0223 24.3133 19.6667V26.7333C24.3133 27.3777 23.791 27.9 23.1466 27.9C22.5023 27.9 21.98 27.3777 21.98 26.7333V19.6667C21.98 19.0223 22.5023 18.5 23.1466 18.5Z"
       fill="currentColor"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M18.4333 23.2C18.4333 22.5557 18.9557 22.0334 19.6 22.0334H26.68C27.3243 22.0334 27.8467 22.5557 27.8467 23.2C27.8467 23.8444 27.3243 24.3667 26.68 24.3667H19.6C18.9557 24.3667 18.4333 23.8444 18.4333 23.2Z"
       fill="currentColor"
     />
