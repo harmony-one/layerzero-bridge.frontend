@@ -73,24 +73,32 @@ export const StepBASE: React.FC<Props> = observer(() => {
   return (
     <StepContainer>
       <NetworkRow />
-      <Box gap="24px" pad={{ horizontal: '30px', bottom: '20px' }}>
-        <Box direction="column" gap="16px" justify="center" align="center">
-          <MetamaskButton
-            active={userMetamask.isAuthorized}
-            onClick={handleClickMetamask}
-          />
+      {!userMetamask.isAuthorized && (
+        <Box
+          direction="column"
+          justify="center"
+          pad={{ horizontal: '80px', bottom: '20px' }}
+        >
+          <MetamaskButton active={true} onClick={handleClickMetamask} />
         </Box>
-        {userMetamask.isAuthorized && !userMetamask.isNetworkActual && (
-          <Box align="center" gap="16px">
-            <WalletNetworkWarn />
-            {!userMetamask.isNetworkActual && userMetamask.isAuthorized && (
-              <Box>
-                <SwitchNetworkButton />
-              </Box>
-            )}
-          </Box>
-        )}
-      </Box>
+      )}
+
+      {userMetamask.isAuthorized && !userMetamask.isNetworkActual && (
+        <Box
+          direction="column"
+          justify="center"
+          align="center"
+          gap="16px"
+          pad={{ horizontal: '30px', bottom: '20px' }}
+        >
+          <WalletNetworkWarn />
+          {!userMetamask.isNetworkActual && userMetamask.isAuthorized && (
+            <Box>
+              <SwitchNetworkButton />
+            </Box>
+          )}
+        </Box>
+      )}
 
       <Divider />
       <Box pad={{ vertical: '30px' }}>

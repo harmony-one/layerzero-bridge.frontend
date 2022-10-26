@@ -169,6 +169,8 @@ export class UserStoreMetamask extends StoreConstructor {
 
   @action.bound
   public async signOut() {
+    console.log('### metamask signout');
+
     this.isAuthorized = false;
     this.ethBalance = '0';
     this.ethAddress = '';
@@ -189,6 +191,8 @@ export class UserStoreMetamask extends StoreConstructor {
 
   @action.bound
   public async signIn(isNew = false) {
+    console.log('### metamask signin');
+
     try {
       this.error = '';
 
@@ -207,7 +211,9 @@ export class UserStoreMetamask extends StoreConstructor {
 
       this.provider.on('accountsChanged', this.handleAccountsChanged);
 
-      this.provider.on('disconnect', () => {
+      this.provider.on('disconnect', params => {
+        console.log('### metamask disconnect', params);
+
         this.isAuthorized = false;
         this.ethAddress = null;
       });

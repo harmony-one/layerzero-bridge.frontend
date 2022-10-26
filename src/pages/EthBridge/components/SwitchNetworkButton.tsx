@@ -12,6 +12,7 @@ const StyledButton = styled(Button)`
   border-radius: 15px;
   padding: 4px 20px;
   font-size: 14px;
+  min-height: 40px;
   color: ${props => props.theme.palette.NWhite};
 `;
 
