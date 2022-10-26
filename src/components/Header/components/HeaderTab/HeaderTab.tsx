@@ -6,8 +6,9 @@ import styled from 'styled-components';
 
 interface Props {
   title: string;
-  to: string;
+  to?: string;
   external?: boolean;
+  onClick?: () => void;
 }
 
 const StyledLink = styled.a`
@@ -26,7 +27,16 @@ const StyledNavLink = styled(NavLink)`
   text-decoration: none;
 `;
 
-export const HeaderTab: React.FC<Props> = ({ title, to, external }) => {
+export const HeaderTab: React.FC<Props> = ({
+  title,
+  to,
+  external,
+  onClick,
+}) => {
+  if (onClick) {
+    return <StyledLink onClick={onClick}>{title}</StyledLink>;
+  }
+
   if (external) {
     return (
       <StyledLink href={to} target="_blank" rel="noreferrer">

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { Box, Grid } from 'grommet';
 import * as s from './Header.styl';
 import { HeaderTab } from './components/HeaderTab/HeaderTab';
@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import { ThemeButton } from '../ThemeButton';
 import { ThemeContext } from '../../themes/ThemeContext';
 import { truncateAddressString } from '../../utils';
+import { InfoNew2 } from '../InfoNew';
 
 const HeaderLogo = () => {
   return (
@@ -77,6 +78,26 @@ const StyledGrid = styled(Grid)`
 interface Props {}
 
 export const Header: React.FC<Props> = React.memo(() => {
+  const { actionModals } = useStores();
+
+  const openTerms = useCallback(() => {
+    actionModals.open(() => <InfoNew2 title="Important Notice" />, {
+      title: 'Important Notice',
+      applyText: 'Got it',
+      closeText: '',
+      noValidation: true,
+      width: '800px',
+      showOther: true,
+      applyButtonProps: {
+        fill: true,
+        style: { height: '30px' },
+      },
+      onApply: () => {
+        return Promise.resolve();
+      },
+    });
+  }, []);
+
   return (
     <StyledGrid align="center">
       {/*<Box*/}
@@ -108,6 +129,7 @@ export const Header: React.FC<Props> = React.memo(() => {
           external
         />
         <HeaderTab title="Support" to="/support" />
+        <HeaderTab title="Terms of Services" onClick={openTerms} />
       </Box>
       <Box
         gridArea="account"
