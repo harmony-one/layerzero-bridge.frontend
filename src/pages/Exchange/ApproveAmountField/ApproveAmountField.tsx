@@ -60,7 +60,7 @@ export const ApproveAmountField = observer<any>(({ tokenInfo }) => {
               name="approveAmount"
               type="decimal"
               min="0"
-              precision="6"
+              precision="18"
               border="none"
               delimiter="."
               placeholder="0"

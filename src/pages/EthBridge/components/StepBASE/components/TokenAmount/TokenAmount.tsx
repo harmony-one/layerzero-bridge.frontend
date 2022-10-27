@@ -55,7 +55,7 @@ export const TokenAmount: React.FC<Props> = observer(() => {
           name="amount"
           type="decimal"
           min="0"
-          precision="6"
+          precision="18"
           bgColor="transparent"
           border="none"
           delimiter="."
