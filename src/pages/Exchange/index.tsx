@@ -951,7 +951,7 @@ export class Exchange extends React.Component<
           ) : null}
 
           {exchange.step.id === EXCHANGE_STEPS.APPROVE ? (
-            <ApproveAmountField tokenInfo={this.tokenInfo} />
+            <ApproveAmountField />
           ) : null}
         </Form>
 
