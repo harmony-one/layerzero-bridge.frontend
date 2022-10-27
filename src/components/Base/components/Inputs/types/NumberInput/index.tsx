@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   absNumber,
   limitLength,
@@ -94,11 +94,13 @@ export const NumberInput: React.FC<INumberInputProps> = ({
 } = {}) => {
   const { mask, getValue, onChange: onChangeNormalize } = types[type];
 
-  const onChangeHandler = valueArg => onChangeNormalize(props)(valueArg);
+  const onChangeHandler = useMemo(() => {
+    return valueArg => onChangeNormalize(props)(valueArg);
+  }, [onChangeNormalize, props]);
 
   useEffect(() => {
     props.onChange(onChangeHandler(props.value));
-  }, []);
+  }, [onChangeHandler, props]);
 
   return (
     <TextInput

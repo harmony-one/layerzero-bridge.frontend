@@ -11,7 +11,7 @@ import { Checkbox } from '../../../components/Base/components/Inputs/types';
 import { minAmount } from '../../../utils';
 import * as s from './ApproveAmountField.styl';
 
-export const ApproveAmountField = observer<any>(({ tokenInfo }) => {
+export const ApproveAmountField = observer<{}>(() => {
   const { exchange } = useStores();
 
   const [customAmount, setCustomAmount] = useState(false);

@@ -41,7 +41,7 @@ export const StepAPPROVE: React.FC<Props> = observer(() => {
           </Box>
         )}
 
-        <ApproveAmountField tokenInfo={exchange.tokenInfo} />
+        <ApproveAmountField />
       </Box>
 
       <Box direction="row" height="66px">
