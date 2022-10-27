@@ -40,15 +40,13 @@ export const App: React.FC = () => (
         <Route exact path="/support" component={SupportPage} />
         <Route exact path="/explorer/:validator?" component={Explorer} />
         <Route exact path="/portfolio/" component={Portfolio} />
-        <Route exact path="/stuck-operations" component={StuckOperations} />} />
+        <Route exact path="/stuck-operations" component={StuckOperations} />
         <Route exact path="/admin-explorer" component={AdminExplorer} />
-        } />
         <Route
           exact
           path="/admin-explorer-full-history"
           component={AdminExplorerFullHistory}
         />
-        } />
         <Route exact path="/:token" component={EthBridge} />
         <Route
           exact
