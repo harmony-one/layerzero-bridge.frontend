@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { useStores } from '../../../../stores';
 import { Box } from 'grommet';
 import * as s from '../StepBASE/StepBASE.styl';
-import { Button } from '../../../../components/Base';
+import { Button, Text } from '../../../../components/Base';
 import cn from 'classnames';
 import { ethBridgeStore } from '../../EthBridgeStore';
 import { Networks } from '../Networks/Networks';
@@ -23,6 +23,7 @@ export const StepAPPROVE: React.FC<Props> = observer(() => {
 
   const handleClickContinue = useCallback(() => {
     const conf = exchange.step.buttons[1];
+
     exchange.onClickHandler(conf.validate, conf.onClick, ethBridgeStore);
   }, [exchange]);
 
@@ -31,7 +32,15 @@ export const StepAPPROVE: React.FC<Props> = observer(() => {
       <Networks />
 
       <Divider />
-      <Box pad="60px">
+      <Box pad="60px" gap="20px">
+        {ethBridgeStore.addressValidationError && (
+          <Box justify="center">
+            <Text align="center" color="red">
+              {ethBridgeStore.addressValidationError}
+            </Text>
+          </Box>
+        )}
+
         <ApproveAmountField tokenInfo={exchange.tokenInfo} />
       </Box>
 

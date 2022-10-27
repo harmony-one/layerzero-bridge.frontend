@@ -1296,6 +1296,20 @@ export class Exchange extends StoreConstructor {
             return;
           }
 
+          if (exchange.step.id === EXCHANGE_STEPS.APPROVE) {
+            const amount = mulDecimals(
+              exchange.transaction.amount.toString(),
+              18,
+            );
+            const approve = mulDecimals(exchange.transaction.approveAmount, 18);
+
+            if (approve.lt(amount)) {
+              ethBridgeStore.addressValidationError =
+                'Approve amount is less than required';
+              throw new Error('Approve amount is less than required');
+            }
+          }
+
           callback();
         })
         .catch(error => {
