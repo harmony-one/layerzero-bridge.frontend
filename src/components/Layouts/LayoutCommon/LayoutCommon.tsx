@@ -4,6 +4,7 @@ import * as s from './LayoutCommon.styl';
 import { Header } from '../../Header/Header';
 import styled from 'styled-components';
 import { Disclaimer } from '../../../components/DisclaimerWarning';
+import PageFooter from 'components/PageFooter';
 
 interface Props {}
 
@@ -45,6 +46,7 @@ export const LayoutCommon: React.FC<Props> = ({ children }) => {
         {/* <Disclaimer /> */}
         {children}
       </Box>
+      <PageFooter />
     </StyledBox>
   );
 };
