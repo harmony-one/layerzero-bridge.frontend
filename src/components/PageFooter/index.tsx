@@ -45,17 +45,17 @@ const Divider = styled.div`
   box-sizing: border-box;
 `;
 
-const SocialNetworks = () => {
+const SocialNetworks = props => {
   return (
-    <Box
-      direction="row"
-    
-      gap="small"
-    >
+    <Box direction="row" gap="small">
       {SocialNetworksData.map(social => {
         return (
           <div
-            style={{ cursor: 'pointer', fontSize: '1.2rem', paddingTop: '1em' }}
+            style={{
+              cursor: 'pointer',
+              fontSize: '1.2rem',
+              paddingTop: '1em',
+            }}
             onClick={() => window.open(social.url, '_blank')}
           >
             {social.icon}
@@ -66,11 +66,20 @@ const SocialNetworks = () => {
   );
 };
 
+const StyledDiv = styled.div`
+  color: ${props => props.theme.headerTab.color};
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 4em;
+`;
+
 const PageFooter: React.FC<Props> = () => {
   return (
-    <div className={cn(styles.footer)}>
+    <StyledDiv>
       <Divider />
-      <Box direction="column" align="center" fill='vertical'>
+      <Box direction="column" align="center" fill="vertical">
         <SocialNetworks />
         <Box
           direction="row"
@@ -84,7 +93,7 @@ const PageFooter: React.FC<Props> = () => {
           </p>
         </Box>
       </Box>
-    </div>
+    </StyledDiv>
   );
 };
 
