@@ -68,11 +68,11 @@ const SocialNetworks = props => {
 
 const StyledDiv = styled.div`
   color: ${props => props.theme.headerTab.color};
-  position: fixed;
-  left: 0;
+  right: 0;
   bottom: 0;
-  width: 100%;
+  left: 0;
   height: 4em;
+  //position: sticky !important;
 `;
 
 const PageFooter: React.FC<Props> = () => {
