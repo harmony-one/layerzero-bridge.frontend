@@ -37,7 +37,7 @@ export const InfoModal = observer(() => {
     if (!user.isInfoNewReading) {
       actionModals.open(() => <InfoNew2 title="Important Notice" />, {
         title: 'Important Notice',
-        applyText: 'Got it',
+        applyText: 'Agreed',
         closeText: '',
         noValidation: true,
         width: '800px',

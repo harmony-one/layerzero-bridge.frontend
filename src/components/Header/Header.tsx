@@ -83,7 +83,7 @@ export const Header: React.FC<Props> = React.memo(() => {
   const openTerms = useCallback(() => {
     actionModals.open(() => <InfoNew2 title="Important Notice" />, {
       title: 'Important Notice',
-      applyText: 'Got it',
+      applyText: 'Agreed',
       closeText: '',
       noValidation: true,
       width: '800px',
