@@ -1,9 +1,9 @@
 import React, { useCallback, useContext } from 'react';
-import { Box, Grid } from 'grommet';
+import { Box, Grid, Menu } from 'grommet';
+import { MoreVertical } from 'grommet-icons';
 import * as s from './Header.styl';
 import { HeaderTab } from './components/HeaderTab/HeaderTab';
 import { observer } from 'mobx-react';
-import { useMediaQuery } from 'react-responsive';
 import { useStores } from '../../stores';
 import styled from 'styled-components';
 import { ThemeButton } from '../ThemeButton';
@@ -75,6 +75,46 @@ const StyledGrid = styled(Grid)`
   }
 `;
 
+const MoreMenu: React.FC = React.memo(() => {
+  const makeNavigateCb = (url: string) => () => {
+    window.open(url, '_blank');
+  };
+
+  const menuItems = [
+    {
+      label: 'Tutorial',
+      onClick: makeNavigateCb(
+        'https://docs.harmony.one/home/general/layerzero-bridge/bridging-tutorial',
+      ),
+    },
+    {
+      label: 'FAQ',
+      onClick: makeNavigateCb(
+        'https://docs.harmony.one/home/general/layerzero-bridge/faq',
+      ),
+    },
+    {
+      label: 'Help',
+      onClick: makeNavigateCb(
+        'https://docs.harmony.one/home/general/layerzero-bridge/help',
+      ),
+    },
+  ];
+
+  return (
+    <Menu
+      dropProps={{
+        align: { top: 'bottom', right: 'right' },
+        round: 'small',
+        margin: { right: '20px' },
+      }}
+      plain
+      icon={<MoreVertical />}
+      items={menuItems}
+    />
+  );
+});
+
 interface Props {}
 
 export const Header: React.FC<Props> = React.memo(() => {
@@ -140,6 +180,7 @@ export const Header: React.FC<Props> = React.memo(() => {
       >
         <ThemeButton />
         <Account />
+        <MoreMenu />
       </Box>
       {/*</Box>*/}
     </StyledGrid>
