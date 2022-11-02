@@ -268,6 +268,15 @@ export const baseTheme: any = {
     },
   },
 
+  menu: {
+    background: palette.NBlack,
+    item: {
+      // color: 'brand',
+      // style: { fontFamily: 'Arial', fontWeight: 'bold' },
+    },
+    // extend: `border: 3px solid gray`,
+  },
+
   select: {
     background: palette.Basic100,
     icons: {

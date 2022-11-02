@@ -1,39 +1,17 @@
 import React, { useCallback, useContext } from 'react';
+import styled from 'styled-components';
+import { observer } from 'mobx-react';
 import { Box, Grid, Menu } from 'grommet';
 import { MoreVertical } from 'grommet-icons';
+import { Text } from '../Base';
 import * as s from './Header.styl';
 import { HeaderTab } from './components/HeaderTab/HeaderTab';
-import { observer } from 'mobx-react';
 import { useStores } from '../../stores';
-import styled from 'styled-components';
 import { ThemeButton } from '../ThemeButton';
 import { ThemeContext } from '../../themes/ThemeContext';
 import { truncateAddressString } from '../../utils';
 import { InfoNew2 } from '../InfoNew';
-
-const HeaderLogo = () => {
-  return (
-    <Box direction="row" align="center">
-      <Box>
-        <img alt="harmony logo" src="/harmony_logo_blue.svg" />
-      </Box>
-      <Box direction="column" pad={{ left: '26px' }}>
-        <Box>
-          <span
-            style={{ color: 'white', letterSpacing: '12px', fontSize: '14px' }}
-          >
-            HORIZON
-          </span>
-        </Box>
-        <Box>
-          <span style={{ color: '#AAAAAA', fontSize: '11px' }}>
-            <b>by Harmony</b>
-          </span>
-        </Box>
-      </Box>
-    </Box>
-  );
-};
+import { MoreMenu } from './components/MoreMenu';
 
 const HarmonyLogo = () => {
   const themeContext = useContext(ThemeContext);
@@ -74,46 +52,6 @@ const StyledGrid = styled(Grid)`
     grid-template-areas: 'logo menu account';
   }
 `;
-
-const MoreMenu: React.FC = React.memo(() => {
-  const makeNavigateCb = (url: string) => () => {
-    window.open(url, '_blank');
-  };
-
-  const menuItems = [
-    {
-      label: 'Tutorial',
-      onClick: makeNavigateCb(
-        'https://docs.harmony.one/home/general/layerzero-bridge/bridging-tutorial',
-      ),
-    },
-    {
-      label: 'FAQ',
-      onClick: makeNavigateCb(
-        'https://docs.harmony.one/home/general/layerzero-bridge/faq',
-      ),
-    },
-    {
-      label: 'Help',
-      onClick: makeNavigateCb(
-        'https://docs.harmony.one/home/general/layerzero-bridge/help',
-      ),
-    },
-  ];
-
-  return (
-    <Menu
-      dropProps={{
-        align: { top: 'bottom', right: 'right' },
-        round: 'small',
-        margin: { right: '20px' },
-      }}
-      plain
-      icon={<MoreVertical />}
-      items={menuItems}
-    />
-  );
-});
 
 interface Props {}
 
@@ -179,7 +117,7 @@ export const Header: React.FC<Props> = React.memo(() => {
         direction="row"
       >
         <ThemeButton />
-        <Account />
+        {/*<Account />*/}
         <MoreMenu />
       </Box>
       {/*</Box>*/}
