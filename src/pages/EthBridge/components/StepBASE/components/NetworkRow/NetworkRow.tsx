@@ -9,19 +9,14 @@ interface Props {}
 
 export const NetworkRow: React.FC<Props> = observer(() => {
   return (
-    <Box
-      direction="row"
-      justify="around"
-      align="center"
-      style={{ height: '168px' }}
-    >
-      <Box basis="0" flex="grow">
+    <Box direction="row" align="center">
+      <Box basis="33%" flex={{ grow: 1, shrink: 0 }}>
         <NetworkSourceControl />
       </Box>
-      <Box>
+      <Box align="center" pad={{ vertical: '16px' }}>
         <NetworkDirection />
       </Box>
-      <Box basis="0" flex="grow">
+      <Box basis="33%" flex={{ grow: 1, shrink: 0 }}>
         <NetworkDestination />
       </Box>
     </Box>

@@ -80,21 +80,25 @@ export const TokenRow: React.FC<Props> = observer(() => {
       {/*<Box justify="center" align="center" pad={{ bottom: '16px' }}>*/}
       {/*  <TokenSettings />*/}
       {/*</Box>*/}
-      <Box direction="row" justify="center">
-        <Box basis="0" flex="grow">
+      <Box direction="row-responsive" justify="center">
+        <Box flex={{ grow: 1, shrink: 0 }} basis="33%">
           <TokenControl />
         </Box>
-        <Box pad={{ top: '12px' }}>
+        <Box
+          flex={{ grow: 0, shrink: 1 }}
+          align="center"
+          pad={{ vertical: '12px' }}
+        >
           {exchange.tokenInfo && exchange.tokenInfo.image && (
             <img alt="token" src={exchange.tokenInfo.image} width="40" />
           )}
         </Box>
-        <Box basis="0" flex="grow" align="center">
+        <Box flex={{ grow: 1, shrink: 0 }} basis="33%" align="center">
           <TokenAmount />
         </Box>
       </Box>
       {displayTokenAddress && (
-        <Box justify="center" align="center" pad={{ top: 'xsmall' }}>
+        <Box justify="center" align="center" pad={{ top: '16px' }}>
           <BridgeControl
             gap="8px"
             title={

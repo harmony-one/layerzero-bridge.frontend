@@ -19,7 +19,10 @@ export const NetworkDirection: React.FC<Props> = observer(() => {
   }, [exchange, userMetamask]);
 
   return (
-    <Button onClick={handleChangeMode} style={{ width: '40px' }}>
+    <Button
+      onClick={handleChangeMode}
+      style={{ width: '40px', textAlign: 'center' }}
+    >
       <Transaction />
     </Button>
   );

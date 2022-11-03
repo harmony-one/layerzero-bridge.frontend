@@ -72,12 +72,14 @@ export const StepBASE: React.FC<Props> = observer(() => {
 
   return (
     <StepContainer>
-      <NetworkRow />
+      <Box pad={{ top: '24px' }}>
+        <NetworkRow />
+      </Box>
       {!userMetamask.isAuthorized && (
         <Box
           direction="column"
           justify="center"
-          pad={{ horizontal: '80px', bottom: '20px' }}
+          pad={{ horizontal: '80px', vertical: '20px' }}
         >
           <MetamaskButton active={true} onClick={handleClickMetamask} />
         </Box>
@@ -89,7 +91,7 @@ export const StepBASE: React.FC<Props> = observer(() => {
           justify="center"
           align="center"
           gap="16px"
-          pad={{ horizontal: '30px', bottom: '20px' }}
+          pad={{ horizontal: '30px', vertical: '20px' }}
         >
           <WalletNetworkWarn />
           {!userMetamask.isNetworkActual && userMetamask.isAuthorized && (

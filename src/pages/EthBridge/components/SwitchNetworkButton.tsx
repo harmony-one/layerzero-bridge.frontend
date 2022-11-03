@@ -8,6 +8,7 @@ import styled from 'styled-components';
 interface Props {}
 
 const StyledButton = styled(Button)`
+  text-align: center;
   background-color: ${props => props.theme.palette.NBlue};
   border-radius: 15px;
   padding: 4px 20px;
