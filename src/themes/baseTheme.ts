@@ -270,11 +270,13 @@ export const baseTheme: any = {
 
   menu: {
     background: palette.NBlack,
-    item: {
-      // color: 'brand',
-      // style: { fontFamily: 'Arial', fontWeight: 'bold' },
+    item: {},
+  },
+
+  table: {
+    loader: {
+      bgColor: 'rgba(0, 0, 0, 0.6)',
     },
-    // extend: `border: 3px solid gray`,
   },
 
   select: {

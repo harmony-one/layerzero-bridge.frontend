@@ -267,6 +267,12 @@ export const lightTheme: any = {
     },
   },
 
+  table: {
+    loader: {
+      bgColor: 'rgba(255, 255, 255, 0.6)',
+    },
+  },
+
   select: {
     background: palette.Basic100,
     icons: {
