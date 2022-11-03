@@ -72,7 +72,7 @@ export const StepBASE: React.FC<Props> = observer(() => {
 
   return (
     <StepContainer>
-      <Box pad={{ top: '24px' }}>
+      <Box pad={{ vertical: '24px' }}>
         <NetworkRow />
       </Box>
       {!userMetamask.isAuthorized && (
