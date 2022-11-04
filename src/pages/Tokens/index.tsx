@@ -5,12 +5,11 @@ import { observer } from 'mobx-react-lite';
 import { useStores } from 'stores';
 import { IColumn, Table } from 'components/Table';
 import { ITokenInfo, NETWORK_TYPE, TOKEN } from 'stores/interfaces';
-import { formatWithTwoDecimals, truncateAddressString } from 'utils';
+import { formatWithTwoDecimals } from 'utils';
 import * as styles from './styles.styl';
 import { Text } from 'components/Base';
 import { SearchInput } from 'components/Search';
-import { getBech32Address, getChecksumAddress } from '../../blockchain-bridge';
-import { NETWORK_ICON } from '../../stores/names';
+import { getBech32Address } from '../../blockchain-bridge';
 import { useMediaQuery } from 'react-responsive';
 import { LayoutCommon } from '../../components/Layouts/LayoutCommon/LayoutCommon';
 import { FilterTokenType } from './components/FilterTokenType/FilterTokenType';
@@ -18,92 +17,8 @@ import { FilterNetworkType } from './components/FilterNetworkType/FilterNetworkT
 import { TokensHeader } from './components/TokensHeader/TokensHeader';
 import styled from 'styled-components';
 import { TokenSymbol } from '../Explorer/TokenSymbol';
-
-const TRUNCATE_ADDRESS = 6;
-
-const EthAddress = observer(
-  ({ value, network }: { value: string; network: NETWORK_TYPE }) => {
-    const { exchange } = useStores();
-
-    return (
-      <Box
-        direction="row"
-        justify="start"
-        align="center"
-        style={{ marginTop: 4 }}
-      >
-        <img
-          alt="network"
-          className={styles.imgToken}
-          style={{ height: 20 }}
-          src={NETWORK_ICON[network]}
-        />
-        <a
-          className={styles.addressLink}
-          href={`${exchange.getExplorerByNetwork(network)}/token/${value}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {truncateAddressString(value, TRUNCATE_ADDRESS)}
-        </a>
-      </Box>
-    );
-  },
-);
-
-const oneAddress = value => (
-  <Box direction="row" justify="start" align="center" style={{ marginTop: 4 }}>
-    <img
-      alt="harmony address"
-      className={styles.imgToken}
-      style={{ height: 18 }}
-      src="/one.svg"
-    />
-    <a
-      className={styles.addressLink}
-      href={`${process.env.HMY_EXPLORER_URL}/address/${value}?activeTab=3`}
-      target="_blank"
-    >
-      {truncateAddressString(value, TRUNCATE_ADDRESS)}
-    </a>
-  </Box>
-);
-
-const getAssetAddress = (data: ITokenInfo, type: 'origin' | 'mapping') => {
-  /*
-  token type        | type    | address       | component
-  ---               | ---     | ---           |
-  token.erc         | origin  | erc20Address  | EthAddress
-  token.hrc         | origin  | hrc20Address  | HrcAddress
-  token.erc         | mapping | hrc20Address  | HrcAddress
-  token.hrc         | mapping | erc20Address  | EthAddress
-   */
-  let assetPrefix;
-  switch (type) {
-    case 'origin':
-      assetPrefix = 'erc';
-      break;
-    case 'mapping':
-      assetPrefix = 'hrc';
-      break;
-  }
-
-  const isMappingForOne = data.type === TOKEN.ONE && type === 'mapping';
-
-  const isErcOrHrcToken = data.type.indexOf(assetPrefix) !== -1;
-
-  if (isErcOrHrcToken || isMappingForOne) {
-    return <EthAddress value={data.erc20Address} network={data.network} />;
-  } else {
-    const address =
-      String(data.hrc20Address).toLowerCase() ===
-      String(process.env.ONE_HRC20).toLowerCase()
-        ? String(data.hrc20Address).toLowerCase()
-        : getChecksumAddress(data.hrc20Address);
-
-    return oneAddress(address);
-  }
-};
+import { TableRowMobile } from './components/TableRowMobile';
+import { AssetLink } from './AssetLink';
 
 const StyledGrid = styled(Grid)`
   //grid-template-columns: auto auto auto auto;
@@ -114,7 +29,7 @@ const StyledGrid = styled(Grid)`
 
   @media (min-width: 850px) {
     //grid-template-columns: auto auto auto auto;
-    grid-template-areas: 'total total total total' 'search search filters select';
+    grid-template-areas: 'total total total total' 'seagetAssetAddressrch search filters select';
     justify-content: space-between;
   }
 
@@ -168,14 +83,14 @@ const getColumns = ({ hmyLINKBalanceManager }): IColumn<ITokenInfo>[] => [
     key: 'erc20Address',
     dataIndex: 'erc20Address',
     width: 180,
-    render: (value, data) => getAssetAddress(data, 'origin'),
+    render: (value, data) => <AssetLink data={data} type="origin" />,
   },
   {
     title: 'Mapping Address',
     key: 'hrc20Address',
     dataIndex: 'hrc20Address',
     width: 180,
-    render: (value, data) => getAssetAddress(data, 'mapping'),
+    render: (value, data) => <AssetLink data={data} type="mapping" />,
   },
   // {
   //   title: 'Decimals',
@@ -231,7 +146,7 @@ export const Tokens = observer((props: any) => {
   const [tokenType, setToken] = useState<TOKEN | 'ALL'>('ALL');
 
   const [columns, setColumns] = useState(getColumns(user));
-  const isMobile = useMediaQuery({ query: '(max-width: 600px)' });
+  const isMobile: boolean = useMediaQuery({ query: '(max-width: 600px)' });
 
   useEffect(() => {
     tokens.selectedNetwork = network === 'ALL' ? undefined : network;
@@ -351,73 +266,25 @@ export const Tokens = observer((props: any) => {
         justify="center"
         align="start"
       >
-        {isMobile ? (
-          <Table
-            data={filteredData}
-            columns={columns}
-            isPending={tokens.isPending}
-            hidePagination={true}
-            dataLayerConfig={tokens.dataFlow}
-            onChangeDataFlow={onChangeDataFlow}
-            onRowClicked={() => {}}
-            customItem={{
-              bodyStyle: {
-                // padding: '0px 20px',
-              },
-              dir: 'column',
-              render: props => {
-                const data = props.params as ITokenInfo;
-
-                const hrc20Address =
-                  String(data.hrc20Address).toLowerCase() ===
-                  String(process.env.ONE_HRC20).toLowerCase()
-                    ? String(data.hrc20Address).toLowerCase()
-                    : getChecksumAddress(data.hrc20Address);
-
-                return (
-                  <Box
-                    style={{
-                      width: 'calc(100vw - 20px)',
-                      overflow: 'hidden',
-                      borderRadius: '5px',
-                      background: '#1B1B1C',
-                    }}
-                    direction="column"
-                    pad="medium"
-                    margin={{ top: '15px' }}
-                    gap="5px"
-                  >
-                    <Text bold={true}>
-                      {data.name} ({data.symbol})
-                    </Text>
-                    <Text>HRC20 Address: {oneAddress(hrc20Address)}</Text>
-                    <Text>
-                      ERC20 Address:{' '}
-                      <EthAddress
-                        value={data.erc20Address}
-                        network={data.network}
-                      />
-                    </Text>
-                    <Text>
-                      Total Locked USD: $
-                      {formatWithTwoDecimals(data.totalLockedUSD)}
-                    </Text>
-                  </Box>
-                ) as any;
-              },
-            }}
-          />
-        ) : (
-          <Table
-            data={filteredData}
-            columns={columns}
-            isPending={tokens.isPending}
-            hidePagination={true}
-            dataLayerConfig={tokens.dataFlow}
-            onChangeDataFlow={onChangeDataFlow}
-            onRowClicked={() => {}}
-          />
-        )}
+        <Table
+          data={filteredData}
+          columns={columns}
+          isPending={tokens.isPending}
+          hidePagination={true}
+          dataLayerConfig={tokens.dataFlow}
+          onChangeDataFlow={onChangeDataFlow}
+          onRowClicked={() => {}}
+          customItem={
+            !isMobile
+              ? undefined
+              : {
+                  dir: 'column',
+                  render: (props: { params: ITokenInfo }) => {
+                    return <TableRowMobile data={props.params} />;
+                  },
+                }
+          }
+        />
       </Box>
     </LayoutCommon>
   );
