@@ -6,10 +6,18 @@ import { Text } from '../../../components/Base';
 import { HarmonyLink } from '../HarmonyLink';
 import { formatWithTwoDecimals } from '../../../utils';
 import { EthereumLink } from '../EthereumLink';
+import styled from 'styled-components';
 
 interface Props {
   data: ITokenInfo;
 }
+
+const RowContainer = styled(Box)`
+  width: calc(100vw - 20px);
+  overflow: hidden;
+  border-radius: 10px;
+  background: ${props => props.theme.table.bgColor};
+`;
 
 export const TableRowMobile: React.FC<Props> = ({ data }) => {
   const hrc20Address =
@@ -19,13 +27,7 @@ export const TableRowMobile: React.FC<Props> = ({ data }) => {
       : getChecksumAddress(data.hrc20Address);
 
   return (
-    <Box
-      style={{
-        width: 'calc(100vw - 20px)',
-        overflow: 'hidden',
-        borderRadius: '5px',
-        background: '#1B1B1C',
-      }}
+    <RowContainer
       direction="column"
       pad="medium"
       margin={{ top: '15px' }}
@@ -44,7 +46,7 @@ export const TableRowMobile: React.FC<Props> = ({ data }) => {
       <Text>
         Total Locked USD: ${formatWithTwoDecimals(data.totalLockedUSD)}
       </Text>
-    </Box>
+    </RowContainer>
   ) as any;
 };
 

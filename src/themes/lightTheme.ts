@@ -271,6 +271,7 @@ export const lightTheme: any = {
     loader: {
       bgColor: 'rgba(255, 255, 255, 0.6)',
     },
+    bgColor: palette.NWhite,
   },
 
   select: {

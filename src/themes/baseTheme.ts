@@ -277,6 +277,7 @@ export const baseTheme: any = {
     loader: {
       bgColor: 'rgba(0, 0, 0, 0.6)',
     },
+    bgColor: palette.NBlack,
   },
 
   select: {
