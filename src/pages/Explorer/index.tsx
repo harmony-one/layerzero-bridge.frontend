@@ -7,8 +7,9 @@ import { Table } from 'components/Table';
 import { getColumns, StatisticBlockLight } from './Common';
 import { ExpandedRow } from './ExpandedRow';
 import { validators } from '../../services';
-import { Title } from '../../components/Base/components/Title';
+import { Title } from '../../components/Base';
 import { Text } from '../../components/Base';
+import { useMediaQuery } from 'react-responsive';
 import {
   CustomPagination,
   PaginationType,
@@ -16,6 +17,8 @@ import {
 import { LayoutCommon } from '../../components/Layouts/LayoutCommon/LayoutCommon';
 import { ExpandIcon } from '../../components/Table/ExpandIcon/ExpandIcon';
 import { CheckboxButton } from '../../components/Base/components/Inputs/types/CheckboxButton';
+import { IOperation } from '../../stores/interfaces';
+import { TableRowMobile } from './TableRowMobile';
 
 export const Explorer = observer((props: any) => {
   const { operations, user, tokens, userMetamask } = useStores();
@@ -61,6 +64,8 @@ export const Explorer = observer((props: any) => {
     operations.filters['ethAddress'] && operations.filters['oneAddress'];
 
   const isAuthorized = userMetamask.ethAddress || user.address;
+
+  const isMobile: boolean = useMediaQuery({ query: '(max-width: 600px)' });
 
   return (
     <LayoutCommon>
@@ -135,6 +140,16 @@ export const Explorer = observer((props: any) => {
             dataLayerConfig={operations.dataFlow}
             onChangeDataFlow={onChangeDataFlow}
             onRowClicked={() => {}}
+            customItem={
+              !isMobile
+                ? undefined
+                : {
+                    dir: 'column',
+                    render: (props: { params: IOperation }) => {
+                      return <TableRowMobile operation={props.params} />;
+                    },
+                  }
+            }
             tableParams={{
               rowKey: (data: any) => data.id,
               expandable: {

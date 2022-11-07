@@ -21,6 +21,7 @@ export const OperationType = (props: { type: EXCHANGE_MODE }) => {
     >
       <Box direction="row" align="center">
         <img
+          alt="token"
           className={styles.imgToken}
           style={{ height: 20 }}
           src="/eth.svg"
@@ -64,14 +65,9 @@ export const Price = observer(
         pad={{ right: 'medium' }}
         {...props.boxProps}
       >
-        <Text
-          color="NWhite"
-          bold
-          style={{ fontSize: 14 }}
-          nowrap
-        >{`${formatWithSixDecimals(props.value)} ${
-          props.isEth ? NETWORK_BASE_TOKEN[props.network] : 'ONE'
-        }`}</Text>
+        <Text bold style={{ fontSize: 14 }} nowrap>{`${formatWithSixDecimals(
+          props.value,
+        )} ${props.isEth ? NETWORK_BASE_TOKEN[props.network] : 'ONE'}`}</Text>
         <Text color="NGray" bold size="xsmall">
           ${formatWithSixDecimals(props.value * rate)}
         </Text>

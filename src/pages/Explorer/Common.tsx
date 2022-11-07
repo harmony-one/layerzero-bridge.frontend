@@ -1,63 +1,18 @@
 import * as React from 'react';
-import { EXCHANGE_MODE, IOperation, TOKEN } from 'stores/interfaces';
-import {
-  dateTimeAgoFormat,
-  formatWithSixDecimals,
-  truncateAddressString,
-} from 'utils';
+import { IOperation, TOKEN } from 'stores/interfaces';
+import { formatWithSixDecimals } from 'utils';
 import * as styles from './styles.styl';
-import { getOperationFee } from './ExpandedRow';
-import { Price } from './Components';
-import { NETWORK_ICON } from '../../stores/names';
-import { getChecksumAddress } from '../../blockchain-bridge';
 import { observer } from 'mobx-react-lite';
 import { useStores } from '../../stores';
 import { Box } from 'grommet';
 import { IColumn } from '../../components/Table';
 import { ManageButton } from './ManageButton';
-import { Text } from '../../components/Base';
 import { EntityStatus } from '../../components/EntityStatus';
 import { TokenSymbol } from './TokenSymbol';
-
-const EthAddress = observer<any>(
-  (params: { address; operation: IOperation }) => {
-    const { exchange } = useStores();
-    const icon = NETWORK_ICON[params.operation.network];
-
-    return (
-      <Box
-        direction="row"
-        justify="start"
-        align="center"
-        style={{ marginTop: 4 }}
-      >
-        <img className={styles.imgToken} style={{ height: 20 }} src={icon} />
-        <a
-          className={styles.addressLink}
-          href={`${exchange.getExplorerByNetwork(
-            params.operation.network,
-          )}/address/${getChecksumAddress(params.address)}`}
-          target="_blank"
-        >
-          {truncateAddressString(getChecksumAddress(params.address), 5)}
-        </a>
-      </Box>
-    );
-  },
-);
-
-const oneAddress = value => (
-  <Box direction="row" justify="start" align="center" style={{ marginTop: 4 }}>
-    <img className={styles.imgToken} style={{ height: 18 }} src="/one.svg" />
-    <a
-      className={styles.addressLink}
-      href={`${process.env.HMY_EXPLORER_URL}/address/${value}`}
-      target="_blank"
-    >
-      {truncateAddressString(value, 5)}
-    </a>
-  </Box>
-);
+import { OperationFromLink } from './OperationFromLink';
+import { OperationToLink } from './OperationToLink';
+import { OperationAge } from './OperationAge';
+import { OperationFee } from './OperationFee';
 
 export const getColumns = (
   { user },
@@ -77,12 +32,7 @@ export const getColumns = (
       key: 'ethAddress',
       dataIndex: 'ethAddress',
       width: 200,
-      render: (value, data) =>
-        data.type === EXCHANGE_MODE.ETH_TO_ONE ? (
-          <EthAddress address={value} operation={data} />
-        ) : (
-          oneAddress(data.oneAddress)
-        ),
+      render: (value, data) => <OperationFromLink operation={data} />,
     },
 
     {
@@ -90,12 +40,7 @@ export const getColumns = (
       key: 'oneAddress',
       dataIndex: 'oneAddress',
       width: 200,
-      render: (value, data) =>
-        data.type === EXCHANGE_MODE.ETH_TO_ONE ? (
-          oneAddress(data.oneAddress)
-        ) : (
-          <EthAddress address={data.ethAddress} operation={data} />
-        ),
+      render: (value, data) => <OperationToLink operation={data} />,
     },
 
     // {
@@ -168,11 +113,7 @@ export const getColumns = (
       dataIndex: 'timestamp',
       width: 160,
       render: value => {
-        return (
-          <Text color="NGray">
-            {value ? dateTimeAgoFormat(value * 1000) : '--'}
-          </Text>
-        );
+        return <OperationAge date={value} />;
       },
     },
     {
@@ -182,10 +123,7 @@ export const getColumns = (
       className: styles.rightHeader,
       width: 180,
       render: (value, data) => {
-        const fee = getOperationFee(data);
-        const isETH = data.type === EXCHANGE_MODE.ETH_TO_ONE;
-
-        return <Price value={fee} isEth={isETH} network={data.network} />;
+        return <OperationFee operation={data} />;
       },
     },
   ];
@@ -227,8 +165,6 @@ export const StatusField = (props: {
 };
 
 export const StatisticBlock = observer(() => {
-  const { operations } = useStores();
-
   return (
     <Box direction="row" gap="30px">
       <StatusField text="Validator status" statusText="OK" />

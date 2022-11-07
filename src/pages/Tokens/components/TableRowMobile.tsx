@@ -1,23 +1,15 @@
 import React from 'react';
 import { ITokenInfo } from '../../../stores/interfaces';
 import { getChecksumAddress } from '../../../blockchain-bridge';
-import { Box } from 'grommet';
 import { Text } from '../../../components/Base';
 import { HarmonyLink } from '../HarmonyLink';
 import { formatWithTwoDecimals } from '../../../utils';
 import { EthereumLink } from '../EthereumLink';
-import styled from 'styled-components';
+import { TableRowMobileContainer } from '../../../components/Table/TableRowMobileContainer';
 
 interface Props {
   data: ITokenInfo;
 }
-
-const RowContainer = styled(Box)`
-  width: calc(100vw - 20px);
-  overflow: hidden;
-  border-radius: 10px;
-  background: ${props => props.theme.table.bgColor};
-`;
 
 export const TableRowMobile: React.FC<Props> = ({ data }) => {
   const hrc20Address =
@@ -27,12 +19,7 @@ export const TableRowMobile: React.FC<Props> = ({ data }) => {
       : getChecksumAddress(data.hrc20Address);
 
   return (
-    <RowContainer
-      direction="column"
-      pad="medium"
-      margin={{ top: '15px' }}
-      gap="5px"
-    >
+    <TableRowMobileContainer>
       <Text bold={true}>
         {data.name} ({data.symbol})
       </Text>
@@ -46,8 +33,8 @@ export const TableRowMobile: React.FC<Props> = ({ data }) => {
       <Text>
         Total Locked USD: ${formatWithTwoDecimals(data.totalLockedUSD)}
       </Text>
-    </RowContainer>
-  ) as any;
+    </TableRowMobileContainer>
+  );
 };
 
 TableRowMobile.displayName = 'TableRowMobile';
