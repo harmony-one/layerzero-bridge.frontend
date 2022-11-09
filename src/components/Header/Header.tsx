@@ -1,15 +1,10 @@
 import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
-import { observer } from 'mobx-react';
-import { Box, Grid, Menu } from 'grommet';
-import { MoreVertical } from 'grommet-icons';
-import { Text } from '../Base';
-import * as s from './Header.styl';
+import { Box, Grid } from 'grommet';
 import { HeaderTab } from './components/HeaderTab/HeaderTab';
 import { useStores } from '../../stores';
 import { ThemeButton } from '../ThemeButton';
 import { ThemeContext } from '../../themes/ThemeContext';
-import { truncateAddressString } from '../../utils';
 import { InfoNew2 } from '../InfoNew';
 import { MoreMenu } from './components/MoreMenu';
 
@@ -27,19 +22,6 @@ const HarmonyLogo = () => {
     </Box>
   );
 };
-
-const Account = observer(() => {
-  const { userMetamask } = useStores();
-
-  if (!userMetamask.isAuthorized) {
-    return null;
-  }
-  return (
-    <div className={s.account}>
-      {truncateAddressString(userMetamask.ethAddress, 6)}
-    </div>
-  );
-});
 
 const StyledGrid = styled(Grid)`
   grid-template-columns: 50% 50%;
@@ -77,15 +59,7 @@ export const Header: React.FC<Props> = React.memo(() => {
 
   return (
     <StyledGrid align="center">
-      {/*<Box*/}
-      {/*  className={s.root}*/}
-      {/*  gridArea="logo"*/}
-      {/*  direction="row"*/}
-      {/*  justify="between"*/}
-      {/*  align="center"*/}
-      {/*>*/}
       <Box flex={{ grow: 0, shrink: 0 }} gridArea="logo" basis="150px">
-        {/*<HeaderLogo />*/}
         <HarmonyLogo />
       </Box>
       <Box
@@ -117,10 +91,8 @@ export const Header: React.FC<Props> = React.memo(() => {
         direction="row"
       >
         <ThemeButton />
-        {/*<Account />*/}
         <MoreMenu />
       </Box>
-      {/*</Box>*/}
     </StyledGrid>
   );
 });

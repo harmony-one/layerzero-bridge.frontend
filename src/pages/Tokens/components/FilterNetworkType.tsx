@@ -1,6 +1,6 @@
 import React from 'react';
-import { NetworkButton } from '../NetworkButton/NetworkButton';
-import { NETWORK_TYPE } from '../../../../stores/interfaces';
+import { NetworkButton } from './NetworkButton/NetworkButton';
+import { NETWORK_TYPE } from '../../../stores/interfaces';
 import { Box } from 'grommet';
 
 interface Props {

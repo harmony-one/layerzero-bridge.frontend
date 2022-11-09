@@ -12,8 +12,8 @@ import { SearchInput } from 'components/Search';
 import { getBech32Address } from '../../blockchain-bridge';
 import { useMediaQuery } from 'react-responsive';
 import { LayoutCommon } from '../../components/Layouts/LayoutCommon/LayoutCommon';
-import { FilterTokenType } from './components/FilterTokenType/FilterTokenType';
-import { FilterNetworkType } from './components/FilterNetworkType/FilterNetworkType';
+import { FilterTokenType } from './components/FilterTokenType';
+import { FilterNetworkType } from './components/FilterNetworkType';
 import { TokensHeader } from './components/TokensHeader/TokensHeader';
 import styled from 'styled-components';
 import { TokenSymbol } from '../Explorer/TokenSymbol';
@@ -206,34 +206,6 @@ export const Tokens = observer((props: any) => {
 
   return (
     <LayoutCommon>
-      {/*<Box*/}
-      {/*  direction={isMobile ? 'column' : 'row'}*/}
-      {/*  justify="between"*/}
-      {/*  align={isMobile ? 'start' : 'center'}*/}
-      {/*  margin={{ top: 'medium' }}*/}
-      {/*  pad={{ horizontal: 'medium' }}*/}
-      {/*>*/}
-      {/*  <Title>Bridged Assets</Title>*/}
-
-      {/*  <Box direction="column">*/}
-      {/*    <Title size="small">*/}
-      {/*      Total Value Locked (USD){' '}*/}
-      {/*      <span*/}
-      {/*        style={{*/}
-      {/*          marginLeft: 5,*/}
-      {/*          color: '#47b8eb',*/}
-      {/*          fontWeight: 600,*/}
-      {/*          letterSpacing: 0.2,*/}
-      {/*        }}*/}
-      {/*      >*/}
-      {/*        ${formatZeroDecimals(tokens.totalLockedUSD)}*/}
-      {/*      </span>*/}
-      {/*    </Title>*/}
-      {/*  </Box>*/}
-
-      {/*  <Text>{`Last update: ${lastUpdateAgo}sec ago`}</Text>*/}
-      {/*</Box>*/}
-
       <StyledGrid pad={{ vertical: '24px' }} fill="horizontal">
         <Box gridArea="total">
           <TokensHeader
