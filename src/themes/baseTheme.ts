@@ -171,6 +171,11 @@ export const baseTheme: any = {
     border: `1px solid ${palette.NBlack}`,
   },
 
+  checkboxButton: {
+    checked: { bgColor: palette.NWhite, textColor: palette.Black },
+    unchecked: { bgColor: palette.NBlack, textColor: palette.NWhite },
+  },
+
   pager: {
     cellDefault: {
       bgColor: 'transparent',

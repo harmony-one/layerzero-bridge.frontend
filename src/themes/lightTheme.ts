@@ -171,6 +171,11 @@ export const lightTheme: any = {
     border: `1px solid ${palette.NGray}`,
   },
 
+  checkboxButton: {
+    checked: { bgColor: palette.NBlack, textColor: palette.NWhite },
+    unchecked: { bgColor: palette.NWhite, textColor: palette.NBlack },
+  },
+
   pager: {
     cellDefault: {
       borderColor: 'transparent',
