@@ -4,15 +4,12 @@ import { Box, BoxProps, Text } from 'grommet';
 import { useHistory } from 'react-router';
 import { observer } from 'mobx-react-lite';
 import { IStyledChildrenProps } from 'interfaces';
-import { Title } from '../Base/components/Title';
+import { Title } from '../Base';
 import { useStores } from '../../stores';
 import * as styles from './styles.styl';
 import cn from 'classnames';
 import { TOKEN } from '../../stores/interfaces';
 import { useMediaQuery } from 'react-responsive';
-import { IdentityTokens } from '../../pages/IdentityTokens';
-
-// import { formatWithTwoDecimals } from '../../utils';
 
 const MainLogo = styled.img`
   width: auto;

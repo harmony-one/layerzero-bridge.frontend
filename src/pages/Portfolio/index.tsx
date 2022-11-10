@@ -1,108 +1,19 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Box } from 'grommet';
-import { BaseContainer, PageContainer } from 'components';
-import utils from 'web3-utils';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'stores';
 import { IColumn, Table } from 'components/Table';
 import { ITokenInfo, NETWORK_TYPE, TOKEN } from 'stores/interfaces';
-import {
-  formatWithSixDecimals,
-  formatWithTwoDecimals,
-  truncateAddressString,
-} from 'utils';
 import * as styles from './styles.styl';
-import { Select, Text, Title } from 'components/Base';
 import { SearchInput } from 'components/Search';
-import { getBech32Address, getChecksumAddress } from '../../blockchain-bridge';
-import { NETWORK_ICON } from '../../stores/names';
-import { NetworkButton } from './Components';
-// import { AddTokenIcon } from '../../ui/AddToken';
+import { getBech32Address } from '../../blockchain-bridge';
 import { useMediaQuery } from 'react-responsive';
-
-const EthAddress = observer(
-  ({ value, network }: { value: string; network: NETWORK_TYPE }) => {
-    const { exchange } = useStores();
-
-    return (
-      <Box
-        direction="row"
-        justify="start"
-        align="center"
-        style={{ marginTop: 4 }}
-      >
-        <img
-          className={styles.imgToken}
-          style={{ height: 20 }}
-          src={NETWORK_ICON[network]}
-        />
-        <a
-          className={styles.addressLink}
-          href={`${exchange.getExplorerByNetwork(network)}/token/${value}`}
-          target="_blank"
-        >
-          {truncateAddressString(value, 10)}
-        </a>
-      </Box>
-    );
-  },
-);
-
-const oneAddress = value => (
-  <Box direction="row" justify="start" align="center" style={{ marginTop: 4 }}>
-    <img className={styles.imgToken} style={{ height: 18 }} src="/one.svg" />
-    <a
-      className={styles.addressLink}
-      href={`${process.env.HMY_EXPLORER_URL}/address/${value}?activeTab=3`}
-      target="_blank"
-    >
-      {truncateAddressString(value, 10)}
-    </a>
-  </Box>
-);
-
-const getAssetAddress = (data, type: 'origin' | 'mapping') => {
-  let assetPrefix;
-  switch (type) {
-    case 'origin':
-      assetPrefix = 'erc';
-      break;
-    case 'mapping':
-      assetPrefix = 'hrc';
-      break;
-  }
-
-  if (data.type.indexOf(assetPrefix) !== -1) {
-    return <EthAddress value={data.erc20Address} network={data.network} />;
-  } else {
-    const address =
-      String(data.hrc20Address).toLowerCase() ===
-      String(process.env.ONE_HRC20).toLowerCase()
-        ? String(data.hrc20Address).toLowerCase()
-        : getChecksumAddress(data.hrc20Address);
-
-    return oneAddress(address);
-  }
-};
-
-const getAssetBalance = (data, type: 'origin' | 'mapping') => {
-  let assetPrefix;
-  switch (type) {
-    case 'origin':
-      assetPrefix = 'erc';
-      break;
-    case 'mapping':
-      assetPrefix = 'hrc';
-      break;
-  }
-
-  if (data.type.indexOf(assetPrefix) !== -1) {
-    return data.erc20Balance;
-  } else {
-    return data.hrc20Balance;
-  }
-};
+import { LayoutCommon } from '../../components/Layouts/LayoutCommon/LayoutCommon';
+import { NetworkButton } from '../Tokens/components/NetworkButton/NetworkButton';
+import { AssetLink } from '../Tokens/AssetLink';
+import { TableRowMobile } from './components/TableRowMobile';
+import { TokenBalance } from './components/TokenBalance';
 
 const getColumns = ({ hmyLINKBalanceManager }): IColumn<ITokenInfo>[] => [
   {
@@ -141,17 +52,10 @@ const getColumns = ({ hmyLINKBalanceManager }): IColumn<ITokenInfo>[] => [
     dataIndex: 'erc20Address',
     width: 380,
     render: (value, data) => {
-      const balance = getAssetBalance(data, 'origin') || '0';
-      const hBalance = utils.fromWei(balance);
-      // @ts-ignore
-      const usdBalance = hBalance * data.usdPrice;
       return (
-        <Box>
-          <Box>{getAssetAddress(data, 'origin')}</Box>
-          <Box>
-            {formatWithSixDecimals(hBalance)} {data.symbol} ( $
-            {formatWithTwoDecimals(usdBalance)} )
-          </Box>
+        <Box direction="column" gap="4px">
+          <AssetLink data={data} type="origin" />
+          <TokenBalance data={data} type="origin" />
         </Box>
       );
     },
@@ -162,17 +66,10 @@ const getColumns = ({ hmyLINKBalanceManager }): IColumn<ITokenInfo>[] => [
     dataIndex: 'hrc20Address',
     width: 380,
     render: (value, data) => {
-      const balance = getAssetBalance(data, 'mapping') || '0';
-      const hBalance = utils.fromWei(balance);
-      // @ts-ignore
-      const usdBalance = hBalance * data.usdPrice;
       return (
-        <Box>
-          <Box>{getAssetAddress(data, 'mapping')}</Box>
-          <Box>
-            {formatWithSixDecimals(hBalance)} {data.symbol} ( $
-            {formatWithTwoDecimals(usdBalance)} )
-          </Box>
+        <Box direction="column" gap="4px">
+          <AssetLink data={data} type="mapping" />
+          <TokenBalance data={data} type="mapping" />
         </Box>
       );
     },
@@ -187,8 +84,8 @@ const getColumns = ({ hmyLINKBalanceManager }): IColumn<ITokenInfo>[] => [
   // },
 ];
 
-export const Portfolio = observer((props: any) => {
-  const { tokens, user, userMetamask, portfolio } = useStores();
+export const Portfolio = observer(() => {
+  const { tokens, user, portfolio } = useStores();
   const [search, setSearch] = useState('');
   const [network, setNetwork] = useState<NETWORK_TYPE | 'ALL'>('ALL');
   const [tokenType, setToken] = useState<TOKEN | 'ALL'>('ALL');
@@ -226,7 +123,7 @@ export const Portfolio = observer((props: any) => {
 
   const lastUpdateAgo = Math.ceil((Date.now() - tokens.lastUpdateTime) / 1000);
 
-  const filteredData = portfolio.tokens.filter(token => {
+  const filteredData = tokens.allData.filter(token => {
     // if (
     //   (token.type === 'erc20' || token.type === 'hrc20') &&
     //   !Number(token.totalSupply)
@@ -264,55 +161,55 @@ export const Portfolio = observer((props: any) => {
   });
 
   return (
-    <BaseContainer>
-      <PageContainer>
-        {!isMobile ? (
-          <Box
-            pad={{ horizontal: '9px' }}
-            margin={{ top: 'medium', bottom: 'medium' }}
-            // style={{ maxWidth: 500 }}
-            direction={isMobile ? 'column' : 'row'}
-            justify="between"
-            align={isMobile ? 'start' : 'end'}
-            gap="40px"
-          >
-            <SearchInput value={search} onChange={setSearch} />
-            <Box direction="row" gap="10px" align="end">
-              <NetworkButton
-                type={'ALL'}
-                selectedType={network}
-                onClick={() => setNetwork('ALL')}
-              />
-              <NetworkButton
-                type={NETWORK_TYPE.BINANCE}
-                selectedType={network}
-                onClick={() => setNetwork(NETWORK_TYPE.BINANCE)}
-              />
-              <NetworkButton
-                type={NETWORK_TYPE.ETHEREUM}
-                selectedType={network}
-                onClick={() => setNetwork(NETWORK_TYPE.ETHEREUM)}
-              />
-              <Box direction="column" style={{ width: 300 }} gap="5px">
-                <Text>Token:</Text>
-                <Select
-                  size="full"
-                  value={tokenType}
-                  options={[
-                    { text: 'ALL', value: 'ALL' },
-                    { text: 'ERC20', value: TOKEN.ERC20 },
-                    { text: 'HRC20', value: TOKEN.HRC20 },
-                    { text: 'ERC721', value: TOKEN.ERC721 },
-                    { text: 'ERC1155', value: TOKEN.ERC1155 },
-                    { text: 'HRC721', value: TOKEN.HRC721 },
-                    { text: 'HRC1155', value: TOKEN.HRC1155 },
-                  ]}
-                  onChange={setToken}
-                />
-              </Box>
-            </Box>
+    <LayoutCommon>
+      {!isMobile ? (
+        <Box
+          pad={{ horizontal: '9px' }}
+          margin={{ top: 'medium', bottom: 'medium' }}
+          // style={{ maxWidth: 500 }}
+          direction={isMobile ? 'column' : 'row'}
+          justify="between"
+          align={isMobile ? 'start' : 'end'}
+          gap="40px"
+        >
+          <SearchInput value={search} onChange={setSearch} />
+          <Box direction="row" gap="10px" align="end">
+            <NetworkButton
+              type="ALL"
+              selectedType={network}
+              onClick={() => setNetwork('ALL')}
+            />
+            <NetworkButton
+              type={NETWORK_TYPE.BINANCE}
+              selectedType={network}
+              onClick={() => setNetwork(NETWORK_TYPE.BINANCE)}
+            />
+            <NetworkButton
+              type={NETWORK_TYPE.ETHEREUM}
+              selectedType={network}
+              onClick={() => setNetwork(NETWORK_TYPE.ETHEREUM)}
+            />
+            {/*<Box direction="column" style={{ width: 300 }} gap="5px">*/}
+            {/*  <Text>Token:</Text>*/}
+            {/*  <Select*/}
+            {/*    size="full"*/}
+            {/*    value={tokenType}*/}
+            {/*    options={[*/}
+            {/*      { text: 'ALL', value: 'ALL' },*/}
+            {/*      { text: 'ERC20', value: TOKEN.ERC20 },*/}
+            {/*      { text: 'HRC20', value: TOKEN.HRC20 },*/}
+            {/*      { text: 'ERC721', value: TOKEN.ERC721 },*/}
+            {/*      { text: 'ERC1155', value: TOKEN.ERC1155 },*/}
+            {/*      { text: 'HRC721', value: TOKEN.HRC721 },*/}
+            {/*      { text: 'HRC1155', value: TOKEN.HRC1155 },*/}
+            {/*    ]}*/}
+            {/*    onChange={setToken}*/}
+            {/*  />*/}
+            {/*</Box>*/}
           </Box>
-        ) : (
+        </Box>
+      ) : (
+        <Box direction="column">
           <Box
             direction="row"
             gap="10px"
@@ -320,7 +217,7 @@ export const Portfolio = observer((props: any) => {
             margin={{ top: '20px', bottom: '10px' }}
           >
             <NetworkButton
-              type={'ALL'}
+              type="ALL"
               selectedType={network}
               onClick={() => setNetwork('ALL')}
             />
@@ -335,26 +232,31 @@ export const Portfolio = observer((props: any) => {
               onClick={() => setNetwork(NETWORK_TYPE.ETHEREUM)}
             />
           </Box>
-        )}
-
-        <Box
-          direction="row"
-          wrap={true}
-          fill={true}
-          justify="center"
-          align="start"
-        >
-          <Table
-            data={filteredData}
-            columns={columns}
-            isPending={tokens.isPending}
-            hidePagination={true}
-            dataLayerConfig={tokens.dataFlow}
-            onChangeDataFlow={onChangeDataFlow}
-            onRowClicked={() => {}}
-          />
+          <SearchInput value={search} onChange={setSearch} />
         </Box>
-      </PageContainer>
-    </BaseContainer>
+      )}
+
+      <Box direction="row" wrap fill justify="center" align="start">
+        <Table
+          data={filteredData}
+          columns={columns}
+          isPending={tokens.isPending}
+          hidePagination={true}
+          dataLayerConfig={tokens.dataFlow}
+          onChangeDataFlow={onChangeDataFlow}
+          onRowClicked={() => {}}
+          customItem={
+            !isMobile
+              ? undefined
+              : {
+                  dir: 'column',
+                  render: (props: { params: ITokenInfo }) => {
+                    return <TableRowMobile data={props.params} />;
+                  },
+                }
+          }
+        />
+      </Box>
+    </LayoutCommon>
   );
 });

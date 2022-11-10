@@ -9,11 +9,11 @@ interface Props {
 }
 
 export const HarmonyLink: React.FC<Props> = ({ address }) => (
-  <Box direction="row" justify="start" align="center" style={{ marginTop: 4 }}>
+  <Box direction="row" justify="start" align="center">
     <img
       alt="harmony address"
       className={styles.imgToken}
-      style={{ height: 18 }}
+      style={{ width: '20px' }}
       src="/one.svg"
     />
     <a

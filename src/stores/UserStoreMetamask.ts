@@ -337,6 +337,10 @@ export class UserStoreMetamask extends StoreConstructor {
     this.balances[tokenId] = balance;
   }
 
+  getTokenBalance(tokenId: string) {
+    return this.balances[tokenId] || 0;
+  }
+
   @action.bound public async loadTokenBalance(
     token: ITokenInfo,
     walletAddress,

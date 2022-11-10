@@ -33,7 +33,7 @@ export const AssetLink: React.FC<Props> = ({ data, type }) => {
   const isErcOrHrcToken = data.type.indexOf(assetPrefix) !== -1;
 
   if (isErcOrHrcToken || isMappingForOne) {
-    return <EthereumLink value={data.erc20Address} network={data.network} />;
+    return <EthereumLink address={data.erc20Address} network={data.network} />;
   } else {
     const address =
       String(data.hrc20Address).toLowerCase() ===

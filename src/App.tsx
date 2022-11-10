@@ -39,7 +39,7 @@ export const App: React.FC = () => (
         <Route exact path="/info" component={InfoPage} />
         <Route exact path="/support" component={SupportPage} />
         <Route exact path="/explorer/:validator?" component={Explorer} />
-        <Route exact path="/portfolio/" component={Portfolio} />
+        <Route exact path="/portfolio" component={Portfolio} />
         <Route exact path="/stuck-operations" component={StuckOperations} />
         <Route exact path="/admin-explorer" component={AdminExplorer} />
         <Route

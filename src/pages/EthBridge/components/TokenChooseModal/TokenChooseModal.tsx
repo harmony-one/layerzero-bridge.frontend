@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box } from 'grommet/components/Box';
 import * as s from './TokenChooseModal.styl';
-import { Icon, Text } from '../../../../components/Base';
+import { Icon } from '../../../../components/Base';
 import { Button } from 'grommet/components/Button';
 import { useStores } from '../../../../stores';
 import { observer } from 'mobx-react';
@@ -65,13 +65,13 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
   const sortByBalance = useMemo(() => {
     return (a: ITokenInfo, b: ITokenInfo) => {
       const tokenIdA = buildTokenId(a);
-      const balanceA = userMetamask.balances[tokenIdA] || 0;
+      const balanceA = userMetamask.getTokenBalance(tokenIdA);
       const tokenIdB = buildTokenId(b);
-      const balanceB = userMetamask.balances[tokenIdB] || 0;
+      const balanceB = userMetamask.getTokenBalance(tokenIdB);
 
       return Number(balanceB) - Number(balanceA);
     };
-  }, [userMetamask.balances, sortCashKey]);
+  }, [userMetamask, sortCashKey]);
 
   const tokenlist = useMemo(() => {
     return tokens.allData
@@ -145,7 +145,7 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
         >
           {tokenlist.map(token => {
             const tokenId = buildTokenId(token);
-            const balance = userMetamask.balances[tokenId] || 0;
+            const balance = userMetamask.getTokenBalance(tokenId) || 0;
             return (
               <TokenHorizontal
                 key={tokenId}

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Select, Text } from '../../../../components/Base';
-import { TOKEN } from '../../../../stores/interfaces';
+import { Select, Text } from '../../../components/Base';
+import { TOKEN } from '../../../stores/interfaces';
 import { Box } from 'grommet';
 
 interface Props {

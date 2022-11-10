@@ -28,7 +28,7 @@ export const TableRowMobile: React.FC<Props> = ({ data }) => {
       </Text>
       <Text>
         ERC20 Address:{' '}
-        <EthereumLink value={data.erc20Address} network={data.network} />
+        <EthereumLink address={data.erc20Address} network={data.network} />
       </Text>
       <Text>
         Total Locked USD: ${formatWithTwoDecimals(data.totalLockedUSD)}

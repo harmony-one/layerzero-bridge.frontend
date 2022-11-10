@@ -9,33 +9,31 @@ import { truncateAddressString } from '../../utils';
 import { TRUNCATE_ADDRESS } from '../../constants';
 
 interface Props {
-  value: string;
+  address: string;
   network: NETWORK_TYPE;
 }
-export const EthereumLink: React.FC<Props> = observer(({ value, network }) => {
-  const { exchange } = useStores();
+export const EthereumLink: React.FC<Props> = observer(
+  ({ address, network }) => {
+    const { exchange } = useStores();
 
-  return (
-    <Box
-      direction="row"
-      justify="start"
-      align="center"
-      style={{ marginTop: 4 }}
-    >
-      <img
-        alt="network"
-        className={styles.imgToken}
-        style={{ height: 20 }}
-        src={NETWORK_ICON[network]}
-      />
-      <a
-        className={styles.addressLink}
-        href={`${exchange.getExplorerByNetwork(network)}/token/${value}`}
-        target="_blank"
-        rel="noreferrer"
-      >
-        {truncateAddressString(value, TRUNCATE_ADDRESS)}
-      </a>
-    </Box>
-  );
-});
+    return (
+      <Box direction="row" justify="start" align="center">
+        <Box justify="center" align="center" className={styles.imgToken}>
+          <img
+            alt="network"
+            style={{ height: 20 }}
+            src={NETWORK_ICON[network]}
+          />
+        </Box>
+        <a
+          className={styles.addressLink}
+          href={`${exchange.getExplorerByNetwork(network)}/token/${address}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {truncateAddressString(address, TRUNCATE_ADDRESS)}
+        </a>
+      </Box>
+    );
+  },
+);
