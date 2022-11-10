@@ -242,9 +242,7 @@ export class ListStoreConstructor<T> extends StoreConstructor {
   get sortedData() {
     if (!this.isLocal) return this.filteredData;
 
-    console.log(this.sorter);
-
-    if (!this.sorter || this.sorter === 'none') {
+    if (!this.sorter || this.sorter.length === 0 || this.sorter === 'none') {
       return this.filteredData;
     }
 
