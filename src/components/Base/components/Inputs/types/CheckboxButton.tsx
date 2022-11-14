@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled, { withTheme } from 'styled-components';
-import { Icon } from '../../Icons';
 import { ICommonInputProps, getSize } from '../common';
 
 const HiddenInput = styled.input<any>`
@@ -11,9 +10,13 @@ const HiddenInput = styled.input<any>`
 
 const Label = styled.label<any>`
   color: ${props =>
-    props.checked ? props.theme.palette.NBlack : props.theme.palette.NWhite};
+    props.checked
+      ? props.theme.checkboxButton.checked.textColor
+      : props.theme.checkboxButton.unchecked.textColor};
   background-color: ${props =>
-    props.checked ? props.theme.palette.NWhite : props.theme.palette.NBlack};
+    props.checked
+      ? props.theme.checkboxButton.checked.bgColor
+      : props.theme.checkboxButton.unchecked.bgColor};
   border: 1px solid white;
   border-radius: 15px;
   margin: ${props => (props.margin ? props.margin : '')};
