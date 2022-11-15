@@ -39,6 +39,7 @@ import { ConfirmTokenBridge } from '../../components/ConfirmTokenBridge';
 import { EthBridgeStore } from '../../pages/EthBridge/EthBridgeStore';
 import { ITokenInfo } from '../../pages/Exchange';
 import { getTokenConfig, tokensConfigs } from '../../config';
+import Web3 from 'web3';
 
 export enum EXCHANGE_STEPS {
   GET_TOKEN_ADDRESS = 'GET_TOKEN_ADDRESS',
@@ -1374,7 +1375,8 @@ export class Exchange extends StoreConstructor {
             exchange.mode === EXCHANGE_MODE.ONE_TO_ETH
               ? user.hrc20Balance
               : userMetamask.erc20Balance,
-          symbol: token && token.symbol,
+          symbol:
+            (token && token.symbol) || userMetamask.erc20TokenDetails?.symbol,
           image: token && token.image,
           address: token && token.erc20Address,
         };
@@ -1425,4 +1427,12 @@ export class Exchange extends StoreConstructor {
       return token.network === this.stores.exchange.network;
     });
   }
+
+  @action.bound
+  public getENSOwner = async (name: string) => {
+    // @ts-ignore
+    const web3 = new Web3(window.ethereum);
+
+    return web3.eth.ens.getOwner(name);
+  };
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Box } from 'grommet/components/Box';
 import * as s from './ENSTokenModal.styl';
 import { Icon, Text } from '../../../../components/Base';
@@ -6,10 +6,8 @@ import { Button as GrommetButton } from 'grommet/components/Button';
 import { useStores } from '../../../../stores';
 import { observer } from 'mobx-react';
 import { Grid } from 'grommet';
-import { TextInput, Button } from 'components/Base';
-import { Form } from '../../../../components/Form';
-import { Spinner } from '../../../../ui';
-import { TokensField } from '../../../Exchange/AmountField';
+import { Button } from 'components/Base';
+import { Form, Input, isRequired } from '../../../../components/Form';
 import { ModalContent } from '../../../../components/ModalContent';
 
 const OpenSeaBadge: React.FC = () => {
@@ -58,19 +56,29 @@ interface Props {
 }
 
 export const ENSTokenModal: React.FC<Props> = observer(({ onClose }) => {
-  const { erc20Select, exchange } = useStores();
-  const [erc20, setErc20] = useState('');
+  const { erc20Select, exchange, routing } = useStores();
+  const [contractAddress, setContractAddress] = useState('');
 
-  useEffect(() => setErc20(erc20Select.tokenAddress), [
+  const [ensName, setEnsName] = useState('');
+
+  useEffect(() => setContractAddress(erc20Select.tokenAddress), [
     erc20Select.tokenAddress,
   ]);
 
+  const handleClickContinue = useCallback(async () => {
+    await erc20Select.setENSToken(ensName);
+
+    if (!erc20Select.error) {
+      routing.closeModal();
+    }
+  }, [ensName, erc20Select, routing]);
+
   const showOpenSeaBadge =
-    erc20 !== '' &&
+    contractAddress !== '' &&
     erc20Select.erc20VerifiedInfo &&
     erc20Select.erc20VerifiedInfo.collection.safelist_request_status ===
       'verified' &&
-    erc20Select.erc20VerifiedInfo.address === erc20;
+    erc20Select.erc20VerifiedInfo.address === contractAddress;
 
   return (
     <Form data={exchange.transaction}>
@@ -88,16 +96,38 @@ export const ENSTokenModal: React.FC<Props> = observer(({ onClose }) => {
         </Box>
         <ModalContent direction="column" fill="horizontal" pad="30px">
           <Box margin={{ top: 'xsmall', bottom: 'medium' }}>
-            <Text color="NGray4">Input ENS contract address</Text>
-            <TextInput
+            <Text color="NGray4">ENS</Text>
+            <Input
+              name="ensName"
               disabled={erc20Select.isLoading}
-              placeholder="0x..."
+              placeholder="Input ENS"
               wrapperProps={{ className: s.input }}
-              value={erc20}
+              value={ensName}
+              rules={[isRequired]}
               // @ts-ignore
-              onChange={setErc20}
+              onChange={setEnsName}
             />
           </Box>
+          <Box>
+            <Button
+              disabled={erc20Select.isLoading}
+              onClick={handleClickContinue}
+            >
+              Continue
+            </Button>
+          </Box>
+
+          {/*<Box margin={{ top: 'xsmall', bottom: 'medium' }}>*/}
+          {/*  <Text color="NGray4">Input ENS contract address</Text>*/}
+          {/*  <TextInput*/}
+          {/*    disabled={erc20Select.isLoading}*/}
+          {/*    placeholder="0x..."*/}
+          {/*    wrapperProps={{ className: s.input }}*/}
+          {/*    value={contractAddress}*/}
+          {/*    // @ts-ignore*/}
+          {/*    onChange={setContractAddress}*/}
+          {/*  />*/}
+          {/*</Box>*/}
           <Grid columns={['1/2', '1/2']}>
             <Box direction="column" align="start">
               {showOpenSeaBadge && (
@@ -110,18 +140,18 @@ export const ENSTokenModal: React.FC<Props> = observer(({ onClose }) => {
                 </a>
               )}
             </Box>
-            <Box direction="column" align="end">
-              {erc20Select.isLoading ? (
-                <Spinner color="#fff" boxSize={12} />
-              ) : (
-                <Button
-                  disabled={erc20Select.isLoading}
-                  onClick={async () => erc20Select.setToken(erc20)}
-                >
-                  {erc20 ? 'Change token' : 'Select token'}
-                </Button>
-              )}
-            </Box>
+            {/*<Box direction="column" align="end">*/}
+            {/*  {erc20Select.isLoading ? (*/}
+            {/*    <Spinner color="#fff" boxSize={12} />*/}
+            {/*  ) : (*/}
+            {/*    <Button*/}
+            {/*      disabled={erc20Select.isLoading}*/}
+            {/*      onClick={async () => erc20Select.setToken(contractAddress)}*/}
+            {/*    >*/}
+            {/*      {contractAddress ? 'Change token' : 'Select token'}*/}
+            {/*    </Button>*/}
+            {/*  )}*/}
+            {/*</Box>*/}
           </Grid>
 
           {erc20Select.error ? (
@@ -135,18 +165,6 @@ export const ENSTokenModal: React.FC<Props> = observer(({ onClose }) => {
               <Text color="green">Token selected successfully</Text>
             </Box>
           ) : null}
-
-          <Box
-            direction="column"
-            gap="2px"
-            fill={true}
-            margin={{ top: 'xlarge', bottom: 'large' }}
-          >
-            <TokensField
-              label={exchange.tokenInfo.label}
-              maxTokens={exchange.tokenInfo.maxAmount}
-            />
-          </Box>
         </ModalContent>
 
         <Box>

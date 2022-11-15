@@ -12,6 +12,7 @@ import { CircleQuestion } from 'grommet-icons';
 import { TipContent } from '../../../../../../components/TipContent';
 import { Link } from 'components/Link';
 import { getTokenConfig } from '../../../../../../config';
+import { isNFT } from '../../../../../../stores/Exchange/helpers';
 
 const TokenAddresses = observer(() => {
   const { exchange, erc20Select } = useStores();
@@ -75,6 +76,8 @@ export const TokenRow: React.FC<Props> = observer(() => {
 
   const [tipRef, setTipRef] = useState();
 
+  const _isNFT = isNFT(exchange.token);
+
   return (
     <Box direction="column">
       {/*<Box justify="center" align="center" pad={{ bottom: '16px' }}>*/}
@@ -93,9 +96,12 @@ export const TokenRow: React.FC<Props> = observer(() => {
             <img alt="token" src={exchange.tokenInfo.image} width="40" />
           )}
         </Box>
-        <Box flex={{ grow: 1, shrink: 0 }} basis="33%" align="center">
-          <TokenAmount />
-        </Box>
+
+        {!_isNFT && (
+          <Box flex={{ grow: 1, shrink: 0 }} basis="33%" align="center">
+            <TokenAmount />
+          </Box>
+        )}
       </Box>
       {displayTokenAddress && (
         <Box justify="center" align="center" pad={{ top: '16px' }}>

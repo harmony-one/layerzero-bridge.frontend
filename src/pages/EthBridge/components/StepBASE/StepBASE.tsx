@@ -10,14 +10,14 @@ import { useStores } from '../../../../stores';
 import { observer } from 'mobx-react';
 import { Divider } from '../../../../components/Divider/Divider';
 import { ModalIds, ModalRegister } from '../../../../modals';
-import { CustomTokenModal } from '../CustomTokenModal/CustomTokenModal';
-import { TokenChooseModal } from '../TokenChooseModal/TokenChooseModal';
 import { autorun } from 'mobx';
 import { TOKEN } from '../../../../stores/interfaces';
 import { StepContainer } from '../StepContainer';
 import { WalletNetworkWarn } from './components/WalletNetworkWarn';
 import { SwitchNetworkButton } from '../SwitchNetworkButton';
 import { MetamaskButton } from '../../../../components/MetamaskButton';
+import { ENSTokenModal } from '../ENSTokenModal/ENSTokenModal';
+import { TokenChooseModal } from '../TokenChooseModal/TokenChooseModal';
 
 interface Props {}
 
@@ -129,11 +129,17 @@ export const StepBASE: React.FC<Props> = observer(() => {
           Continue
         </Button>
       </Box>
+      {/*<ModalRegister*/}
+      {/*  layerProps={{ position: 'top' }}*/}
+      {/*  modalId={ModalIds.BRIDGE_CUSTOM_TOKEN}*/}
+      {/*>*/}
+      {/*  <CustomTokenModal />*/}
+      {/*</ModalRegister>*/}
       <ModalRegister
-        layerProps={{ position: 'top' }}
-        modalId={ModalIds.BRIDGE_CUSTOM_TOKEN}
+        modalId={ModalIds.BRIDGE_ENS_TOKEN}
+        layerProps={{ full: 'vertical' }}
       >
-        <CustomTokenModal />
+        <ENSTokenModal />
       </ModalRegister>
       <ModalRegister
         modalId={ModalIds.BRIDGE_TOKEN_CHOOSE}
