@@ -109,7 +109,7 @@ export class Erc20SelectStore extends StoreConstructor {
           break;
       }
     } catch (e) {
-      console.log('### e', e);
+      console.log('### setToken error', e);
       this.error = e.message;
     }
 
