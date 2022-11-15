@@ -4,6 +4,7 @@ export enum ModalIds {
   BRIDGE_TOKEN_SETTINGS = 'BRIDGE_TOKEN_SETTINGS',
   BRIDGE_TOKEN_CHOOSE = 'BRIDGE_TOKEN_CHOOSE',
   BRIDGE_CUSTOM_TOKEN = 'BRIDGE_CUSTOM_TOKEN',
+  BRIDGE_ENS_TOKEN = 'BRIDGE_ENS_TOKEN',
 }
 
 export interface LayerProps {
@@ -29,6 +30,11 @@ export type ModalMap = {
     component: React.ReactNode;
   };
   [ModalIds.BRIDGE_CUSTOM_TOKEN]: {
+    params: { data: string };
+    layerProps?: LayerProps;
+    component: React.ReactNode;
+  };
+  [ModalIds.BRIDGE_ENS_TOKEN]: {
     params: { data: string };
     layerProps?: LayerProps;
     component: React.ReactNode;
