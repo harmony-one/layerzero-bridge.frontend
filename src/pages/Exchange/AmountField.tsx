@@ -12,6 +12,11 @@ export const TokensField = observer<{ label: string; maxTokens: string }>(
   (params: { label: string; maxTokens: string }) => {
     const { exchange } = useStores();
 
+    const isMultiToken = Array.isArray(exchange.transaction.amount);
+    const tokenIds = Array.isArray(exchange.transaction.amount)
+      ? exchange.transaction.amount
+      : [];
+
     return (
       <>
         <Text color="NGray4">
@@ -26,8 +31,8 @@ export const TokensField = observer<{ label: string; maxTokens: string }>(
           )}
         </Text>
         <Box direction="column" align="end" fill={true}>
-          {Array.isArray(exchange.transaction.amount)
-            ? exchange.transaction.amount.map((t, idx) => (
+          {isMultiToken
+            ? tokenIds.map((t, idx) => (
                 <Box
                   direction="row"
                   justify="between"
@@ -41,7 +46,7 @@ export const TokensField = observer<{ label: string; maxTokens: string }>(
                       type="integerString"
                       delimiter="."
                       placeholder="0"
-                      style={{ width: '100%' }}
+                      style={{ width: '100%', padding: '8px 8px' }}
                       rules={[isRequired]}
                     />
                   </div>
@@ -50,11 +55,8 @@ export const TokensField = observer<{ label: string; maxTokens: string }>(
                       margin={{ horizontal: 'medium', top: '15px' }}
                       align="start"
                       onClick={() => {
-                        if (
-                          Array.isArray(exchange.transaction.amount) &&
-                          exchange.transaction.amount.length > 1
-                        ) {
-                          exchange.transaction.amount = exchange.transaction.amount.filter(
+                        if (isMultiToken && tokenIds.length > 1) {
+                          exchange.transaction.amount = tokenIds.filter(
                             (a, id) => id !== idx,
                           );
                         }
@@ -71,10 +73,11 @@ export const TokensField = observer<{ label: string; maxTokens: string }>(
               style={{ width: 180, top: 10 }}
               onClick={() => {
                 if (
-                  Array.isArray(exchange.transaction.amount) &&
-                  exchange.transaction.amount.length < Number(params.maxTokens)
+                  isMultiToken &&
+                  tokenIds.length < Number(params.maxTokens)
                 ) {
-                  exchange.transaction.amount.push('0');
+                  Array.isArray(exchange.transaction.amount) &&
+                    exchange.transaction.amount.push('0');
                 }
               }}
             >
