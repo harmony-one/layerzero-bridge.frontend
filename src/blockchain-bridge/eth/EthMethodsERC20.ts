@@ -3,11 +3,11 @@ import { getAddress } from '@harmony-js/crypto';
 import Web3 from 'web3';
 import { mulDecimals } from '../../utils';
 import { getGasPrice } from './helpers';
-const BN = require('bn.js');
 
-import { abi as ProxyERC20Abi } from '../out/ProxyERC20Abi'
+import { abi as ProxyERC20Abi } from '../out/ProxyERC20Abi';
 import { layerZeroConfig, getTokenConfig } from '../../config';
 import { TOKEN } from 'stores/interfaces';
+import BN from 'bn.js';
 
 export interface IEthMethodsInitParams {
   web3: Web3;
@@ -62,18 +62,23 @@ export class EthMethodsERC20 {
         mulDecimals(Number(amount), decimals).cmp(Number(this.allowance)) > 0
       ) {
         // reset to 0
-        await erc20Contract.methods.approve(getTokenConfig(erc20Address).proxyERC20, 0).send({
-          from: accounts[0],
-          gas: process.env.ETH_GAS_LIMIT,
-          gasPrice: this.gasPrice
-            ? this.gasPrice
-            : await getGasPrice(this.web3),
-        });
+        await erc20Contract.methods
+          .approve(getTokenConfig(erc20Address).proxyERC20, 0)
+          .send({
+            from: accounts[0],
+            gas: process.env.ETH_GAS_LIMIT,
+            gasPrice: this.gasPrice
+              ? this.gasPrice
+              : await getGasPrice(this.web3),
+          });
       }
     }
 
     await erc20Contract.methods
-      .approve(getTokenConfig(erc20Address).proxyERC20, mulDecimals(amount, decimals))
+      .approve(
+        getTokenConfig(erc20Address).proxyERC20,
+        mulDecimals(amount, decimals),
+      )
       .send({
         from: accounts[0],
         gas: process.env.ETH_GAS_LIMIT,
@@ -140,67 +145,69 @@ export class EthMethodsERC20 {
 
     const proxyContract = new this.web3.eth.Contract(
       ProxyERC20Abi as any,
-      getTokenConfig(erc20Address).proxyERC20
+      getTokenConfig(erc20Address).proxyERC20,
     );
 
     // const - 500k gasLimit
     const adapterParams = '0x';
 
-    const sendFee = await proxyContract.methods.estimateSendFee(
-      layerZeroConfig.harmony.chainId,
-      hmyAddrHex, // to user address
-      amount,
-      false,
-      adapterParams
-    ).call();
+    const sendFee = await proxyContract.methods
+      .estimateSendFee(
+        layerZeroConfig.harmony.chainId,
+        hmyAddrHex, // to user address
+        amount,
+        false,
+        adapterParams,
+      )
+      .call();
 
     console.log('Send Fee: ', sendFee);
 
-    const res = await proxyContract.methods.sendFrom(
-      accounts[0], // from user address
-      layerZeroConfig.harmony.chainId,
-      hmyAddrHex, // to user address
-      amount,
-      accounts[0], // refund address
-      '0x0000000000000000000000000000000000000000', // const
-      adapterParams
-    ).send({
-      value: sendFee.nativeFee,
-      from: accounts[0],
-      gas: new BN(gasLimit),
-      gasPrice: await getGasPrice(this.web3),
-    })
+    const res = await proxyContract.methods
+      .sendFrom(
+        accounts[0], // from user address
+        layerZeroConfig.harmony.chainId,
+        hmyAddrHex, // to user address
+        amount,
+        accounts[0], // refund address
+        '0x0000000000000000000000000000000000000000', // const
+        adapterParams,
+      )
+      .send({
+        value: sendFee.nativeFee,
+        from: accounts[0],
+        gas: new BN(gasLimit),
+        gasPrice: await getGasPrice(this.web3),
+      })
       .on('transactionHash', hash => sendTxCallback(hash));
 
     return res;
   };
 
-  getFee = async (
-    erc20Address,
-    userAddr,
-    amount,
-    decimals
-  ) => {
+  getFee = async (erc20Address, userAddr, amount, decimals) => {
     const hmyAddrHex = getAddress(userAddr).checksum;
 
     const proxyContract = new this.web3.eth.Contract(
       ProxyERC20Abi as any,
-      getTokenConfig(erc20Address).proxyERC20
+      getTokenConfig(erc20Address).proxyERC20,
     );
 
     // const - 500k gasLimit
-    const adapterParams = '0x0001000000000000000000000000000000000000000000000000000000000007a120';
+    const adapterParams =
+      '0x0001000000000000000000000000000000000000000000000000000000000007a120';
 
-    const sendFee = await proxyContract.methods.estimateSendFee(
-      layerZeroConfig.harmony.chainId,
-      hmyAddrHex, // to user address
-      mulDecimals(amount, decimals),
-      false,
-      adapterParams
-    ).call();
+    const sendFee = await proxyContract.methods
+      .estimateSendFee(
+        layerZeroConfig.harmony.chainId,
+        hmyAddrHex, // to user address
+        mulDecimals(amount, decimals),
+        false,
+        adapterParams,
+      )
+      .call();
 
     return sendFee.nativeFee;
-  }
+  };
 
   lockToken = async (
     erc20Address,
@@ -240,19 +247,22 @@ export class EthMethodsERC20 {
 
     const proxyContract = new this.web3.eth.Contract(
       ProxyERC20Abi as any,
-      token.proxyERC20
+      token.proxyERC20,
     );
 
     // const - 500k gasLimit
-    const adapterParams = '0x0001000000000000000000000000000000000000000000000000000000000007a120';
+    const adapterParams =
+      '0x0001000000000000000000000000000000000000000000000000000000000007a120';
 
-    const sendFee = await proxyContract.methods.estimateSendFee(
-      layerZeroConfig.harmony.chainId,
-      hmyAddrHex, // to user address
-      mulDecimals(amount, decimals),
-      false,
-      adapterParams
-    ).call();
+    const sendFee = await proxyContract.methods
+      .estimateSendFee(
+        layerZeroConfig.harmony.chainId,
+        hmyAddrHex, // to user address
+        mulDecimals(amount, decimals),
+        false,
+        adapterParams,
+      )
+      .call();
 
     console.log('Send Fee: ', sendFee);
 
@@ -267,36 +277,35 @@ export class EthMethodsERC20 {
     // )
     //   .estimateGas({ from: accounts[0] });
 
-    const gasLimit = Math.max(
-      500000,
-      Number(process.env.ETH_GAS_LIMIT),
-    );
+    const gasLimit = Math.max(500000, Number(process.env.ETH_GAS_LIMIT));
 
     let value;
 
     switch (token.token) {
       case TOKEN.ETH:
-        value = mulDecimals(amount, decimals).add(new BN(sendFee.nativeFee))
+        value = mulDecimals(amount, decimals).add(new BN(sendFee.nativeFee));
         break;
 
       default:
         value = sendFee.nativeFee;
     }
 
-    const res = await proxyContract.methods.sendFrom(
-      accounts[0], // from user address
-      layerZeroConfig.harmony.chainId,
-      hmyAddrHex, // to user address
-      mulDecimals(amount, decimals),
-      accounts[0], // refund address
-      '0x0000000000000000000000000000000000000000', // const
-      adapterParams
-    ).send({
-      value,
-      from: accounts[0],
-      gas: new BN(gasLimit),
-      gasPrice: this.gasPrice ? this.gasPrice : await getGasPrice(this.web3),
-    })
+    const res = await proxyContract.methods
+      .sendFrom(
+        accounts[0], // from user address
+        layerZeroConfig.harmony.chainId,
+        hmyAddrHex, // to user address
+        mulDecimals(amount, decimals),
+        accounts[0], // refund address
+        '0x0000000000000000000000000000000000000000', // const
+        adapterParams,
+      )
+      .send({
+        value,
+        from: accounts[0],
+        gas: new BN(gasLimit),
+        gasPrice: this.gasPrice ? this.gasPrice : await getGasPrice(this.web3),
+      })
       .on('transactionHash', hash => sendTxCallback(hash));
 
     return res;
