@@ -37,9 +37,9 @@ import { MetamaskWarning } from '../../components/MetamaskWarning';
 import { ValidatorsCountWarning } from '../../components/ValidatorsCountWarning';
 import { ConfirmTokenBridge } from '../../components/ConfirmTokenBridge';
 import { EthBridgeStore } from '../../pages/EthBridge/EthBridgeStore';
-import { ITokenInfo } from '../../pages/Exchange';
 import { getTokenConfig, tokensConfigs } from '../../config';
 import Web3 from 'web3';
+import { ITokenInfo } from '../../interfaces';
 
 export enum EXCHANGE_STEPS {
   GET_TOKEN_ADDRESS = 'GET_TOKEN_ADDRESS',

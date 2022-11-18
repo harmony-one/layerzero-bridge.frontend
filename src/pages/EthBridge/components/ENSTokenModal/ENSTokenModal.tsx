@@ -16,16 +16,16 @@ const OpenSeaBadge: React.FC = () => {
       <clipPath id="r">
         <rect width="186.5" height="28" rx="3" fill="#fff" />
       </clipPath>
-      <g clip-path="url(#r)" shape-rendering="crispEdges">
+      <g clipPath="url(#r)" shapeRendering="crispEdges">
         <rect width="101.75" height="28" fill="#555" />
         <rect x="101.75" width="84.75" height="28" fill="#0083e9" />
       </g>
       <g
         fill="#fff"
-        text-anchor="middle"
-        font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
-        text-rendering="geometricPrecision"
-        font-size="100"
+        textAnchor="middle"
+        fontFamily="Verdana,Geneva,DejaVu Sans,sans-serif"
+        textRendering="geometricPrecision"
+        fontSize="100"
       >
         <text
           transform="scale(.1)"
@@ -42,7 +42,7 @@ const OpenSeaBadge: React.FC = () => {
           y="175"
           textLength="607.5"
           fill="#fff"
-          font-weight="bold"
+          fontWeight="bold"
         >
           OPENSEA
         </text>
@@ -116,18 +116,6 @@ export const ENSTokenModal: React.FC<Props> = observer(({ onClose }) => {
               Continue
             </Button>
           </Box>
-
-          {/*<Box margin={{ top: 'xsmall', bottom: 'medium' }}>*/}
-          {/*  <Text color="NGray4">Input ENS contract address</Text>*/}
-          {/*  <TextInput*/}
-          {/*    disabled={erc20Select.isLoading}*/}
-          {/*    placeholder="0x..."*/}
-          {/*    wrapperProps={{ className: s.input }}*/}
-          {/*    value={contractAddress}*/}
-          {/*    // @ts-ignore*/}
-          {/*    onChange={setContractAddress}*/}
-          {/*  />*/}
-          {/*</Box>*/}
           <Grid columns={['1/2', '1/2']}>
             <Box direction="column" align="start">
               {showOpenSeaBadge && (
@@ -140,18 +128,6 @@ export const ENSTokenModal: React.FC<Props> = observer(({ onClose }) => {
                 </a>
               )}
             </Box>
-            {/*<Box direction="column" align="end">*/}
-            {/*  {erc20Select.isLoading ? (*/}
-            {/*    <Spinner color="#fff" boxSize={12} />*/}
-            {/*  ) : (*/}
-            {/*    <Button*/}
-            {/*      disabled={erc20Select.isLoading}*/}
-            {/*      onClick={async () => erc20Select.setToken(contractAddress)}*/}
-            {/*    >*/}
-            {/*      {contractAddress ? 'Change token' : 'Select token'}*/}
-            {/*    </Button>*/}
-            {/*  )}*/}
-            {/*</Box>*/}
           </Grid>
 
           {erc20Select.error ? (
