@@ -358,6 +358,14 @@ export class EthMethodsERC20 {
       erc20Address,
     );
 
+    if (erc20Address === '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85') {
+      return {
+        name: 'Ethereum Name Service',
+        symbol: 'ENS',
+        decimals: '0',
+      };
+    }
+
     const name = await erc20Contract.methods.name().call();
     const symbol = await erc20Contract.methods.symbol().call();
     // const decimals = await erc20Contract.methods.decimals().call();

@@ -104,12 +104,12 @@ export class Erc20SelectStore extends StoreConstructor {
         throw new Error(`You don't have access to this record`);
       }
 
-      this.setToken('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85');
+      await this.setToken('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85');
 
       //
       this.stores.userMetamask.erc20TokenDetails = {
-        name: 'ENS',
-        symbol: ensName,
+        name: 'Ethereum Name Service',
+        symbol: 'ENS',
         decimals: '0',
       };
 
@@ -121,11 +121,7 @@ export class Erc20SelectStore extends StoreConstructor {
   };
 
   @action.bound
-  setToken = async (
-    value: string,
-    ignoreValidations = false,
-    tokenId?: string,
-  ) => {
+  setToken = async (value: string, ignoreValidations = false) => {
     this.tokenAddress = value;
     this.error = '';
     this.isLoading = true;

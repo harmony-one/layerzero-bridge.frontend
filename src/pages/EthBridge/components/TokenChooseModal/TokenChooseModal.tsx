@@ -7,13 +7,16 @@ import { useStores } from '../../../../stores';
 import { observer } from 'mobx-react';
 import { TextInput } from 'grommet';
 import { TokenHorizontal } from './components/TokenHorizontal';
-import { ITokenInfo, TOKEN } from '../../../../stores/interfaces';
+import {
+  ITokenInfo,
+  TOKEN,
+  TOKEN_SUBTYPE,
+} from '../../../../stores/interfaces';
 import styled from 'styled-components';
 import { LoadableContent } from '../../../../components/LoadableContent';
 import { buildTokenId } from '../../../../utils/token';
 import { formatWithSixDecimals } from '../../../../utils';
 import { ModalContent } from '../../../../components/ModalContent';
-import { ModalIds } from '../../../../modals';
 
 interface Props {
   onClose?: () => void;
@@ -108,11 +111,12 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
       .sort(sortByBalance);
   }, [exchange.network, exchange.token, search, sortByBalance, tokens]);
 
-  const chooseNFT = useCallback(() => {
+  const handleClickENS = useCallback(() => {
     user.resetTokens();
-    exchange.setToken(TOKEN.ERC721);
+    exchange.setToken(TOKEN.ERC721, TOKEN_SUBTYPE.ENS);
     // routing.push(`/${exchange.token}`);
-    routing.goToModal(ModalIds.BRIDGE_ENS_TOKEN);
+    routing.push(TOKEN.ERC721);
+    // routing.goToModal(ModalIds.BRIDGE_ENS_TOKEN);
   }, [exchange, routing, user]);
 
   return (
@@ -156,7 +160,7 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
             icon="./ethereum-name-service-ens.svg"
             label="Ethereum Name Service"
             balance=""
-            onClick={chooseNFT}
+            onClick={handleClickENS}
           />
           {tokenlist.map(token => {
             const tokenId = buildTokenId(token);

@@ -23,6 +23,12 @@ export enum TOKEN {
   HRC1155 = 'hrc1155',
 }
 
+export enum TOKEN_SUBTYPE {
+  ENS = 'ENS',
+  UNS = 'UNS',
+  REGULAR = 'REGULAR',
+}
+
 export type TConfig = {
   nodeURL: string;
   explorerURL: string;
@@ -179,9 +185,9 @@ export interface ITokenInfo {
   proxyHRC20?: string;
   image?: string;
   config?: {
-    endpoint: string,
-    chainId: number,
-  },
+    endpoint: string;
+    chainId: number;
+  };
   adapterParams?: string;
 }
 
