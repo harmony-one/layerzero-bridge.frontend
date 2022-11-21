@@ -21,7 +21,7 @@ export const TokenControl: React.FC<Props> = observer(() => {
   const title = useMemo(() => {
     const title =
       isNFT(exchange.token) || isMultiNFT(exchange.token)
-        ? 'Choose NFT'
+        ? 'Select Token'
         : 'Select token';
 
     if (exchange.token === TOKEN.ALL) {

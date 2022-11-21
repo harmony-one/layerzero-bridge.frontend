@@ -17,22 +17,27 @@ interface Props {}
 
 const SocialNetworksData = [
   {
+    key: 'people_group',
     icon: <FontAwesomeIcon icon={faPeopleGroup} />,
     url: 'https://discord.com/invite/rdCmBpe',
   },
   {
+    key: 'discord',
     icon: <FontAwesomeIcon icon={faDiscord} />,
     url: 'https://discord.com/invite/rdCmBpe',
   },
   {
+    key: 'medium',
     icon: <FontAwesomeIcon icon={faMedium} />,
     url: 'https://medium.com/harmony-one',
   },
   {
+    key: 'telegram',
     icon: <FontAwesomeIcon icon={faTelegram} />,
     url: 'https://t.me/harmony_one',
   },
   {
+    key: 'twitter',
     icon: <FontAwesomeIcon icon={faTwitter} />,
     url: 'https://twitter.com/harmonyprotocol',
   },
@@ -51,6 +56,7 @@ const SocialNetworks = props => {
       {SocialNetworksData.map(social => {
         return (
           <div
+            key={social.key}
             style={{
               cursor: 'pointer',
               fontSize: '1.2rem',

@@ -6,22 +6,18 @@ import { TokenAmount } from '../TokenAmount/TokenAmount';
 import { observer } from 'mobx-react';
 import { useStores } from '../../../../../../stores';
 import { BridgeControl } from '../../../BridgeControl/BridgeControl';
-import { TOKEN } from '../../../../../../stores/interfaces';
+import { TOKEN, TOKEN_SUBTYPE } from '../../../../../../stores/interfaces';
 import { truncateAddressString } from '../../../../../../utils';
 import { CircleQuestion } from 'grommet-icons';
 import { TipContent } from '../../../../../../components/TipContent';
 import { Link } from 'components/Link';
 import { getTokenConfig } from '../../../../../../config';
+import { ENSInput } from '../ENSInput';
 
 const TokenAddresses = observer(() => {
   const { exchange, erc20Select } = useStores();
 
   const tokenConfig = getTokenConfig(erc20Select.tokenAddress);
-
-  const originalAddress =
-    exchange.token === TOKEN.HRC20
-      ? tokenConfig.hrc20Address
-      : tokenConfig.erc20Address;
 
   const mappedAddress =
     exchange.token !== TOKEN.HRC20
@@ -93,9 +89,18 @@ export const TokenRow: React.FC<Props> = observer(() => {
             <img alt="token" src={exchange.tokenInfo.image} width="40" />
           )}
         </Box>
-        <Box flex={{ grow: 1, shrink: 0 }} basis="33%" align="center">
-          <TokenAmount />
-        </Box>
+
+        {exchange.isTokenSubtype(TOKEN_SUBTYPE.ENS) && (
+          <Box flex={{ grow: 1, shrink: 0 }} basis="33%" align="center">
+            <ENSInput />
+          </Box>
+        )}
+
+        {!exchange.isNFT() && (
+          <Box flex={{ grow: 1, shrink: 0 }} basis="33%" align="center">
+            <TokenAmount />
+          </Box>
+        )}
       </Box>
       {displayTokenAddress && (
         <Box justify="center" align="center" pad={{ top: '16px' }}>

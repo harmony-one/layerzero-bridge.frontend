@@ -31,6 +31,10 @@ export const ModalReactRouter: React.FC<Props> = observer(() => {
     [routing],
   );
 
+  if (modalId && !modal) {
+    console.error(`### modal ${modalId} does not registered`);
+  }
+
   if (!modal || !modal.component) {
     return null;
   }

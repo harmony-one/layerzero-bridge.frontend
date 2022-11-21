@@ -7,11 +7,16 @@ import { useStores } from '../../../../stores';
 import { observer } from 'mobx-react';
 import { TextInput } from 'grommet';
 import { TokenHorizontal } from './components/TokenHorizontal';
-import { ITokenInfo, TOKEN } from '../../../../stores/interfaces';
+import {
+  ITokenInfo,
+  TOKEN,
+  TOKEN_SUBTYPE,
+} from '../../../../stores/interfaces';
 import styled from 'styled-components';
 import { LoadableContent } from '../../../../components/LoadableContent';
 import { buildTokenId } from '../../../../utils/token';
 import { formatWithSixDecimals } from '../../../../utils';
+import { ModalContent } from '../../../../components/ModalContent';
 
 interface Props {
   onClose?: () => void;
@@ -37,16 +42,15 @@ const StyledTextInput = styled(TextInput)`
   border: none;
 `;
 
-const ModalContent = styled(Box)`
-  max-height: 650px;
-  border: 1px solid ${props => props.theme.modal.borderColor};
-  background-color: ${props => props.theme.modal.bgColor};
-  border-radius: 10px;
-  min-width: 408px;
-`;
-
 export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
-  const { erc20Select, tokens, exchange, routing, userMetamask } = useStores();
+  const {
+    erc20Select,
+    tokens,
+    exchange,
+    routing,
+    userMetamask,
+    user,
+  } = useStores();
 
   const [search, setSearch] = useState();
 
@@ -107,6 +111,14 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
       .sort(sortByBalance);
   }, [exchange.network, exchange.token, search, sortByBalance, tokens]);
 
+  const handleClickENS = useCallback(() => {
+    user.resetTokens();
+    exchange.setToken(TOKEN.ERC721, TOKEN_SUBTYPE.ENS);
+    // routing.push(`/${exchange.token}`);
+    routing.push(TOKEN.ERC721);
+    // routing.goToModal(ModalIds.BRIDGE_ENS_TOKEN);
+  }, [exchange, routing, user]);
+
   return (
     <Box
       direction="column"
@@ -143,6 +155,13 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
           direction="column"
           overflow={{ vertical: 'scroll', horizontal: 'hidden' }}
         >
+          <TokenHorizontal
+            symbol="ENS"
+            icon="./ethereum-name-service-ens.svg"
+            label="Ethereum Name Service"
+            balance=""
+            onClick={handleClickENS}
+          />
           {tokenlist.map(token => {
             const tokenId = buildTokenId(token);
             const balance = userMetamask.getTokenBalance(tokenId) || 0;

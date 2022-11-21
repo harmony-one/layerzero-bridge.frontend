@@ -3,6 +3,8 @@ import { action, autorun, computed, observable, reaction } from 'mobx';
 import { NETWORK_TYPE, OpenSeaValideResponse, TOKEN } from './interfaces';
 import { NETWORK_ICON } from './names';
 import { tokensMainnet } from '../pages/Exchange/tokens';
+import { ensToTokenId } from '../utils/ens';
+import Web3 from 'web3';
 
 export class Erc20SelectStore extends StoreConstructor {
   @observable tokenAddress;
@@ -77,6 +79,48 @@ export class Erc20SelectStore extends StoreConstructor {
   }
 
   @action.bound
+  setENSToken = async (ensName: string) => {
+    const [name] = ensName.split('.');
+    const tokenId = ensToTokenId(name);
+    this.error = '';
+    this.isLoading = true;
+
+    try {
+      const ownerAddress = await this.stores.exchange.getENSOwner(ensName);
+
+      // @ts-ignore
+      const web3 = new Web3(window.ethereum);
+
+      const recordExist = await web3.eth.ens.recordExists(ensName);
+
+      if (!recordExist) {
+        throw new Error(`Record doesn't exist`);
+      }
+
+      if (
+        ownerAddress.toLowerCase() !==
+        this.stores.userMetamask.ethAddress.toLowerCase()
+      ) {
+        throw new Error(`You don't have access to this record`);
+      }
+
+      await this.setToken('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85');
+
+      //
+      this.stores.userMetamask.erc20TokenDetails = {
+        name: 'Ethereum Name Service',
+        symbol: 'ENS',
+        decimals: '0',
+      };
+
+      this.stores.exchange.transaction.amount = [tokenId];
+    } catch (err) {
+      this.isLoading = false;
+      this.error = err.message;
+    }
+  };
+
+  @action.bound
   setToken = async (value: string, ignoreValidations = false) => {
     this.tokenAddress = value;
     this.error = '';
@@ -109,7 +153,7 @@ export class Erc20SelectStore extends StoreConstructor {
           break;
       }
     } catch (e) {
-      console.log('### e', e);
+      console.log('### setToken error', e);
       this.error = e.message;
     }
 

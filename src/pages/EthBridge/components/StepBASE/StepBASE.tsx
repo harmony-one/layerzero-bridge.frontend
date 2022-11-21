@@ -10,23 +10,19 @@ import { useStores } from '../../../../stores';
 import { observer } from 'mobx-react';
 import { Divider } from '../../../../components/Divider/Divider';
 import { ModalIds, ModalRegister } from '../../../../modals';
-import { CustomTokenModal } from '../CustomTokenModal/CustomTokenModal';
-import { TokenChooseModal } from '../TokenChooseModal/TokenChooseModal';
 import { autorun } from 'mobx';
 import { TOKEN } from '../../../../stores/interfaces';
 import { StepContainer } from '../StepContainer';
 import { WalletNetworkWarn } from './components/WalletNetworkWarn';
 import { SwitchNetworkButton } from '../SwitchNetworkButton';
 import { MetamaskButton } from '../../../../components/MetamaskButton';
+import { ENSTokenModal } from '../ENSTokenModal/ENSTokenModal';
+import { TokenChooseModal } from '../TokenChooseModal/TokenChooseModal';
 
 interface Props {}
 
 export const StepBASE: React.FC<Props> = observer(() => {
   const { exchange, userMetamask } = useStores();
-
-  const handleClickReset = useCallback(() => {
-    exchange.clear();
-  }, [exchange]);
 
   const handleClickContinue = useCallback(() => {
     const conf = exchange.step.buttons[0];
@@ -112,14 +108,6 @@ export const StepBASE: React.FC<Props> = observer(() => {
       </Box>
 
       <Box direction="row" height="66px">
-        {/*<Button*/}
-        {/*  fontSize="14px"*/}
-        {/*  className={s.buttonContainer}*/}
-        {/*  buttonClassName={cn(s.bridgeButton, s.reset)}*/}
-        {/*  onClick={handleClickReset}*/}
-        {/*>*/}
-        {/*  Reset Bridge*/}
-        {/*</Button>*/}
         <Button
           fontSize="14px"
           className={s.buttonContainer}
@@ -130,10 +118,10 @@ export const StepBASE: React.FC<Props> = observer(() => {
         </Button>
       </Box>
       <ModalRegister
-        layerProps={{ position: 'top' }}
-        modalId={ModalIds.BRIDGE_CUSTOM_TOKEN}
+        modalId={ModalIds.BRIDGE_ENS_TOKEN}
+        layerProps={{ full: 'vertical' }}
       >
-        <CustomTokenModal />
+        <ENSTokenModal />
       </ModalRegister>
       <ModalRegister
         modalId={ModalIds.BRIDGE_TOKEN_CHOOSE}
