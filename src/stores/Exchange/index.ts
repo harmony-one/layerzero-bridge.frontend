@@ -76,6 +76,7 @@ export interface ITransaction {
   erc1155TokenId?: string;
   nftName?: string;
   nftImageUrl?: string;
+  ensName?: string;
 }
 
 export class Exchange extends StoreConstructor {
@@ -99,6 +100,7 @@ export class Exchange extends StoreConstructor {
     hrc721Address: '',
     nftName: '',
     nftImageUrl: '',
+    ensName: '',
   };
 
   @observable transaction = this.defaultTransaction;
@@ -1275,6 +1277,14 @@ export class Exchange extends StoreConstructor {
       ethBridgeStore.formRef
         .validateFields()
         .then(async () => {
+          if (
+            (exchange.step.id === EXCHANGE_STEPS.BASE,
+            exchange.token === TOKEN.ERC721 &&
+              exchange.tokenSubtype === TOKEN_SUBTYPE.ENS)
+          ) {
+            this.stores.erc20Select.setENSToken(exchange.transaction.ensName);
+          }
+
           try {
             if (exchange.step.id === EXCHANGE_STEPS.BASE) {
               await new Promise((res, rej) => {
