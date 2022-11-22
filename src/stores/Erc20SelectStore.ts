@@ -83,7 +83,6 @@ export class Erc20SelectStore extends StoreConstructor {
     const [name] = ensName.split('.');
     const tokenId = ensToTokenId(name);
     this.error = '';
-    this.isLoading = true;
 
     try {
       const ownerAddress = await this.stores.exchange.getENSOwner(ensName);
@@ -104,8 +103,6 @@ export class Erc20SelectStore extends StoreConstructor {
         throw new Error(`You don't have access to this record`);
       }
 
-      await this.setToken('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85');
-
       //
       this.stores.userMetamask.erc20TokenDetails = {
         name: 'Ethereum Name Service',
@@ -115,7 +112,6 @@ export class Erc20SelectStore extends StoreConstructor {
 
       this.stores.exchange.transaction.amount = [tokenId];
     } catch (err) {
-      this.isLoading = false;
       this.error = err.message;
     }
   };

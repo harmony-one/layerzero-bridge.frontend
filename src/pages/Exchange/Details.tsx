@@ -3,7 +3,11 @@ import { Box, Button, Image } from 'grommet';
 import { observer } from 'mobx-react-lite';
 import { Icon, Text } from 'components/Base';
 import { useStores } from 'stores';
-import { formatWithSixDecimals, truncateAddressString } from 'utils';
+import {
+  formatWithSixDecimals,
+  sliceByLength,
+  truncateAddressString,
+} from 'utils';
 import { EXCHANGE_MODE, NETWORK_TYPE, TOKEN } from '../../stores/interfaces';
 import { Price } from '../Explorer/Components';
 import { useCallback, useState } from 'react';
@@ -11,12 +15,24 @@ import { SliceTooltip } from '../../ui/SliceTooltip';
 import { NETWORK_BASE_TOKEN, NETWORK_NAME } from '../../stores/names';
 import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
-// import { EXPLORER_URL } from '../../blockchain';
-import { hmyMethodsERC20Web3 } from 'blockchain-bridge/hmy';
-import { getExNetworkMethods } from 'blockchain-bridge/eth';
-import { identity } from 'lodash';
 import { getBech32Address } from '../../blockchain-bridge';
-import { ONE_SECOND } from '../../constants/dates';
+
+const CopyButton: React.FC<{ value: string | number }> = ({ value }) => {
+  const handleClickCopy = useCallback(() => {
+    navigator.clipboard.writeText(String(value));
+  }, [value]);
+
+  return (
+    <Button onClick={handleClickCopy}>
+      <Icon
+        glyph="PrintFormCopy"
+        size="20px"
+        color="NBlue"
+        style={{ marginLeft: 10, width: 20 }}
+      />
+    </Button>
+  );
+};
 
 interface AssetRowAddressProps {
   link: string;
@@ -24,10 +40,6 @@ interface AssetRowAddressProps {
 }
 
 const AssetRowAddress: React.FC<AssetRowAddressProps> = props => {
-  const handleClickCopy = useCallback(() => {
-    navigator.clipboard.writeText(props.address);
-  }, [props.address]);
-
   const isMobile = useMediaQuery({ query: '(max-width: 600px)' });
   const truncatedAddress = truncateAddressString(
     props.address,
@@ -48,22 +60,25 @@ const AssetRowAddress: React.FC<AssetRowAddressProps> = props => {
           {truncatedAddress}
         </Text>
       </a>
-      <Button onClick={handleClickCopy}>
-        <Icon
-          glyph="PrintFormCopy"
-          size="20px"
-          color="NBlue"
-          style={{ marginLeft: 10, width: 20 }}
-        />
-      </Button>
+      <CopyButton value={props.address} />
     </>
   );
 };
 
-const AssetRow = props => {
+interface AssetRow {
+  label: string;
+  showIds?: boolean;
+  address?: boolean;
+  link?: string;
+  value?: string;
+  after?: string;
+  copy?: boolean;
+}
+
+const AssetRow: React.FC<AssetRow> = props => {
   return (
     <Box
-      direction="row"
+      direction="row-responsive"
       justify="between"
       margin={{ bottom: 'medium' }}
       align="start"
@@ -79,10 +94,16 @@ const AssetRow = props => {
           <AssetRowAddress link={props.link} address={props.value} />
         ) : (
           <>
-            {props.value ? <Text size="small">{props.value}</Text> : null}
+            {props.value ? (
+              <Text size="small">{sliceByLength(props.value, 26)}</Text>
+            ) : null}
             {props.children}
           </>
         )}
+
+        {!props.address && props.copy ? (
+          <CopyButton value={props.value} />
+        ) : null}
 
         {props.after && (
           <Text style={{ marginLeft: 5 }} color="Basic500">
@@ -202,6 +223,7 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
                           userMetamask.erc20TokenDetails.symbol,
                       ).toUpperCase()} token ID`}
                       value={amount}
+                      copy
                     />
                   ))
                 : null}

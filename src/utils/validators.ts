@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import Web3 from 'web3';
 
 export function createValidate(
   func: (value: any, data?: any) => boolean,
@@ -153,4 +154,39 @@ export const moreThanZero = {
     callback(errors);
   },
   validateType: 'requiredValidator',
+};
+
+export const isENSRecordExist = () => {
+  return {
+    asyncValidator: async (rule, value) => {
+      // @ts-ignore
+      const web3 = new Web3(window.ethereum);
+
+      const recordExist = await web3.eth.ens.recordExists(value);
+
+      console.log('### value', value);
+      if (recordExist) {
+        return true;
+      }
+
+      throw new Error(`Record doesn't exist`);
+    },
+  };
+};
+
+export const isENSOwner = (userAddress: string) => {
+  return {
+    asyncValidator: async (rule, value) => {
+      // @ts-ignore
+      const web3 = new Web3(window.ethereum);
+
+      const ownerAddress = await web3.eth.ens.getOwner(value);
+
+      if (ownerAddress.toLowerCase() !== userAddress.toLowerCase()) {
+        throw new Error(`You don't have access to this record`);
+      }
+
+      return true;
+    },
+  };
 };
