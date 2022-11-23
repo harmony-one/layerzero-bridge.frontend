@@ -306,7 +306,7 @@ export const abi = [
       },
       {
         internalType: 'uint256',
-        name: '_amount',
+        name: '_tokenId',
         type: 'uint256',
       },
       {

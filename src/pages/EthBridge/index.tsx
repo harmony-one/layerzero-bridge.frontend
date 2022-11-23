@@ -34,7 +34,11 @@ export const EthBridge = observer((props: any) => {
 
     const token = exchange.getDefaultToken();
 
-    if (![TOKEN.ERC20, TOKEN.ETH, TOKEN.ONE].includes(tokenTypeFromUrl)) {
+    if (
+      ![TOKEN.ERC20, TOKEN.ETH, TOKEN.ONE, TOKEN.ERC721].includes(
+        tokenTypeFromUrl,
+      )
+    ) {
       routing.push(TOKEN.ONE);
       erc20Select.setToken(token.erc20Address);
       return;

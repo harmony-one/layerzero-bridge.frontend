@@ -68,7 +68,7 @@ export const sendErc721Token = async (params: {
       await ethMethods.lockTokens(
         transaction.erc20Address,
         transaction.oneAddress,
-        transaction.amount,
+        transaction.amount[0],
         hash => confirmCallback(hash, lockToken.type),
       );
     }

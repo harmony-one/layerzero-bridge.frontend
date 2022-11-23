@@ -161,7 +161,7 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
           {exchange.network === NETWORK_TYPE.ETHEREUM && (
             <TokenHorizontal
               symbol="ENS"
-              icon="./ethereum-name-service-ens.svg"
+              icon="/ethereum-name-service-ens.svg"
               label="Ethereum Name Service"
               balance=""
               onClick={handleClickENS}

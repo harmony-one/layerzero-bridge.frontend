@@ -1379,7 +1379,7 @@ export class Exchange extends StoreConstructor {
           return {
             label: 'Ethereum Name Service',
             symbol: 'ENS',
-            image: './ethereum-name-service-ens.svg',
+            image: '/ethereum-name-service-ens.svg',
             address: '',
             maxAmount: '0',
           };

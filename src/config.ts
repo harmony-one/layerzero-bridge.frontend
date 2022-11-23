@@ -336,7 +336,7 @@ export const tokensConfigs: ITokenInfo[] = [
 export const getTokenConfig = (addr: string): ITokenInfo => {
   let token: ITokenInfo;
 
-  if (stores.exchange.token === TOKEN.ERC20) {
+  if ([TOKEN.ERC20, TOKEN.ERC721].includes(stores.exchange.token)) {
     token = tokensConfigs.find(
       t =>
         t.erc20Address.toUpperCase() === addr.toUpperCase() ||
