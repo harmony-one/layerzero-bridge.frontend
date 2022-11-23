@@ -314,6 +314,23 @@ export const tokensConfigs: ITokenInfo[] = [
     network: NETWORK_TYPE.ETHEREUM,
     image: '/aave_icon.svg',
   },
+  {
+    hrc20Address: '0x925b03143cf250892aadef83306b830ca4786404',
+    erc20Address: '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85',
+    proxyERC20: '0xa14154c24A12457f2280941678559c8877B52F3D',
+    proxyHRC20: '0x925b03143cf250892aadef83306b830ca4786404',
+    name: 'Ethereum Name Service',
+    symbol: 'ENS',
+    decimals: '18',
+    totalLocked: '0',
+    totalSupply: '0',
+    totalLockedNormal: '0',
+    totalLockedUSD: '0',
+    token: TOKEN.ERC20,
+    type: TOKEN.ERC721,
+    network: NETWORK_TYPE.ETHEREUM,
+    image: '/ethereum-name-service-ens.svg',
+  },
 ];
 
 export const getTokenConfig = (addr: string): ITokenInfo => {

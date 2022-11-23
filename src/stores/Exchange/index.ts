@@ -814,6 +814,7 @@ export class Exchange extends StoreConstructor {
           return;
       }
 
+      // sendErc20token
       if (this.token === TOKEN.ERC20) {
         let getHRC20Action = this.getActionByType(ACTION_TYPE.getHRC20Address);
 
