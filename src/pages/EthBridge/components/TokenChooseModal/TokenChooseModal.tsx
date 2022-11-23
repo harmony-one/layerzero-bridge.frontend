@@ -158,15 +158,15 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
           direction="column"
           overflow={{ vertical: 'scroll', horizontal: 'hidden' }}
         >
-          {exchange.network === NETWORK_TYPE.ETHEREUM && (
-            <TokenHorizontal
-              symbol="ENS"
-              icon="/ethereum-name-service-ens.svg"
-              label="Ethereum Name Service"
-              balance=""
-              onClick={handleClickENS}
-            />
-          )}
+          {/*{exchange.network === NETWORK_TYPE.ETHEREUM && (*/}
+          {/*  <TokenHorizontal*/}
+          {/*    symbol="ENS"*/}
+          {/*    icon="/ethereum-name-service-ens.svg"*/}
+          {/*    label="Ethereum Name Service"*/}
+          {/*    balance=""*/}
+          {/*    onClick={handleClickENS}*/}
+          {/*  />*/}
+          {/*)}*/}
           {tokenlist.map(token => {
             const tokenId = buildTokenId(token);
             const balance = userMetamask.getTokenBalance(tokenId) || 0;
