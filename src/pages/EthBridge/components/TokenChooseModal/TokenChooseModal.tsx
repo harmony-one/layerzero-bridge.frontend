@@ -161,7 +161,7 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
           {exchange.network === NETWORK_TYPE.ETHEREUM && (
             <TokenHorizontal
               symbol="ENS"
-              icon="./ethereum-name-service-ens.svg"
+              icon="/ethereum-name-service-ens.svg"
               label="Ethereum Name Service"
               balance=""
               onClick={handleClickENS}
@@ -170,12 +170,16 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
           {tokenlist.map(token => {
             const tokenId = buildTokenId(token);
             const balance = userMetamask.getTokenBalance(tokenId) || 0;
+
+            const label =
+              `${token.name} - ${token.type}` +
+              (token.horizon ? ' (Horizon)' : '');
             return (
               <TokenHorizontal
                 key={tokenId}
                 className={s.borderBottom}
                 symbol={token.symbol}
-                label={`${token.name} - ${token.type}`}
+                label={label}
                 balance={formatWithSixDecimals(balance)}
                 icon={token.image}
                 onClick={async () => {

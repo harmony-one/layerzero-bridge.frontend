@@ -5,6 +5,7 @@ import { mulDecimals } from '../../utils';
 import { getGasPrice } from './helpers';
 
 import { abi as ProxyERC20Abi } from '../out/ProxyERC20Abi';
+import { abi as ProxyERC721Abi } from '../out/ProxyERC721Abi';
 import { layerZeroConfig, getTokenConfig } from '../../config';
 import { TOKEN } from 'stores/interfaces';
 import BN from 'bn.js';
@@ -129,10 +130,10 @@ export class EthMethodsERC20 {
     //   .lockTokens(erc20Address, amount, hmyAddrHex)
     //   .estimateGas({ from: accounts[0] });
 
-    const gasLimit = Math.max(
-      // estimateGas + estimateGas * 0.3,
-      Number(process.env.ETH_GAS_LIMIT),
-    );
+    // const gasLimit = Math.max(
+    //   // estimateGas + estimateGas * 0.3,
+    //   Number(process.env.ETH_GAS_LIMIT),
+    // );
 
     // let transaction = await this.ethManagerContract.methods
     //   .lockTokens(erc20Address, amount, hmyAddrHex)
@@ -142,14 +143,16 @@ export class EthMethodsERC20 {
     //     gasPrice: await getGasPrice(this.web3),
     //   })
     //   .on('transactionHash', hash => sendTxCallback(hash));
+    const tokenConfig = getTokenConfig(erc20Address);
 
     const proxyContract = new this.web3.eth.Contract(
-      ProxyERC20Abi as any,
-      getTokenConfig(erc20Address).proxyERC20,
+      ProxyERC721Abi as any,
+      tokenConfig.proxyERC20,
     );
 
     // const - 500k gasLimit
-    const adapterParams = '0x';
+    const adapterParams =
+      '0x0001000000000000000000000000000000000000000000000000000000000007a120';
 
     const sendFee = await proxyContract.methods
       .estimateSendFee(
@@ -162,6 +165,8 @@ export class EthMethodsERC20 {
       .call();
 
     console.log('Send Fee: ', sendFee);
+
+    const gasLimit = Math.max(500000, Number(process.env.ETH_GAS_LIMIT));
 
     const res = await proxyContract.methods
       .sendFrom(
@@ -246,7 +251,7 @@ export class EthMethodsERC20 {
     const token = getTokenConfig(erc20Address);
 
     const proxyContract = new this.web3.eth.Contract(
-      ProxyERC20Abi as any,
+      ProxyERC721Abi as any,
       token.proxyERC20,
     );
 

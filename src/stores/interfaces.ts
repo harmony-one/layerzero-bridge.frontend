@@ -169,6 +169,7 @@ export interface IOperation {
 }
 
 export interface ITokenInfo {
+  horizon?: boolean;
   name: string;
   symbol: string;
   decimals: string;

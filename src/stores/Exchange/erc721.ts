@@ -25,19 +25,19 @@ export const sendErc721Token = async (params: {
 
   const ethMethods = getExNetworkMethods().ethMethodsERС721;
 
-  let getHRC20Action = getActionByType(ACTION_TYPE.getHRC20Address);
-
-  while (
-    getHRC20Action &&
-    [STATUS.IN_PROGRESS, STATUS.WAITING].includes(getHRC20Action.status)
-  ) {
-    await sleep(3000);
-    getHRC20Action = getActionByType(ACTION_TYPE.getHRC20Address);
-  }
-
-  if (!stores.user.hrc20Address) {
-    await stores.userMetamask.setERC721Token(transaction.erc20Address);
-  }
+  // let getHRC20Action = getActionByType(ACTION_TYPE.getHRC20Address);
+  //
+  // while (
+  //   getHRC20Action &&
+  //   [STATUS.IN_PROGRESS, STATUS.WAITING].includes(getHRC20Action.status)
+  // ) {
+  //   await sleep(3000);
+  //   getHRC20Action = getActionByType(ACTION_TYPE.getHRC20Address);
+  // }
+  //
+  // if (!stores.user.hrc20Address) {
+  //   await stores.userMetamask.setERC721Token(transaction.erc20Address);
+  // }
 
   if (mode === EXCHANGE_MODE.ETH_TO_ONE) {
     let approveEthManger = getActionByType(ACTION_TYPE.approveEthManger);
@@ -68,7 +68,7 @@ export const sendErc721Token = async (params: {
       await ethMethods.lockTokens(
         transaction.erc20Address,
         transaction.oneAddress,
-        transaction.amount,
+        transaction.amount[0],
         hash => confirmCallback(hash, lockToken.type),
       );
     }
