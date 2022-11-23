@@ -170,12 +170,16 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
           {tokenlist.map(token => {
             const tokenId = buildTokenId(token);
             const balance = userMetamask.getTokenBalance(tokenId) || 0;
+
+            const label =
+              `${token.name} - ${token.type}` +
+              (token.horizon ? ' (Horizon)' : '');
             return (
               <TokenHorizontal
                 key={tokenId}
                 className={s.borderBottom}
                 symbol={token.symbol}
-                label={`${token.name} - ${token.type}`}
+                label={label}
                 balance={formatWithSixDecimals(balance)}
                 icon={token.image}
                 onClick={async () => {

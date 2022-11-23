@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Box, Tip } from 'grommet';
 import { Text } from '../../../../../../components/Base';
 import { TokenControl } from '../TokenControl/TokenControl';
@@ -8,7 +8,7 @@ import { useStores } from '../../../../../../stores';
 import { BridgeControl } from '../../../BridgeControl/BridgeControl';
 import { TOKEN, TOKEN_SUBTYPE } from '../../../../../../stores/interfaces';
 import { truncateAddressString } from '../../../../../../utils';
-import { CircleQuestion } from 'grommet-icons';
+import { CircleQuestion, CircleInformation } from 'grommet-icons';
 import { TipContent } from '../../../../../../components/TipContent';
 import { Link } from 'components/Link';
 import { getTokenConfig } from '../../../../../../config';
@@ -18,6 +18,8 @@ const TokenAddresses = observer(() => {
   const { exchange, erc20Select } = useStores();
 
   const tokenConfig = getTokenConfig(erc20Select.tokenAddress);
+
+  const tipRef = useRef<HTMLAnchorElement>();
 
   const mappedAddress =
     exchange.token !== TOKEN.HRC20
@@ -46,16 +48,38 @@ const TokenAddresses = observer(() => {
           {truncateAddressString(erc20Select.tokenAddress, 8)}
         </Link>
       </Text>
-      <Text bold>
-        <Link
-          monospace
-          href={mappedAddressLink}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {truncateAddressString(mappedAddress, 8)}
-        </Link>
-      </Text>
+      <Tip
+        dropProps={{ align: { bottom: 'top' } }}
+        plain
+        content={
+          tokenConfig.horizon ? (
+            <TipContent round="7px" pad="xsmall">
+              <Text size="xsmall">Horizon token</Text>
+            </TipContent>
+          ) : null
+        }
+      >
+        <Box direction="row" gap="4px" align="center">
+          <Text bold>
+            <Link
+              monospace
+              href={mappedAddressLink}
+              target="_blank"
+              rel="noreferrer"
+              ref={ref => (tipRef.current = ref)}
+            >
+              {truncateAddressString(mappedAddress, 8)}
+            </Link>
+          </Text>
+          {tokenConfig.horizon ? (
+            <CircleInformation
+              color="#EE9F18"
+              style={{ marginTop: '2px' }}
+              size="16px"
+            />
+          ) : null}
+        </Box>
+      </Tip>
     </Box>
   );
 });
