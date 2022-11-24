@@ -19,6 +19,7 @@ import styled from 'styled-components';
 import { TokenSymbol } from '../Explorer/TokenSymbol';
 import { TableRowMobile } from './components/TableRowMobile';
 import { AssetLink } from './AssetLink';
+import { getTokenTypeName } from '../../utils/token';
 
 const StyledGrid = styled(Grid)`
   //grid-template-columns: auto auto auto auto;
@@ -74,7 +75,7 @@ const getColumns = ({ hmyLINKBalanceManager }): IColumn<ITokenInfo>[] => [
     width: 100,
     render: (value, data) => (
       <Text size="xxsmall" color="NGray">
-        {value.toUpperCase()}
+        {getTokenTypeName(data)}
       </Text>
     ),
   },

@@ -1,4 +1,4 @@
-import { ITokenInfo, TOKEN } from '../stores/interfaces';
+import { ITokenInfo, NETWORK_TYPE, TOKEN } from '../stores/interfaces';
 import { UsedToken } from '../services';
 
 export const buildTokenId = (token: ITokenInfo) => {
@@ -16,4 +16,16 @@ export const getAssetOriginAddress = (data: ITokenInfo) => {
 
 export const getAssetsMappingAddress = (data: ITokenInfo) => {
   return data.type.includes('hrc') ? data.hrc20Address : data.erc20Address;
+};
+
+export const getTokenTypeName = (token: ITokenInfo) => {
+  if (token.network === NETWORK_TYPE.BINANCE && token.type === TOKEN.ERC20) {
+    return 'BEP20';
+  }
+
+  if (token.network === NETWORK_TYPE.ETHEREUM && token.type === TOKEN.ERC20) {
+    return 'ERC20';
+  }
+
+  return token.type.toUpperCase();
 };

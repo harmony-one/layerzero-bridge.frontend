@@ -9,13 +9,12 @@ import { TextInput } from 'grommet';
 import { TokenHorizontal } from './components/TokenHorizontal';
 import {
   ITokenInfo,
-  NETWORK_TYPE,
   TOKEN,
   TOKEN_SUBTYPE,
 } from '../../../../stores/interfaces';
 import styled from 'styled-components';
 import { LoadableContent } from '../../../../components/LoadableContent';
-import { buildTokenId } from '../../../../utils/token';
+import { buildTokenId, getTokenTypeName } from '../../../../utils/token';
 import { formatWithSixDecimals } from '../../../../utils';
 import { ModalContent } from '../../../../components/ModalContent';
 
@@ -171,8 +170,10 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
             const tokenId = buildTokenId(token);
             const balance = userMetamask.getTokenBalance(tokenId) || 0;
 
+            const tokenType = getTokenTypeName(token);
+
             const label =
-              `${token.name} - ${token.type}` +
+              `${token.name} - ${tokenType}` +
               (token.horizon ? ' (Horizon)' : '');
             return (
               <TokenHorizontal
