@@ -8,6 +8,7 @@ export const StepContainer = styled(Box)`
   margin-top: 12px;
   background-color: ${props => props.theme.bridgeForm.bgColor};
   overflow: hidden;
+  position: relative;
 `;
 
 StepContainer.displayName = 'StepContainer';
