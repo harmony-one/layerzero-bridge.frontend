@@ -317,7 +317,7 @@ export const tokensConfigs: ITokenInfo[] = [
   {
     hrc20Address: '0x925b03143cf250892aadef83306b830ca4786404',
     erc20Address: '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85',
-    proxyERC20: '0xa14154c24A12457f2280941678559c8877B52F3D',
+    proxyERC20: '0x7a04c0d1d07b3e3fc2d31a405f44b1a729cf16a6',
     proxyHRC20: '0x925b03143cf250892aadef83306b830ca4786404',
     name: 'Ethereum Name Service',
     symbol: 'ENS',

@@ -100,13 +100,15 @@ export class EthMethodsERC20 {
       erc20Address,
     );
 
+    const tokenConfig = getTokenConfig(erc20Address);
+
     let res = await erc20Contract.methods
-      .isApprovedForAll(accounts[0], this.ethManagerAddress)
+      .isApprovedForAll(accounts[0], tokenConfig.proxyERC20)
       .call();
 
     if (!res) {
       await erc20Contract.methods
-        .setApprovalForAll(this.ethManagerAddress, true)
+        .setApprovalForAll(tokenConfig.proxyERC20, true)
         .send({
           from: accounts[0],
           gas: process.env.ETH_GAS_LIMIT,
