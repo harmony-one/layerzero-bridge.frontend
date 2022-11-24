@@ -1,119 +1,17 @@
 import * as React from 'react';
-import { Box, Button, Image } from 'grommet';
+import { useState } from 'react';
+import { Box, Image } from 'grommet';
 import { observer } from 'mobx-react-lite';
 import { Icon, Text } from 'components/Base';
 import { useStores } from 'stores';
-import {
-  formatWithSixDecimals,
-  sliceByLength,
-  truncateAddressString,
-} from 'utils';
+import { formatWithSixDecimals } from 'utils';
 import { EXCHANGE_MODE, NETWORK_TYPE, TOKEN } from '../../stores/interfaces';
 import { Price } from '../Explorer/Components';
-import { useCallback, useState } from 'react';
-import { SliceTooltip } from '../../ui/SliceTooltip';
 import { NETWORK_BASE_TOKEN, NETWORK_NAME } from '../../stores/names';
 import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
 import { getBech32Address } from '../../blockchain-bridge';
-
-const CopyButton: React.FC<{ value: string | number }> = ({ value }) => {
-  const handleClickCopy = useCallback(() => {
-    navigator.clipboard.writeText(String(value));
-  }, [value]);
-
-  return (
-    <Button onClick={handleClickCopy}>
-      <Icon
-        glyph="PrintFormCopy"
-        size="20px"
-        color="NBlue"
-        style={{ marginLeft: 10, width: 20 }}
-      />
-    </Button>
-  );
-};
-
-interface AssetRowAddressProps {
-  link: string;
-  address: string;
-}
-
-const AssetRowAddress: React.FC<AssetRowAddressProps> = props => {
-  const isMobile = useMediaQuery({ query: '(max-width: 600px)' });
-  const truncatedAddress = truncateAddressString(
-    props.address,
-    isMobile ? 7 : 12,
-  );
-
-  return (
-    <>
-      <a href={props.link} target="_blank" style={{ textDecoration: 'none' }}>
-        <Text
-          size="small"
-          style={{
-            fontFamily: 'monospace',
-            cursor: 'pointer',
-            // textDecoration: 'underline',
-          }}
-        >
-          {truncatedAddress}
-        </Text>
-      </a>
-      <CopyButton value={props.address} />
-    </>
-  );
-};
-
-interface AssetRow {
-  label: string;
-  showIds?: boolean;
-  address?: boolean;
-  link?: string;
-  value?: string;
-  after?: string;
-  copy?: boolean;
-}
-
-const AssetRow: React.FC<AssetRow> = props => {
-  return (
-    <Box
-      direction="row-responsive"
-      justify="between"
-      margin={{ bottom: 'medium' }}
-      align="start"
-    >
-      <Box>
-        <Text size="small" bold={true}>
-          <SliceTooltip value={props.label} maxLength={24} />
-          {props.showIds ? 'Token IDs' : ''}
-        </Text>
-      </Box>
-      <Box direction="row" align="center">
-        {props.address ? (
-          <AssetRowAddress link={props.link} address={props.value} />
-        ) : (
-          <>
-            {props.value ? (
-              <Text size="small">{sliceByLength(props.value, 26)}</Text>
-            ) : null}
-            {props.children}
-          </>
-        )}
-
-        {!props.address && props.copy ? (
-          <CopyButton value={props.value} />
-        ) : null}
-
-        {props.after && (
-          <Text style={{ marginLeft: 5 }} color="Basic500">
-            {props.after}
-          </Text>
-        )}
-      </Box>
-    </Box>
-  );
-};
+import { AssetRowAddress, AssetRowCustom, AssetRowSimple } from './AssetRow';
 
 const LiquidityWarning = styled(Box)`
   background-color: #e65454;
@@ -198,7 +96,7 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
       switch (exchange.token) {
         case TOKEN.ERC20:
           return (
-            <AssetRow
+            <AssetRowSimple
               label={`${String(
                 userMetamask.erc20TokenDetails &&
                   userMetamask.erc20TokenDetails.symbol,
@@ -215,9 +113,8 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
             <>
               {Array.isArray(exchange.transaction.amount)
                 ? exchange.transaction.amount.map((amount, idx) => (
-                    <AssetRow
+                    <AssetRowSimple
                       key={idx}
-                      showIds={true}
                       label={`${String(
                         userMetamask.erc20TokenDetails &&
                           userMetamask.erc20TokenDetails.symbol,
@@ -232,7 +129,7 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
 
         case TOKEN.ETH:
           return (
-            <AssetRow
+            <AssetRowSimple
               label={`${NETWORK_BASE_TOKEN[exchange.network]} amount`}
               value={formatWithSixDecimals(
                 exchange.transaction.amount.toString(),
@@ -242,7 +139,7 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
 
         default:
           return (
-            <AssetRow
+            <AssetRowSimple
               label={`${String(exchange.token).toUpperCase()} amount`}
               value={formatWithSixDecimals(
                 exchange.transaction.amount.toString(),
@@ -274,26 +171,24 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
 
     return (
       <Box direction="column">
-        <AssetRow
+        <AssetRowAddress
           label={`${NETWORK_BASE_TOKEN[exchange.network]} address`}
-          value={exchange.transaction.ethAddress}
+          address={exchange.transaction.ethAddress}
           link={`${exchange.config.explorerURL}/token/${exchange.transaction.ethAddress}`}
-          address
         />
-        <AssetRow
+        <AssetRowAddress
           label="ONE address"
-          value={exchange.transaction.oneAddress}
+          address={exchange.transaction.oneAddress}
           link={`${process.env.HMY_EXPLORER_URL}/address/${getBech32Address(
             exchange.transaction.oneAddress,
           )}?activeTab=3`}
-          address
         />
         {getAmount()}
 
         {getImage()}
 
         {exchange.mode === EXCHANGE_MODE.ONE_TO_ETH ? (
-          <AssetRow label="Comission amount" value="">
+          <AssetRowCustom label="Comission amount">
             {!exchange.isDepositAmountLoading ? (
               <Price
                 value={Number(exchange.depositAmount.toFixed(2))}
@@ -304,7 +199,7 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
             ) : (
               <Text>...loading</Text>
             )}
-          </AssetRow>
+          </AssetRowCustom>
         ) : null}
 
         {/*<DataItem*/}
@@ -331,7 +226,7 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
             pad={{ top: 'small' }}
             style={{ borderTop: '1px solid #dedede' }}
           >
-            <AssetRow label="Network Fee (total)" value="">
+            <AssetRowCustom label="Network Fee (total)">
               {!exchange.isFeeLoading ? (
                 <Price
                   value={exchange.networkFee}
@@ -342,7 +237,7 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
               ) : (
                 <Text>...loading</Text>
               )}
-            </AssetRow>
+            </AssetRowCustom>
 
             {!isShowDetail && !exchange.isFeeLoading ? (
               <Box
@@ -364,44 +259,41 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
             exchange.mode === EXCHANGE_MODE.ONE_TO_ETH &&
             isShowDetail ? (
               <div style={{ opacity: 1 }}>
-                <AssetRow label="Approve" value="">
+                <AssetRowCustom label="Approve">
                   <Price
                     value={0.97219}
                     isEth={false}
                     boxProps={{ pad: {} }}
                     network={exchange.network}
                   />
-                </AssetRow>
+                </AssetRowCustom>
                 {exchange.token === TOKEN.HRC721 ? (
-                  <AssetRow label="Lock Token" value="">
+                  <AssetRowCustom label="Lock Token">
                     <Price
                       value={0.0067219}
                       isEth={false}
                       boxProps={{ pad: {} }}
                       network={exchange.network}
                     />
-                  </AssetRow>
+                  </AssetRowCustom>
                 ) : (
-                  <AssetRow label="Burn" value="">
+                  <AssetRowCustom label="Burn">
                     <Price
                       value={0.97219}
                       isEth={false}
                       boxProps={{ pad: {} }}
                       network={exchange.network}
                     />
-                  </AssetRow>
+                  </AssetRowCustom>
                 )}
-                <AssetRow
-                  label={NETWORK_NAME[exchange.network] + ' gas'}
-                  value=""
-                >
+                <AssetRowCustom label={NETWORK_NAME[exchange.network] + ' gas'}>
                   <Price
                     value={Number(exchange.depositAmount.toFixed(2))}
                     isEth={false}
                     boxProps={{ pad: {} }}
                     network={exchange.network}
                   />
-                </AssetRow>
+                </AssetRowCustom>
               </div>
             ) : null}
 
@@ -409,32 +301,32 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
             exchange.mode === EXCHANGE_MODE.ETH_TO_ONE &&
             isShowDetail ? (
               <div style={{ opacity: 1 }}>
-                <AssetRow label="Approve (~50000 gas)" value="">
+                <AssetRowCustom label="Approve (~50000 gas)">
                   <Price
                     value={exchange.networkFee / 2}
                     isEth={exchange.mode === EXCHANGE_MODE.ETH_TO_ONE}
                     boxProps={{ pad: {} }}
                     network={exchange.network}
                   />
-                </AssetRow>
+                </AssetRowCustom>
                 {exchange.token === TOKEN.HRC721 ? (
-                  <AssetRow label="Burn token (~50000 gas)" value="">
+                  <AssetRowCustom label="Burn token (~50000 gas)">
                     <Price
                       value={exchange.networkFee / 2}
                       isEth={exchange.mode === EXCHANGE_MODE.ETH_TO_ONE}
                       boxProps={{ pad: {} }}
                       network={exchange.network}
                     />
-                  </AssetRow>
+                  </AssetRowCustom>
                 ) : (
-                  <AssetRow label="Lock token (~500000 gas)" value="">
+                  <AssetRowCustom label="Lock token (~500000 gas)">
                     <Price
                       value={exchange.networkFee * 2.8}
                       isEth={exchange.mode === EXCHANGE_MODE.ETH_TO_ONE}
                       boxProps={{ pad: {} }}
                       network={exchange.network}
                     />
-                  </AssetRow>
+                  </AssetRowCustom>
                 )}
               </div>
             ) : null}
@@ -461,10 +353,10 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
 
         {exchange.txHash ? (
           <Box direction="column" margin={{ top: 'large' }}>
-            <AssetRow
+            <AssetRowAddress
               label="Transaction hash"
-              value={exchange.txHash}
-              address
+              address={exchange.txHash}
+              link=""
             />
           </Box>
         ) : null}
@@ -474,46 +366,3 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
 );
 
 Details.displayName = 'Details';
-
-export const TokenDetails = observer<{ showTotal?: boolean; children?: any }>(
-  ({ showTotal, children }) => {
-    const { userMetamask, exchange, user } = useStores();
-
-    if (!userMetamask.erc20TokenDetails) {
-      return null;
-    }
-
-    if (exchange.mode === EXCHANGE_MODE.ONE_TO_ETH && !user.hrc20Address) {
-      return <Text color="red">Token not found</Text>;
-    }
-
-    return (
-      <Box direction="column">
-        <AssetRow
-          label="Token name"
-          value={userMetamask.erc20TokenDetails.name}
-        />
-        <AssetRow
-          label="Token Symbol"
-          value={userMetamask.erc20TokenDetails.symbol}
-        />
-        {exchange.mode === EXCHANGE_MODE.ETH_TO_ONE &&
-        userMetamask.ethAddress ? (
-          <AssetRow
-            label="User Ethereum Balance"
-            value={formatWithSixDecimals(userMetamask.erc20Balance)}
-          />
-        ) : null}
-
-        {exchange.mode === EXCHANGE_MODE.ONE_TO_ETH && user.address ? (
-          <AssetRow
-            label="User Harmony Balance"
-            value={formatWithSixDecimals(user.hrc20Balance)}
-          />
-        ) : null}
-      </Box>
-    );
-  },
-);
-
-TokenDetails.displayName = 'TokenDetails';
