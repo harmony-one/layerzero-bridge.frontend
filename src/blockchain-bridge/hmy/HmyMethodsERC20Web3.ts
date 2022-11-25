@@ -203,21 +203,23 @@ export class HmyMethodsERC20Web3 {
   };
 
   burnTokens = async (hrc20Address, userAddr, amount, sendTxCallback?) => {
-    // @ts-ignore
-    const accounts = await window.ethereum.request({
-      method: 'eth_requestAccounts',
-    });
+    return this.burnToken(hrc20Address, userAddr, amount, '0', sendTxCallback);
 
-    let response = await this.hmyManagerContract.methods
-      .burnTokens(hrc20Address, amount, userAddr)
-      .send({
-        from: accounts[0],
-        gasLimit: process.env.GAS_LIMIT,
-        gasPrice: Number(process.env.GAS_PRICE),
-      })
-      .on('transactionHash', sendTxCallback);
-
-    return response;
+    // // @ts-ignore
+    // const accounts = await window.ethereum.request({
+    //   method: 'eth_requestAccounts',
+    // });
+    //
+    // let response = await this.hmyManagerContract.methods
+    //   .burnTokens(hrc20Address, amount, userAddr)
+    //   .send({
+    //     from: accounts[0],
+    //     gasLimit: process.env.GAS_LIMIT,
+    //     gasPrice: Number(process.env.GAS_PRICE),
+    //   })
+    //   .on('transactionHash', sendTxCallback);
+    //
+    // return response;
   };
 
   getMappingFor = async erc20TokenAddr => {
