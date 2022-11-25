@@ -13,7 +13,10 @@ interface IHmyMethodsInitParams {
 export class HmyMethodsHRC721 {
   private hmy: Harmony;
   private hmyManagerContract: Contract;
-  private options = { gasPrice: Number(process.env.GAS_PRICE), gasLimit: 6721900 };
+  private options = {
+    gasPrice: Number(process.env.GAS_PRICE),
+    gasLimit: 6721900,
+  };
 
   constructor(params: IHmyMethodsInitParams) {
     this.hmy = params.hmy;
@@ -66,12 +69,7 @@ export class HmyMethodsHRC721 {
   /////////////////////////////////////////
   /////////////////////////////////////////
 
-  lockTokens = async (
-    erc721Address,
-    userAddr,
-    tokenIds,
-    sendTxCallback?,
-  ) => {
+  lockTokens = async (erc721Address, userAddr, tokenIds, sendTxCallback?) => {
     return new Promise(async (resolve, reject) => {
       try {
         // TODO
@@ -107,7 +105,7 @@ export class HmyMethodsHRC721 {
     return { name, symbol, baseURI, erc721Address };
   };
 
-  balanceOf =  async (erc721Address: string) => {
+  balanceOf = async (erc721Address: string) => {
     const tokenJson = require('../out/MyERC721');
     // @ts-ignore
     let { address } = await window.onewallet.getAccount();
@@ -117,9 +115,10 @@ export class HmyMethodsHRC721 {
       erc721Address,
     );
 
-    return await erc721Contract.methods.balanceOf(hmyAddrHex).call(this.options);
+    return await erc721Contract.methods
+      .balanceOf(hmyAddrHex)
+      .call(this.options);
   };
-
 
   allowance = async (addr: string, erc721Address: string) => {
     const tokenJson = require('../out/MyERC721');
