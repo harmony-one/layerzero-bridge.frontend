@@ -26,7 +26,11 @@ export const StepBASE: React.FC<Props> = observer(() => {
 
   const handleClickContinue = useCallback(() => {
     const conf = exchange.step.buttons[0];
-    exchange.onClickHandler(conf.validate, conf.onClick, ethBridgeStore);
+    exchange
+      .onClickHandler(conf.validate, conf.onClick, ethBridgeStore)
+      .catch(err => {
+        console.log('### BaseStep Error', err);
+      });
   }, [exchange]);
 
   useEffect(() => {

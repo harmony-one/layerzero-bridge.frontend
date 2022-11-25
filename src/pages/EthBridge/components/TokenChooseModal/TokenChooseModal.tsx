@@ -9,6 +9,7 @@ import { TextInput } from 'grommet';
 import { TokenHorizontal } from './components/TokenHorizontal';
 import {
   ITokenInfo,
+  NETWORK_TYPE,
   TOKEN,
   TOKEN_SUBTYPE,
 } from '../../../../stores/interfaces';

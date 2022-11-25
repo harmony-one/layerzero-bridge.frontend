@@ -31,8 +31,8 @@ export const ENSInput: React.FC<Props> = observer(() => {
           value={ensName}
           rules={[
             isRequired,
-            isENSRecordExist(),
-            isENSOwner(userMetamask.ethAddress),
+            // isENSRecordExist(),
+            // isENSOwner(userMetamask.ethAddress),
           ]}
           // @ts-ignore
           onChange={setEnsName}
