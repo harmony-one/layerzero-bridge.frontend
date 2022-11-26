@@ -82,13 +82,15 @@ export class HmyMethodsERC20Web3 {
       method: 'eth_requestAccounts',
     });
 
+    const tokenConfig = getTokenConfig(hrc20Address);
+
     let res = await hmyTokenContract.methods
-      .isApprovedForAll(accounts[0], this.hmyManagerContractAddress)
+      .isApprovedForAll(accounts[0], tokenConfig.proxyHRC20)
       .call();
 
     if (!res) {
       res = await hmyTokenContract.methods
-        .setApprovalForAll(this.hmyManagerContractAddress, true)
+        .setApprovalForAll(tokenConfig.proxyHRC20, true)
         .send({
           from: accounts[0],
           gasLimit: process.env.GAS_LIMIT,
