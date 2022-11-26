@@ -83,6 +83,7 @@ export const Status: React.FC<Props> = observer(() => {
       fill={true}
       pad="medium"
       style={{ background: '#dedede40' }}
+      round="10px"
     >
       {icon()}
 
