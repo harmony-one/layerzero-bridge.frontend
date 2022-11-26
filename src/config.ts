@@ -315,10 +315,10 @@ export const tokensConfigs: ITokenInfo[] = [
     image: '/aave_icon.svg',
   },
   {
-    hrc20Address: '0x925b03143cf250892aadef83306b830ca4786404',
+    hrc20Address: '0x447853bc371cce9016df6e21ec1d97e18b8c167d',
     erc20Address: '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85',
     proxyERC20: '0x7a04c0d1d07b3e3fc2d31a405f44b1a729cf16a6',
-    proxyHRC20: '0x925b03143cf250892aadef83306b830ca4786404',
+    proxyHRC20: '0xdcb88a5f12c35961055da7d4b6bfd1210b1f21b4',
     name: 'Ethereum Name Service',
     symbol: 'ENS',
     decimals: '18',
