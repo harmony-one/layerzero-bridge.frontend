@@ -6,7 +6,7 @@ import { TokenAmount } from '../TokenAmount/TokenAmount';
 import { observer } from 'mobx-react';
 import { useStores } from '../../../../../../stores';
 import { BridgeControl } from '../../../BridgeControl/BridgeControl';
-import { TOKEN, TOKEN_SUBTYPE } from '../../../../../../stores/interfaces';
+import { TOKEN } from '../../../../../../stores/interfaces';
 import { truncateAddressString } from '../../../../../../utils';
 import { CircleQuestion, CircleInformation } from 'grommet-icons';
 import { TipContent } from '../../../../../../components/TipContent';
@@ -114,7 +114,7 @@ export const TokenRow: React.FC<Props> = observer(() => {
           )}
         </Box>
 
-        {exchange.isTokenSubtype(TOKEN_SUBTYPE.ENS) && (
+        {exchange.isNFT() && (
           <Box flex={{ grow: 1, shrink: 0 }} basis="33%" align="center">
             <ENSInput />
           </Box>

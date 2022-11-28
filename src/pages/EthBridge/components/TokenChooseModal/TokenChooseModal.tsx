@@ -7,12 +7,7 @@ import { useStores } from '../../../../stores';
 import { observer } from 'mobx-react';
 import { TextInput } from 'grommet';
 import { TokenHorizontal } from './components/TokenHorizontal';
-import {
-  ITokenInfo,
-  NETWORK_TYPE,
-  TOKEN,
-  TOKEN_SUBTYPE,
-} from '../../../../stores/interfaces';
+import { ITokenInfo, NETWORK_TYPE, TOKEN } from '../../../../stores/interfaces';
 import styled from 'styled-components';
 import { LoadableContent } from '../../../../components/LoadableContent';
 import { buildTokenId, getTokenTypeName } from '../../../../utils/token';
@@ -114,7 +109,7 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
 
   const handleClickENS = useCallback(() => {
     user.resetTokens();
-    exchange.setToken(TOKEN.ERC721, TOKEN_SUBTYPE.ENS);
+    exchange.setToken(TOKEN.ERC721);
 
     erc20Select.setToken('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85');
     // routing.push(`/${exchange.token}`);

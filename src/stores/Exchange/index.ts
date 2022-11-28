@@ -106,7 +106,6 @@ export class Exchange extends StoreConstructor {
   @observable transaction = this.defaultTransaction;
   @observable mode: EXCHANGE_MODE = EXCHANGE_MODE.ETH_TO_ONE;
   @observable token: TOKEN;
-  @observable tokenSubtype: TOKEN_SUBTYPE;
 
   constructor(stores) {
     super(stores);
@@ -522,12 +521,11 @@ export class Exchange extends StoreConstructor {
   }
 
   @action.bound
-  setToken(token: TOKEN, tokenSubtype: TOKEN_SUBTYPE = TOKEN_SUBTYPE.REGULAR) {
+  setToken(token: TOKEN) {
     // this.clear();
     console.log('### setToken', token);
 
     this.token = token;
-    this.tokenSubtype = tokenSubtype;
     // this.setAddressByMode();
 
     if (token === TOKEN.ETH) {
@@ -1279,9 +1277,8 @@ export class Exchange extends StoreConstructor {
         .validateFields()
         .then(async () => {
           if (
-            (exchange.step.id === EXCHANGE_STEPS.BASE,
-            exchange.token === TOKEN.ERC721 &&
-              exchange.tokenSubtype === TOKEN_SUBTYPE.ENS)
+            exchange.step.id === EXCHANGE_STEPS.BASE &&
+            exchange.token === TOKEN.ERC721
           ) {
             this.stores.erc20Select.setENSToken(exchange.transaction.ensName);
           }
@@ -1375,15 +1372,14 @@ export class Exchange extends StoreConstructor {
       case TOKEN.ERC1155:
       case TOKEN.HRC1155:
       case TOKEN.ERC721:
-        if (exchange.tokenSubtype === TOKEN_SUBTYPE.ENS) {
-          return {
-            label: 'Ethereum Name Service',
-            symbol: 'ENS',
-            image: '/ethereum-name-service-ens.svg',
-            address: '',
-            maxAmount: '0',
-          };
-        }
+        return {
+          label: 'Ethereum Name Service',
+          symbol: 'ENS',
+          image: '/ethereum-name-service-ens.svg',
+          address: '',
+          maxAmount: '0',
+        };
+
       case TOKEN.ERC20:
       case TOKEN.HRC20:
         const token = tokensConfigs.find(
@@ -1453,9 +1449,5 @@ export class Exchange extends StoreConstructor {
 
   isNFT() {
     return isNFT(this.token);
-  }
-
-  isTokenSubtype(subtype: TOKEN_SUBTYPE) {
-    return this.tokenSubtype === subtype;
   }
 }
