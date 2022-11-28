@@ -1,6 +1,9 @@
 import * as _ from 'lodash';
 import Web3 from 'web3';
 
+import * as MyERC721 from '../blockchain-bridge/out/MyERC721';
+import { ensToTokenId } from './ens';
+
 export function createValidate(
   func: (value: any, data?: any) => boolean,
   error: any,
@@ -174,13 +177,25 @@ export const isENSRecordExist = () => {
   };
 };
 
-export const isENSOwner = (userAddress: string) => {
+export const isENSOwner = (userAddress: string, contractAddress: string) => {
   return {
-    asyncValidator: async (rule, value) => {
+    asyncValidator: async (rule, ensName) => {
       // @ts-ignore
       const web3 = new Web3(window.ethereum);
 
-      const ownerAddress = await web3.eth.ens.getOwner(value);
+      const contract = new web3.eth.Contract(MyERC721.abi, contractAddress);
+
+      const [name] = ensName.split('.');
+      const tokenId = ensToTokenId(name);
+
+      const ownerAddress = await contract.methods
+        .ownerOf(tokenId)
+        .call()
+        .catch(err => {
+          console.log('### err', err);
+          debugger;
+          return '';
+        });
 
       if (ownerAddress.toLowerCase() !== userAddress.toLowerCase()) {
         throw new Error(`You don't have access to this record`);

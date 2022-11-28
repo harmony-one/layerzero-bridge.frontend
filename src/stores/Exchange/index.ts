@@ -1458,12 +1458,4 @@ export class Exchange extends StoreConstructor {
   isTokenSubtype(subtype: TOKEN_SUBTYPE) {
     return this.tokenSubtype === subtype;
   }
-
-  @action.bound
-  public getENSOwner = async (name: string) => {
-    // @ts-ignore
-    const web3 = new Web3(window.ethereum);
-
-    return web3.eth.ens.getOwner(name);
-  };
 }

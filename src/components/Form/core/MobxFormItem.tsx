@@ -75,7 +75,7 @@ export class MobxFormItem extends React.Component<IMobxFormItemProps> {
 
   public registerRules(props: IMobxFormItemProps) {
     const cmpRules = _.get(props, 'fieldParams.componentParams.rules', []);
-    this.rules = (props.rules || []).concat(cmpRules);
+    this.rules = (props.rules.filter(Boolean) || []).concat(cmpRules);
 
     if (!_.isArray(this.rules)) {
       this.rules = [this.rules];
