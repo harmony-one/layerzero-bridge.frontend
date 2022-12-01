@@ -10,7 +10,6 @@ import {
   TConfig,
   TFullConfig,
   TOKEN,
-  TOKEN_SUBTYPE,
 } from '../interfaces';
 import * as operationService from 'services';
 import { threshold, validators } from 'services';
@@ -39,7 +38,6 @@ import { ValidatorsCountWarning } from '../../components/ValidatorsCountWarning'
 import { ConfirmTokenBridge } from '../../components/ConfirmTokenBridge';
 import { EthBridgeStore } from '../../pages/EthBridge/EthBridgeStore';
 import { getTokenConfig, tokensConfigs } from '../../config';
-import Web3 from 'web3';
 import { ITokenInfo } from '../../interfaces';
 
 export enum EXCHANGE_STEPS {
@@ -713,20 +711,6 @@ export class Exchange extends StoreConstructor {
       const exNetwork = getExNetworkMethods();
 
       switch (this.token) {
-        case TOKEN.BUSD:
-          ethMethods = exNetwork.ethMethodsBUSD;
-          hmyMethods = this.stores.user.isMetamask
-            ? contract.hmyMethodsBUSD.hmyMethodsWeb3
-            : contract.hmyMethodsBUSD.hmyMethods;
-          break;
-
-        case TOKEN.LINK:
-          ethMethods = exNetwork.ethMethodsLINK;
-          hmyMethods = this.stores.user.isMetamask
-            ? contract.hmyMethodsLINK.hmyMethodsWeb3
-            : contract.hmyMethodsLINK.hmyMethods;
-          break;
-
         case TOKEN.ERC20:
           ethMethods = exNetwork.ethMethodsERC20;
 

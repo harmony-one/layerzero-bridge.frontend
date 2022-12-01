@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Box } from 'grommet';
-import { BaseContainer, PageContainer } from 'components';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'stores';
 import { Table } from 'components/Table';
@@ -15,6 +14,7 @@ import {
   IOperation,
   STATUS,
 } from '../../stores/interfaces';
+import { LayoutCommon } from '../../components/Layouts/LayoutCommon/LayoutCommon';
 
 export const isStuckOperation = (o: IOperation) => {
   if (o.status === STATUS.IN_PROGRESS || o.status === STATUS.WAITING) {
@@ -64,76 +64,74 @@ export const StuckOperations = observer((props: any) => {
   const needsToBeRestarted = operations.data.some(isStuckOperation);
 
   return (
-    <BaseContainer>
-      <PageContainer>
-        <Box
-          direction="column"
-          align="center"
-          margin={{ top: 'xlarge' }}
-          gap="20px"
-        >
-          <Title size="large">Stuck operations</Title>
-          <Title>
-            Bridge needs to be restarted ? -{' '}
-            {needsToBeRestarted ? (
-              <span style={{ color: 'red' }}>YES</span>
-            ) : (
-              'No'
-            )}
-          </Title>
-        </Box>
-        <Box
-          direction="row"
-          wrap={true}
-          fill={true}
-          justify="center"
-          align="start"
-          margin={{ top: 'medium' }}
-        >
-          {isAuthorized ? (
-            <Box
-              direction="row"
-              pad={{ horizontal: 'large' }}
-              justify="between"
-              align="center"
-              fill={true}
-              margin={{ bottom: '14px' }}
-            >
-              <Box align="center" dir="row">
-                <Checkbox
-                  label="Stuck operations"
-                  value={operations.filters['stuck']}
-                  onChange={value =>
-                    operations.onChangeDataFlow({
-                      filters: { stuck: value ? value : undefined },
-                    })
-                  }
-                />
-              </Box>
-              <Box></Box>
+    <LayoutCommon>
+      <Box
+        direction="column"
+        align="center"
+        margin={{ top: 'xlarge' }}
+        gap="20px"
+      >
+        <Title size="large">Stuck operations</Title>
+        <Title>
+          Bridge needs to be restarted ? -{' '}
+          {needsToBeRestarted ? (
+            <span style={{ color: 'red' }}>YES</span>
+          ) : (
+            'No'
+          )}
+        </Title>
+      </Box>
+      <Box
+        direction="row"
+        wrap={true}
+        fill={true}
+        justify="center"
+        align="start"
+        margin={{ top: 'medium' }}
+      >
+        {isAuthorized ? (
+          <Box
+            direction="row"
+            pad={{ horizontal: 'large' }}
+            justify="between"
+            align="center"
+            fill={true}
+            margin={{ bottom: '14px' }}
+          >
+            <Box align="center" dir="row">
+              <Checkbox
+                label="Stuck operations"
+                value={operations.filters['stuck']}
+                onChange={value =>
+                  operations.onChangeDataFlow({
+                    filters: { stuck: value ? value : undefined },
+                  })
+                }
+              />
             </Box>
-          ) : null}
-          <Table
-            data={operations.data}
-            columns={columns}
-            isPending={operations.isPending}
-            dataLayerConfig={operations.dataFlow}
-            onChangeDataFlow={onChangeDataFlow}
-            onRowClicked={() => {}}
-            tableParams={{
-              rowKey: (data: any) => data.id,
-              rowClassName: (data: IOperation) =>
-                isStuckOperation(data) ? 'stuckOperation' : '',
-              expandable: {
-                expandedRowKeys,
-                onExpandedRowsChange: setExpandedRowKeys,
-                expandedRowRender: (data: any) => <ExpandedRow data={data} />,
-                expandRowByClick: true,
-              },
-            }}
-          />
-        </Box>
-      </PageContainer>
-    </BaseContainer>
+            <Box></Box>
+          </Box>
+        ) : null}
+        <Table
+          data={operations.data}
+          columns={columns}
+          isPending={operations.isPending}
+          dataLayerConfig={operations.dataFlow}
+          onChangeDataFlow={onChangeDataFlow}
+          onRowClicked={() => {}}
+          tableParams={{
+            rowKey: (data: any) => data.id,
+            rowClassName: (data: IOperation) =>
+              isStuckOperation(data) ? 'stuckOperation' : '',
+            expandable: {
+              expandedRowKeys,
+              onExpandedRowsChange: setExpandedRowKeys,
+              expandedRowRender: (data: any) => <ExpandedRow data={data} />,
+              expandRowByClick: true,
+            },
+          }}
+        />
+      </Box>
+    </LayoutCommon>
   );
 });
