@@ -19,6 +19,7 @@ import { isAddressEqual } from './UserStore';
 import * as services from '../services';
 import { getChainConfig, numberToHex } from './Exchange/helpers';
 import { buildTokenId } from '../utils/token';
+import { getTokenConfig } from '../config';
 
 const defaults = {};
 
@@ -753,9 +754,9 @@ export class UserStoreMetamask extends StoreConstructor {
       throw new Error('This address already using for Native tokens');
     }
 
-    const hrc20Address = await hmyMethodsERC721.hmyMethods.getMappingFor(
-      erc20Address,
-    );
+    const tokenConfig = getTokenConfig(erc20Address);
+
+    const hrc20Address = tokenConfig.hrc20Address;
 
     let details;
 

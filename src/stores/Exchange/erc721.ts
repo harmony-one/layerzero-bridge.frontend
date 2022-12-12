@@ -105,7 +105,7 @@ export const sendErc721Token = async (params: {
       await hmyMethods.burnTokens(
         hrc20Address,
         transaction.ethAddress,
-        transaction.amount,
+        transaction.amount[0],
         hash => confirmCallback(hash, burnToken.type),
       );
     }

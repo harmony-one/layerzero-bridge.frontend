@@ -10,7 +10,6 @@ import {
   TConfig,
   TFullConfig,
   TOKEN,
-  TOKEN_SUBTYPE,
 } from '../interfaces';
 import * as operationService from 'services';
 import { threshold, validators } from 'services';
@@ -39,7 +38,6 @@ import { ValidatorsCountWarning } from '../../components/ValidatorsCountWarning'
 import { ConfirmTokenBridge } from '../../components/ConfirmTokenBridge';
 import { EthBridgeStore } from '../../pages/EthBridge/EthBridgeStore';
 import { getTokenConfig, tokensConfigs } from '../../config';
-import Web3 from 'web3';
 import { ITokenInfo } from '../../interfaces';
 
 export enum EXCHANGE_STEPS {
@@ -106,7 +104,6 @@ export class Exchange extends StoreConstructor {
   @observable transaction = this.defaultTransaction;
   @observable mode: EXCHANGE_MODE = EXCHANGE_MODE.ETH_TO_ONE;
   @observable token: TOKEN;
-  @observable tokenSubtype: TOKEN_SUBTYPE;
 
   constructor(stores) {
     super(stores);
@@ -522,12 +519,11 @@ export class Exchange extends StoreConstructor {
   }
 
   @action.bound
-  setToken(token: TOKEN, tokenSubtype: TOKEN_SUBTYPE = TOKEN_SUBTYPE.REGULAR) {
+  setToken(token: TOKEN) {
     // this.clear();
     console.log('### setToken', token);
 
     this.token = token;
-    this.tokenSubtype = tokenSubtype;
     // this.setAddressByMode();
 
     if (token === TOKEN.ETH) {
@@ -715,20 +711,6 @@ export class Exchange extends StoreConstructor {
       const exNetwork = getExNetworkMethods();
 
       switch (this.token) {
-        case TOKEN.BUSD:
-          ethMethods = exNetwork.ethMethodsBUSD;
-          hmyMethods = this.stores.user.isMetamask
-            ? contract.hmyMethodsBUSD.hmyMethodsWeb3
-            : contract.hmyMethodsBUSD.hmyMethods;
-          break;
-
-        case TOKEN.LINK:
-          ethMethods = exNetwork.ethMethodsLINK;
-          hmyMethods = this.stores.user.isMetamask
-            ? contract.hmyMethodsLINK.hmyMethodsWeb3
-            : contract.hmyMethodsLINK.hmyMethods;
-          break;
-
         case TOKEN.ERC20:
           ethMethods = exNetwork.ethMethodsERC20;
 
@@ -1279,9 +1261,8 @@ export class Exchange extends StoreConstructor {
         .validateFields()
         .then(async () => {
           if (
-            (exchange.step.id === EXCHANGE_STEPS.BASE,
-            exchange.token === TOKEN.ERC721 &&
-              exchange.tokenSubtype === TOKEN_SUBTYPE.ENS)
+            exchange.step.id === EXCHANGE_STEPS.BASE &&
+            exchange.token === TOKEN.ERC721
           ) {
             this.stores.erc20Select.setENSToken(exchange.transaction.ensName);
           }
@@ -1375,15 +1356,14 @@ export class Exchange extends StoreConstructor {
       case TOKEN.ERC1155:
       case TOKEN.HRC1155:
       case TOKEN.ERC721:
-        if (exchange.tokenSubtype === TOKEN_SUBTYPE.ENS) {
-          return {
-            label: 'Ethereum Name Service',
-            symbol: 'ENS',
-            image: '/ethereum-name-service-ens.svg',
-            address: '',
-            maxAmount: '0',
-          };
-        }
+        return {
+          label: 'Ethereum Name Service',
+          symbol: 'ENS',
+          image: '/ethereum-name-service-ens.svg',
+          address: '',
+          maxAmount: '0',
+        };
+
       case TOKEN.ERC20:
       case TOKEN.HRC20:
         const token = tokensConfigs.find(
@@ -1454,16 +1434,4 @@ export class Exchange extends StoreConstructor {
   isNFT() {
     return isNFT(this.token);
   }
-
-  isTokenSubtype(subtype: TOKEN_SUBTYPE) {
-    return this.tokenSubtype === subtype;
-  }
-
-  @action.bound
-  public getENSOwner = async (name: string) => {
-    // @ts-ignore
-    const web3 = new Web3(window.ethereum);
-
-    return web3.eth.ens.getOwner(name);
-  };
 }

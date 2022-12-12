@@ -85,25 +85,6 @@ export class Erc20SelectStore extends StoreConstructor {
     this.error = '';
 
     try {
-      const ownerAddress = await this.stores.exchange.getENSOwner(ensName);
-
-      // @ts-ignore
-      const web3 = new Web3(window.ethereum);
-
-      const recordExist = await web3.eth.ens.recordExists(ensName);
-
-      if (!recordExist) {
-        throw new Error(`Record doesn't exist`);
-      }
-
-      if (
-        ownerAddress.toLowerCase() !==
-        this.stores.userMetamask.ethAddress.toLowerCase()
-      ) {
-        throw new Error(`You don't have access to this record`);
-      }
-
-      //
       this.stores.userMetamask.erc20TokenDetails = {
         name: 'Ethereum Name Service',
         symbol: 'ENS',
@@ -112,6 +93,7 @@ export class Erc20SelectStore extends StoreConstructor {
 
       this.stores.exchange.transaction.amount = [tokenId];
     } catch (err) {
+      console.log('### setENSToken error', err);
       this.error = err.message;
     }
   };
@@ -149,7 +131,7 @@ export class Erc20SelectStore extends StoreConstructor {
           break;
       }
     } catch (e) {
-      console.log('### setToken error', e);
+      console.log(`### setToken error ${value}`, e);
       this.error = e.message;
     }
 

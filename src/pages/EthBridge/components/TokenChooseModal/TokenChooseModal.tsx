@@ -7,11 +7,7 @@ import { useStores } from '../../../../stores';
 import { observer } from 'mobx-react';
 import { TextInput } from 'grommet';
 import { TokenHorizontal } from './components/TokenHorizontal';
-import {
-  ITokenInfo,
-  TOKEN,
-  TOKEN_SUBTYPE,
-} from '../../../../stores/interfaces';
+import { ITokenInfo, NETWORK_TYPE, TOKEN } from '../../../../stores/interfaces';
 import styled from 'styled-components';
 import { LoadableContent } from '../../../../components/LoadableContent';
 import { buildTokenId, getTokenTypeName } from '../../../../utils/token';
@@ -113,7 +109,7 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
 
   const handleClickENS = useCallback(() => {
     user.resetTokens();
-    exchange.setToken(TOKEN.ERC721, TOKEN_SUBTYPE.ENS);
+    exchange.setToken(TOKEN.ERC721);
 
     erc20Select.setToken('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85');
     // routing.push(`/${exchange.token}`);
@@ -157,15 +153,15 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
           direction="column"
           overflow={{ vertical: 'scroll', horizontal: 'hidden' }}
         >
-          {/*{exchange.network === NETWORK_TYPE.ETHEREUM && (*/}
-          {/*  <TokenHorizontal*/}
-          {/*    symbol="ENS"*/}
-          {/*    icon="/ethereum-name-service-ens.svg"*/}
-          {/*    label="Ethereum Name Service"*/}
-          {/*    balance=""*/}
-          {/*    onClick={handleClickENS}*/}
-          {/*  />*/}
-          {/*)}*/}
+          {exchange.network === NETWORK_TYPE.ETHEREUM && (
+            <TokenHorizontal
+              symbol="ENS"
+              icon="/ethereum-name-service-ens.svg"
+              label="Ethereum Name Service"
+              balance=""
+              onClick={handleClickENS}
+            />
+          )}
           {tokenlist.map(token => {
             const tokenId = buildTokenId(token);
             const balance = userMetamask.getTokenBalance(tokenId) || 0;

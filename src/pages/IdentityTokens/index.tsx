@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Box } from 'grommet';
-import { BaseContainer, PageContainer } from 'components';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'stores';
 import { IColumn, Table } from 'components/Table';

@@ -4,7 +4,7 @@ import { Contract } from 'web3-eth-contract';
 import { getAddress } from '@harmony-js/crypto';
 const BN = require('bn.js');
 
-import { abi as ProxyERC20Abi } from '../out/ProxyHRC20Abi'
+import { abi as ProxyERC20Abi } from '../out/ProxyHRC20Abi';
 import { layerZeroConfig, getTokenConfig } from '../../config';
 import { TOKEN } from 'stores/interfaces';
 
@@ -56,7 +56,10 @@ export class HmyMethodsERC20Web3 {
     }
 
     const res = await hmyTokenContract.methods
-      .approve(getTokenConfig(hrc20Address).proxyHRC20, mulDecimals(amount, decimals))
+      .approve(
+        getTokenConfig(hrc20Address).proxyHRC20,
+        mulDecimals(amount, decimals),
+      )
       .send({
         from: accounts[0],
         gasLimit: process.env.GAS_LIMIT,
@@ -79,13 +82,15 @@ export class HmyMethodsERC20Web3 {
       method: 'eth_requestAccounts',
     });
 
+    const tokenConfig = getTokenConfig(hrc20Address);
+
     let res = await hmyTokenContract.methods
-      .isApprovedForAll(accounts[0], this.hmyManagerContractAddress)
+      .isApprovedForAll(accounts[0], tokenConfig.proxyHRC20)
       .call();
 
     if (!res) {
       res = await hmyTokenContract.methods
-        .setApprovalForAll(this.hmyManagerContractAddress, true)
+        .setApprovalForAll(tokenConfig.proxyHRC20, true)
         .send({
           from: accounts[0],
           gasLimit: process.env.GAS_LIMIT,
@@ -100,30 +105,29 @@ export class HmyMethodsERC20Web3 {
     }
   };
 
-  getFee = async (hrc20Address,
-    userAddr,
-    amount,
-    decimals,) => {
+  getFee = async (hrc20Address, userAddr, amount, decimals) => {
     const token = getTokenConfig(hrc20Address);
 
     const proxyContract = new this.web3.eth.Contract(
       ProxyERC20Abi as any,
-      token.proxyHRC20
+      token.proxyHRC20,
     );
 
     // const - 500k gasLimitя
     const adapterParams = token.adapterParams || '0x';
 
-    const sendFee = await proxyContract.methods.estimateSendFee(
-      token.config.chainId,
-      userAddr,
-      mulDecimals(amount, decimals),
-      false,
-      adapterParams
-    ).call();
+    const sendFee = await proxyContract.methods
+      .estimateSendFee(
+        token.config.chainId,
+        userAddr,
+        mulDecimals(amount, decimals),
+        false,
+        adapterParams,
+      )
+      .call();
 
     return sendFee.nativeFee;
-  }
+  };
 
   burnToken = async (
     hrc20Address,
@@ -150,19 +154,21 @@ export class HmyMethodsERC20Web3 {
 
     const proxyContract = new this.web3.eth.Contract(
       ProxyERC20Abi as any,
-      token.proxyHRC20
+      token.proxyHRC20,
     );
 
     // const - 500k gasLimit
     const adapterParams = token.adapterParams || '0x';
 
-    const sendFee = await proxyContract.methods.estimateSendFee(
-      token.config.chainId,
-      userAddr,
-      mulDecimals(amount, decimals),
-      false,
-      adapterParams
-    ).call();
+    const sendFee = await proxyContract.methods
+      .estimateSendFee(
+        token.config.chainId,
+        userAddr,
+        mulDecimals(amount, decimals),
+        false,
+        adapterParams,
+      )
+      .call();
 
     console.log('Send Fee: ', sendFee);
 
@@ -170,42 +176,25 @@ export class HmyMethodsERC20Web3 {
 
     switch (token.token) {
       case TOKEN.ONE:
-        value = mulDecimals(amount, decimals).add(new BN(sendFee.nativeFee))
+        value = mulDecimals(amount, decimals).add(new BN(sendFee.nativeFee));
         break;
 
-      default:  
+      default:
         value = sendFee.nativeFee;
     }
 
-    const response = await proxyContract.methods.sendFrom(
-      accounts[0], // from
-      token.config.chainId,
-      userAddr, // to user address
-      mulDecimals(amount, decimals),
-      accounts[0], // refund address
-      '0x0000000000000000000000000000000000000000', // const
-      adapterParams
-    ).send({
-      value,
-      from: accounts[0],
-      gasLimit: process.env.GAS_LIMIT,
-      gasPrice: Number(process.env.GAS_PRICE),
-    })
-      .on('transactionHash', sendTxCallback
-);
-
-    return response;
-  };
-
-  burnTokens = async (hrc20Address, userAddr, amount, sendTxCallback?) => {
-    // @ts-ignore
-    const accounts = await window.ethereum.request({
-      method: 'eth_requestAccounts',
-    });
-
-    let response = await this.hmyManagerContract.methods
-      .burnTokens(hrc20Address, amount, userAddr)
+    const response = await proxyContract.methods
+      .sendFrom(
+        accounts[0], // from
+        token.config.chainId,
+        userAddr, // to user address
+        mulDecimals(amount, decimals),
+        accounts[0], // refund address
+        '0x0000000000000000000000000000000000000000', // const
+        adapterParams,
+      )
       .send({
+        value,
         from: accounts[0],
         gasLimit: process.env.GAS_LIMIT,
         gasPrice: Number(process.env.GAS_PRICE),
@@ -213,6 +202,26 @@ export class HmyMethodsERC20Web3 {
       .on('transactionHash', sendTxCallback);
 
     return response;
+  };
+
+  burnTokens = async (hrc20Address, userAddr, amount, sendTxCallback?) => {
+    return this.burnToken(hrc20Address, userAddr, amount, '0', sendTxCallback);
+
+    // // @ts-ignore
+    // const accounts = await window.ethereum.request({
+    //   method: 'eth_requestAccounts',
+    // });
+    //
+    // let response = await this.hmyManagerContract.methods
+    //   .burnTokens(hrc20Address, amount, userAddr)
+    //   .send({
+    //     from: accounts[0],
+    //     gasLimit: process.env.GAS_LIMIT,
+    //     gasPrice: Number(process.env.GAS_PRICE),
+    //   })
+    //   .on('transactionHash', sendTxCallback);
+    //
+    // return response;
   };
 
   getMappingFor = async erc20TokenAddr => {
