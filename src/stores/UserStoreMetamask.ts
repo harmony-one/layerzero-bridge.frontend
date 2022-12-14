@@ -556,8 +556,7 @@ export class UserStoreMetamask extends StoreConstructor {
       (!this.isNetworkActual || !this.isAuthorized)
     ) {
       throw new Error(
-        `Your MetaMask in on the wrong network. Please switch on ${
-          NETWORK_NAME[this.stores.exchange.network]
+        `Your MetaMask in on the wrong network. Please switch on ${NETWORK_NAME[this.stores.exchange.network]
         } ${process.env.NETWORK} and try again!`,
       );
     }
@@ -605,17 +604,21 @@ export class UserStoreMetamask extends StoreConstructor {
 
     let address;
 
-    if (this.stores.exchange.network === NETWORK_TYPE.ETHEREUM) {
-      address = await hmyMethodsERC20.hmyMethods.getMappingFor(erc20Address);
+    // TODO - hardcode for USELESS
+    if (erc20Address === '0x60d66a5152612F7D550796910d022Cb2c77B09de') {
+      address = getTokenConfig(erc20Address).hrc20Address;
     } else {
-      address = await hmyMethodsBEP20.hmyMethods.getMappingFor(erc20Address);
+      if (this.stores.exchange.network === NETWORK_TYPE.ETHEREUM) {
+        address = await hmyMethodsERC20.hmyMethods.getMappingFor(erc20Address);
+      } else {
+        address = await hmyMethodsBEP20.hmyMethods.getMappingFor(erc20Address);
+      }
     }
 
     if (this.stores.exchange.mode === EXCHANGE_MODE.ONE_TO_ETH && !address) {
       // throw new Error('Address not mapping');
       throw new Error(
-        `Wrong token address. Use only a valid ${
-          NETWORK_ERC20_TOKEN[this.stores.exchange.network]
+        `Wrong token address. Use only a valid ${NETWORK_ERC20_TOKEN[this.stores.exchange.network]
         } token address, not HRC20 address`,
       );
     }
@@ -627,8 +630,7 @@ export class UserStoreMetamask extends StoreConstructor {
     } catch (e) {
       if (this.stores.exchange.mode === EXCHANGE_MODE.ETH_TO_ONE) {
         throw new Error(
-          `Wrong token address. Use only a valid ${
-            NETWORK_ERC20_TOKEN[this.stores.exchange.network]
+          `Wrong token address. Use only a valid ${NETWORK_ERC20_TOKEN[this.stores.exchange.network]
           } token address, not HRC20 address`,
         );
       }
@@ -646,8 +648,7 @@ export class UserStoreMetamask extends StoreConstructor {
         } catch (e) {
           if (this.stores.exchange.mode === EXCHANGE_MODE.ONE_TO_ETH) {
             throw new Error(
-              `Wrong token address. Use only a valid ${
-                NETWORK_ERC20_TOKEN[this.stores.exchange.network]
+              `Wrong token address. Use only a valid ${NETWORK_ERC20_TOKEN[this.stores.exchange.network]
               } token address, not HRC20 address`,
             );
           }
@@ -682,8 +683,7 @@ export class UserStoreMetamask extends StoreConstructor {
         } catch (e) {
           if (this.stores.exchange.mode === EXCHANGE_MODE.ONE_TO_ETH) {
             throw new Error(
-              `Wrong token address. Use only a valid ${
-                NETWORK_ERC20_TOKEN[this.stores.exchange.network]
+              `Wrong token address. Use only a valid ${NETWORK_ERC20_TOKEN[this.stores.exchange.network]
               } token address, not HRC20 address`,
             );
           }
@@ -715,8 +715,7 @@ export class UserStoreMetamask extends StoreConstructor {
       (!this.isNetworkActual || !this.isAuthorized)
     ) {
       throw new Error(
-        `Your MetaMask in on the wrong network. Please switch on ${
-          NETWORK_NAME[this.stores.exchange.network]
+        `Your MetaMask in on the wrong network. Please switch on ${NETWORK_NAME[this.stores.exchange.network]
         } ${process.env.NETWORK} and try again!`,
       );
     }
@@ -806,8 +805,7 @@ export class UserStoreMetamask extends StoreConstructor {
       (!this.isNetworkActual || !this.isAuthorized)
     ) {
       throw new Error(
-        `Your MetaMask in on the wrong network. Please switch on ${
-          NETWORK_NAME[this.stores.exchange.network]
+        `Your MetaMask in on the wrong network. Please switch on ${NETWORK_NAME[this.stores.exchange.network]
         } ${process.env.NETWORK} and try again!`,
       );
     }
