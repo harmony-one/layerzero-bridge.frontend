@@ -614,7 +614,7 @@ export const tokensConfigs: ITokenInfo[] = [
     horizon: true,
     hrc20Address: '0x7aFB0E2ebA6Dc938945FE0f42484d3b8F442D0AC',
     erc20Address: '0x45804880De22913dAFE09f4980848ECE6EcbAf78',
-    proxyERC20: '0xECd19aAdf33213a298875DA0CC15d80F155B7391',
+    proxyERC20: '0x50ED722744D883A54E36dCA49BA3ceBCB1DA1957',
     proxyHRC20: '0xD4464dCbd31BA4391C01a2a10aA37E049e55dB21',
     name: 'PAXG',
     symbol: 'Paxos Gold',
