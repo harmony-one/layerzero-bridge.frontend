@@ -608,7 +608,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.ETHEREUM,
-    image: '/axs.svg',
+    image: '/axs.png',
   },
   {
     horizon: true,
@@ -626,7 +626,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.ETHEREUM,
-    image: '/paxg.svg',
+    image: '/paxg.png',
   },
   {
     horizon: true,
@@ -644,7 +644,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.ETHEREUM,
-    image: '/ygg.svg',
+    image: '/ygg.png',
   },
   {
     horizon: true,
@@ -662,7 +662,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.ETHEREUM,
-    image: '/ftm.svg',
+    image: '/ftm.png',
   },
   {
     horizon: true,
@@ -680,7 +680,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.ETHEREUM,
-    image: '/1inch.svg',
+    image: '/1inch.png',
   },
   {
     horizon: true,
@@ -698,7 +698,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.ETHEREUM,
-    image: '/bal.svg',
+    image: '/bal.png',
   },
   // BSC
   {
@@ -717,7 +717,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.BINANCE,
-    image: '/doge.svg',
+    image: '/doge.png',
   },
   {
     horizon: true,
@@ -735,7 +735,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.BINANCE,
-    image: '/matic.svg',
+    image: '/matic.png',
   },
   {
     horizon: true,
@@ -753,7 +753,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.BINANCE,
-    image: '/atom.svg',
+    image: '/atom.png',
   },
   {
     horizon: true,
@@ -771,7 +771,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.BINANCE,
-    image: '/dot.svg',
+    image: '/dot.png',
   },
   {
     horizon: true,
@@ -789,7 +789,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.BINANCE,
-    image: '/zil.svg',
+    image: '/zil.png',
   },
   {
     horizon: true,
@@ -807,7 +807,7 @@ export const tokensConfigs: ITokenInfo[] = [
     token: TOKEN.ERC20,
     type: TOKEN.ERC20,
     network: NETWORK_TYPE.BINANCE,
-    image: '/xvs.svg',
+    image: '/xvs.png',
   },
 ];
 
