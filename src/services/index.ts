@@ -15,6 +15,7 @@ import { sleep } from '../utils';
 import qs from 'qs';
 import { hmyMethodsERC20Web3 } from '../blockchain-bridge/hmy';
 import { useStores } from 'stores';
+import { tokensConfigs } from '../config';
 
 let serversJson = require('../../appengine-servers.json');
 
@@ -245,25 +246,12 @@ export const getTokensInfo = async (
     params,
   );
 
-  res.body.content.push({
-    hrc20Address: '0xC079d0385492Ac2D0e89ca079c186Dd71ef49B1e',
-    erc20Address: '0x60d66a5152612F7D550796910d022Cb2c77B09de',
-    proxyERC20: '0xbDD7B6370Ca647299aF8b02E49eF59e5113088CE',
-    proxyHRC20: '0x1A2567000Db62B0BB4A652C59bdA6897fe7E7e76',
-    name: 'Useless',
-    symbol: 'USE',
-    //
-    decimals: '18',
-    totalLocked: '0',
-    totalSupply: '0',
-    totalLockedNormal: '0',
-    totalLockedUSD: '0',
-    token: TOKEN.ERC20,
-    type: TOKEN.ERC20,
-    network: NETWORK_TYPE.BINANCE,
-    image: '/useless.png',
-    adapterParams:
-      '0x0001000000000000000000000000000000000000000000000000000000000007a120',
+  tokensConfigs.forEach(t => {
+    if (!res.body.content.find(
+      c => c.erc20Address.toLowerCase() === t.erc20Address.toLocaleLowerCase()
+    )) {
+      res.body.content.push(t);
+    }
   })
 
   return res.body;
