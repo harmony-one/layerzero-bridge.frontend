@@ -32,12 +32,7 @@ export const TokenSymbol = observer((props: TokenSymbolProps) => {
     return <Box>{token}</Box>;
   }
 
-  return tokenInfo.symbol.length > 9 ? (
-    <Box>
-      <a data-tip={tokenInfo.symbol}>{sliceByLength(tokenInfo.symbol, 9)}</a>
-      <ReactTooltip place="top" type="dark" effect="solid" />
-    </Box>
-  ) : (
+  return (
     <Box direction="row" align="center" gap="4px">
       <img alt="token" src={tokenInfo.image} height="16" width="16" />{' '}
       <Text nowrap size="small" margin={{ top: '2px' }}>
