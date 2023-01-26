@@ -809,6 +809,24 @@ export const tokensConfigs: ITokenInfo[] = [
     network: NETWORK_TYPE.BINANCE,
     image: '/xvs.png',
   },
+  {
+    horizon: true,
+    hrc20Address: '0x9aF8D47422aE16ddd500e80eD42C4F24a5FeFfC3',
+    erc20Address: '0xBF05279F9Bf1CE69bBFEd670813b7e431142Afa4',
+    proxyERC20: '0x02eB13Cd5Fd557bbc425A736F02C1Cfe31EFAE1b',
+    proxyHRC20: '0xf7f132e7b172ed7f8759f64ab710407dc292c005',
+    name: 'Million',
+    symbol: 'MM',
+    decimals: '18',
+    totalLocked: '0',
+    totalSupply: '0',
+    totalLockedNormal: '0',
+    totalLockedUSD: '0',
+    token: TOKEN.ERC20,
+    type: TOKEN.ERC20,
+    network: NETWORK_TYPE.BINANCE,
+    image: '/mm_icon.png',
+  },
 ];
 
 export const getTokenConfig = (addr: string): ITokenInfo => {
