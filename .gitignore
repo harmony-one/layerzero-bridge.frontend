@@ -34,3 +34,5 @@ artifacts
 
 firebase.json
 /dist
+# Local Netlify folder
+.netlify

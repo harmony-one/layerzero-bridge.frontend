@@ -605,15 +605,17 @@ export class UserStoreMetamask extends StoreConstructor {
     let address;
 
     // TODO - hardcode for USELESS
-    if (erc20Address === '0x60d66a5152612F7D550796910d022Cb2c77B09de') {
-      address = getTokenConfig(erc20Address).hrc20Address;
-    } else {
-      if (this.stores.exchange.network === NETWORK_TYPE.ETHEREUM) {
-        address = await hmyMethodsERC20.hmyMethods.getMappingFor(erc20Address);
-      } else {
-        address = await hmyMethodsBEP20.hmyMethods.getMappingFor(erc20Address);
-      }
-    }
+    // if (erc20Address === '0x60d66a5152612F7D550796910d022Cb2c77B09de') {
+    //   address = getTokenConfig(erc20Address).hrc20Address;
+    // } else {
+    //   if (this.stores.exchange.network === NETWORK_TYPE.ETHEREUM) {
+    //     address = await hmyMethodsERC20.hmyMethods.getMappingFor(erc20Address);
+    //   } else {
+    //     address = await hmyMethodsBEP20.hmyMethods.getMappingFor(erc20Address);
+    //   }
+    // }
+
+    address = getTokenConfig(erc20Address).hrc20Address;
 
     if (this.stores.exchange.mode === EXCHANGE_MODE.ONE_TO_ETH && !address) {
       // throw new Error('Address not mapping');
