@@ -827,6 +827,24 @@ export const tokensConfigs: ITokenInfo[] = [
   //   network: NETWORK_TYPE.BINANCE,
   //   image: '/mm_icon.png',
   // },
+  {
+    hrc20Address: '0xb1856a6f43fbe216b169803e0d5e2b38fbb5f982',
+    erc20Address: '0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9',
+    proxyERC20: '0x3E266b1531575b9426b832BADF478358B2232cA4',
+    proxyHRC20: '0x2beb8a66ce136c3920522b23d6daee975a5cef87',
+    name: 'Tether USD',
+    symbol: 'USDT',
+    decimals: '6',
+    totalLocked: '0',
+    totalSupply: '0',
+    totalLockedNormal: '0',
+    totalLockedUSD: '0',
+    token: TOKEN.ERC20,
+    type: TOKEN.ERC20,
+    network: NETWORK_TYPE.ARBITRUM,
+    image: '/usdt.png',
+    adapterParams: '0x',
+  },
 ];
 
 export const getTokenConfig = (addr: string): ITokenInfo => {

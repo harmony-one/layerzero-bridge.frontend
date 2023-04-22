@@ -35,6 +35,11 @@ const labels: Record<
     [TOKEN.ERC721]: 'ERC721 token address',
     [TOKEN.HRC20]: 'HRC20 token address',
   },
+  [NETWORK_TYPE.ARBITRUM]: {
+    [TOKEN.ERC20]: 'ERC20 token address',
+    [TOKEN.ERC721]: 'ERC721 token address',
+    [TOKEN.HRC20]: 'HRC20 token address',
+  },
 };
 
 const placeholder: Record<
@@ -54,6 +59,11 @@ const placeholder: Record<
     [TOKEN.ERC721]: 'Select your ERC721 token',
     [TOKEN.HRC20]: 'Select your HRC20 token',
   },
+  [NETWORK_TYPE.ARBITRUM]: {
+    [TOKEN.ERC20]: 'Select your ERC20 token',
+    [TOKEN.ERC721]: 'Select your ERC721 token',
+    [TOKEN.HRC20]: 'Select your HRC20 token',
+  },
 };
 
 export const inputPlaceholder: Record<
@@ -70,6 +80,11 @@ export const inputPlaceholder: Record<
   },
   [NETWORK_TYPE.BINANCE]: {
     [TOKEN.ERC20]: 'Input BEP20 token address',
+    [TOKEN.ERC721]: 'Input ERC721 token address',
+    [TOKEN.HRC20]: 'Input HRC20 token address',
+  },
+  [NETWORK_TYPE.ARBITRUM]: {
+    [TOKEN.ERC20]: 'Input ERC20 token address',
     [TOKEN.ERC721]: 'Input ERC721 token address',
     [TOKEN.HRC20]: 'Input HRC20 token address',
   },

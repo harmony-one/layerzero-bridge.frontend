@@ -172,23 +172,28 @@ export const initNetwork = (config: TConfig, url?: string): INetworkMethods => {
   };
 };
 
-let ethNetwork: INetworkMethods, binanceNetwork: INetworkMethods;
+let ethNetwork: INetworkMethods, 
+binanceNetwork: INetworkMethods, 
+arbitrumNetwork: INetworkMethods;
 
 export const initNetworks = (fullCinfig: TFullConfig) => {
   ethNetwork = initNetwork(fullCinfig.ethClient);
   binanceNetwork = initNetwork(fullCinfig.binanceClient);
+  arbitrumNetwork = initNetwork(fullCinfig.arbitrumClient);
 };
 
 export const getExNetworkMethods = (
   network?: NETWORK_TYPE,
 ): INetworkMethods => {
-  const net = network || stores.exchange.network;
+  const net: NETWORK_TYPE = network || stores.exchange.network;
 
   switch (net) {
     case NETWORK_TYPE.ETHEREUM:
       return ethNetwork;
     case NETWORK_TYPE.BINANCE:
       return binanceNetwork;
+    case NETWORK_TYPE.ARBITRUM:
+      return arbitrumNetwork;
   }
 
   throw new Error(`network ${stores.exchange.network}`);

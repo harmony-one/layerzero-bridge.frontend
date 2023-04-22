@@ -258,7 +258,7 @@ export class EthMethodsERC20 {
     );
 
     // const - 500k gasLimit
-    const adapterParams =
+    const adapterParams = token.adapterParams ||
       '0x0001000000000000000000000000000000000000000000000000000000000007a120';
 
     const sendFee = await proxyContract.methods
@@ -271,21 +271,6 @@ export class EthMethodsERC20 {
       )
       .call();
 
-    console.log('Send Fee: ', sendFee);
-
-    // const estimateGas = await await proxyContract.methods.sendFrom(
-    //   accounts[0], // from user address
-    //   layerZeroConfig.harmony.chainId,
-    //   hmyAddrHex, // to user address
-    //   mulDecimals(amount, decimals),
-    //   accounts[0], // refund address
-    //   '0x0000000000000000000000000000000000000000', // const
-    //   adapterParams
-    // )
-    //   .estimateGas({ from: accounts[0] });
-
-    const gasLimit = Math.max(500000, Number(process.env.ETH_GAS_LIMIT));
-
     let value;
 
     switch (token.token) {
@@ -295,7 +280,29 @@ export class EthMethodsERC20 {
 
       default:
         value = sendFee.nativeFee;
+    }  
+
+    let estimateGas = 0;
+
+    try {
+      estimateGas = await await proxyContract.methods.sendFrom(
+        accounts[0], // from user address
+        layerZeroConfig.harmony.chainId,
+        hmyAddrHex, // to user address
+        mulDecimals(amount, decimals),
+        accounts[0], // refund address
+        '0x0000000000000000000000000000000000000000', // const
+        adapterParams
+      )
+        .estimateGas({ 
+          value,
+          from: accounts[0] 
+        });
+    } catch(e) {
+      console.error(e);
     }
+
+    const gasLimit = Math.max(estimateGas, 500000, Number(process.env.ETH_GAS_LIMIT));
 
     const res = await proxyContract.methods
       .sendFrom(

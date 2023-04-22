@@ -86,6 +86,18 @@ const NetworkMenu = observer(() => {
             exchange.setNetwork(NETWORK_TYPE.ETHEREUM);
           },
         },
+        {
+          label: (
+            <NetworkMenuItem
+              network={networkNameMap[NETWORK_TYPE.ARBITRUM]}
+              icon={<Icon glyph="Arbitrum" />}
+              token={'ETH'}
+            />
+          ),
+          onClick: () => {
+            exchange.setNetwork(NETWORK_TYPE.ARBITRUM);
+          },
+        },
       ]}
     >
       <Box gap="8px" direction="row">
