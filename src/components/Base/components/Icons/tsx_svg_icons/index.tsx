@@ -59,3 +59,4 @@ export * from './Switch';
 export * from './Settings';
 export * from './CloseCircle';
 export * from './AddCircle';
+export * from './Arbitrum';

@@ -129,6 +129,18 @@ const BinanceConfig: MetaMaskNetworkConfig = {
   blockExplorerUrls: [process.env.METAMASK_BSC_EXPLORER],
 };
 
+const ArbitrumConfig: MetaMaskNetworkConfig = {
+  chainId: numberToHex(parseInt(process.env.METAMASK_ARB_CHAIN_ID, 10)),
+  chainName: process.env.METAMASK_ARB_CHAIN_NAME,
+  nativeCurrency: {
+    name: 'ETH',
+    symbol: 'ETH',
+    decimals: 18,
+  },
+  rpcUrls: [process.env.METAMASK_ARB_RPC_URL],
+  blockExplorerUrls: [process.env.METAMASK_ARB_EXPLORER],
+};
+
 const HarmonyConfig: MetaMaskNetworkConfig = {
   chainId: numberToHex(parseInt(process.env.METAMASK_HMY_CHAIN_ID, 10)),
   chainName: process.env.METAMASK_BSC_CHAIN_NAME,
@@ -177,6 +189,10 @@ export const getChainConfig = (mode: EXCHANGE_MODE, network: NETWORK_TYPE) => {
 
   if (network === NETWORK_TYPE.BINANCE) {
     return BinanceConfig;
+  }
+
+  if (network === NETWORK_TYPE.ARBITRUM) {
+    return ArbitrumConfig;
   }
 
   throw new Error('Unhandled network type');

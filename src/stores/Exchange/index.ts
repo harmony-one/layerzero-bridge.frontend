@@ -190,8 +190,7 @@ export class Exchange extends StoreConstructor {
                 !this.stores.userMetamask.isAuthorized)
             ) {
               throw new Error(
-                `Your MetaMask in on the wrong network. Please switch on ${
-                  NETWORK_NAME[this.stores.exchange.network]
+                `Your MetaMask in on the wrong network. Please switch on ${NETWORK_NAME[this.stores.exchange.network]
                 } ${process.env.NETWORK} and try again!`,
               );
             }
@@ -1100,6 +1099,10 @@ export class Exchange extends StoreConstructor {
       return this.fullConfig.binanceClient;
     }
 
+    if (this.network === NETWORK_TYPE.ARBITRUM) {
+      return this.fullConfig.arbitrumClient;
+    }
+
     return this.fullConfig.ethClient;
   }
 
@@ -1113,6 +1116,8 @@ export class Exchange extends StoreConstructor {
         return this.fullConfig.binanceClient.explorerURL;
       case NETWORK_TYPE.ETHEREUM:
         return this.fullConfig.ethClient.explorerURL;
+      case NETWORK_TYPE.ARBITRUM:
+        return this.fullConfig.arbitrumClient.explorerURL;
       case NETWORK_TYPE.HARMONY:
         return this.fullConfig.hmyClient.explorerURL;
     }
@@ -1243,13 +1248,13 @@ export class Exchange extends StoreConstructor {
         this.stores.tokens.allData.some(
           t =>
             t.erc20Address.toLowerCase() ===
-              exchange.transaction.ethAddress.toLowerCase() ||
+            exchange.transaction.ethAddress.toLowerCase() ||
             t.hrc20Address.toLowerCase() ===
-              exchange.transaction.ethAddress.toLowerCase() ||
+            exchange.transaction.ethAddress.toLowerCase() ||
             t.erc20Address.toLowerCase() ===
-              exchange.transaction.oneAddress.toLowerCase() ||
+            exchange.transaction.oneAddress.toLowerCase() ||
             t.hrc20Address.toLowerCase() ===
-              exchange.transaction.oneAddress.toLowerCase(),
+            exchange.transaction.oneAddress.toLowerCase(),
         )
       ) {
         ethBridgeStore.addressValidationError =
