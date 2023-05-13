@@ -27,6 +27,11 @@ export const FilterNetworkType: React.FC<Props> = React.memo(
           selectedType={network}
           onClick={() => setNetwork(NETWORK_TYPE.ETHEREUM)}
         />
+        <NetworkButton
+          type={NETWORK_TYPE.ARBITRUM}
+          selectedType={network}
+          onClick={() => setNetwork(NETWORK_TYPE.ARBITRUM)}
+        />
       </Box>
     );
   },
