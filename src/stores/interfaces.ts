@@ -192,6 +192,7 @@ export interface ITokenInfo {
     chainId: number;
   };
   adapterParams?: string;
+  adapterParamsEth?:string;
 }
 
 export interface IIdentityTokenInfo {

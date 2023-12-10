@@ -108,6 +108,7 @@ export const initNetwork = (config: TConfig, url?: string): INetworkMethods => {
     ethManagerContract: ethManagerContract,
     ethManagerAddress: config.contracts.erc20Manager,
     gasPrice: config.gasPrice,
+    gasLimit: config.gasLimit
   });
 
   const ethMethodsHRC20 = new EthMethodsHRC20({
@@ -179,7 +180,11 @@ arbitrumNetwork: INetworkMethods;
 export const initNetworks = (fullCinfig: TFullConfig) => {
   ethNetwork = initNetwork(fullCinfig.ethClient);
   binanceNetwork = initNetwork(fullCinfig.binanceClient);
-  arbitrumNetwork = initNetwork(fullCinfig.arbitrumClient);
+  arbitrumNetwork = initNetwork({ 
+    ...fullCinfig.arbitrumClient,
+    gasLimit: 2000000,
+    gasPrice: 100000000
+  });
 };
 
 export const getExNetworkMethods = (

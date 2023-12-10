@@ -508,11 +508,11 @@ export class Exchange extends StoreConstructor {
     // this.setAddressByMode();
 
     console.log('### this.token', this.token);
-    if (!this.config.tokens.includes(this.token)) {
-      this.setToken(this.config.tokens[0]);
-    } else {
-      this.setToken(this.token);
-    }
+    // if (!this.config.tokens.includes(this.token)) {
+    this.setToken(this.config.tokens[0]);
+    // } else {
+    //   this.setToken(this.token);
+    /// }
 
     this.setMode(this.mode);
   }

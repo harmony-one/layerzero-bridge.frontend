@@ -7,7 +7,7 @@ import { getGasPrice } from './helpers';
 import { abi as ProxyERC20Abi } from '../out/ProxyERC20Abi';
 import { abi as ProxyERC721Abi } from '../out/ProxyERC721Abi';
 import { layerZeroConfig, getTokenConfig } from '../../config';
-import { TOKEN } from 'stores/interfaces';
+import { NETWORK_TYPE, TOKEN } from 'stores/interfaces';
 import BN from 'bn.js';
 
 export interface IEthMethodsInitParams {
@@ -15,6 +15,8 @@ export interface IEthMethodsInitParams {
   ethManagerContract: Contract;
   ethManagerAddress: string;
   gasPrice?: number;
+  gasLimit?: number;
+
 }
 
 export class EthMethodsERC20 {
@@ -22,12 +24,14 @@ export class EthMethodsERC20 {
   private ethManagerContract: Contract;
   private ethManagerAddress: string;
   gasPrice?: number;
+  gasLimit?: number;
 
   constructor(params: IEthMethodsInitParams) {
     this.web3 = params.web3;
     this.ethManagerContract = params.ethManagerContract;
     this.ethManagerAddress = params.ethManagerAddress;
     this.gasPrice = params.gasPrice;
+    this.gasLimit = params.gasLimit;
   }
 
   approveEthManger = async (
@@ -75,12 +79,23 @@ export class EthMethodsERC20 {
       }
     }
 
+    const tokenConfig = getTokenConfig(erc20Address);
+
+    const isArb = tokenConfig.network  === NETWORK_TYPE.ARBITRUM;
+
+    const arbParams = {
+      from: accounts[0],
+      gas: this.gasLimit,
+      gasLimit: this.gasLimit,
+      gasPrice: this.gasPrice ? this.gasPrice : await getGasPrice(this.web3),
+    }
+
     await erc20Contract.methods
       .approve(
         getTokenConfig(erc20Address).proxyERC20,
         mulDecimals(amount, decimals),
       )
-      .send({
+      .send(isArb ? arbParams : {
         from: accounts[0],
         gas: process.env.ETH_GAS_LIMIT,
         gasPrice: this.gasPrice ? this.gasPrice : await getGasPrice(this.web3),
@@ -258,7 +273,7 @@ export class EthMethodsERC20 {
     );
 
     // const - 500k gasLimit
-    const adapterParams = token.adapterParams ||
+    const adapterParams = token.adapterParams || token.adapterParamsEth ||
       '0x0001000000000000000000000000000000000000000000000000000000000007a120';
 
     const sendFee = await proxyContract.methods
@@ -285,7 +300,7 @@ export class EthMethodsERC20 {
     let estimateGas = 0;
 
     try {
-      estimateGas = await await proxyContract.methods.sendFrom(
+      estimateGas = await proxyContract.methods.sendFrom(
         accounts[0], // from user address
         layerZeroConfig.harmony.chainId,
         hmyAddrHex, // to user address

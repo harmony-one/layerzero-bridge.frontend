@@ -76,7 +76,7 @@ export const tokensConfigs: ITokenInfo[] = [
     type: TOKEN.ETH,
     network: NETWORK_TYPE.BINANCE,
     image: '/binance.png',
-    //  adapterParams: '0x0001000000000000000000000000000000000000000000000000000000000007a120'
+    adapterParamsEth: '0x000100000000000000000000000000000000000000000000000000000000000aae60'
   },
   {
     hrc20Address: '0x4cC435d7b9557d54d6EF02d69Bbf72634905Bf11',
