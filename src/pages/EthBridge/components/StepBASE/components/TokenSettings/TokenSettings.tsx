@@ -9,7 +9,7 @@ import { ModalIds } from '../../../../../../modals';
 import { useStores } from '../../../../../../stores';
 import { TokenSettingsModal } from '../../../TokenSettingsModal/TokenSettingsModal';
 import { NETWORK_TYPE, TOKEN } from '../../../../../../stores/interfaces';
-import { NETWORK_BASE_TOKEN } from '../../../../../../stores/names';
+import { getNetworkBaseToken } from '../../../../../../stores/names';
 
 interface Props {}
 
@@ -30,7 +30,7 @@ export const TokenSettings: React.FC<Props> = () => {
     }
 
     if (exchange.token === TOKEN.ETH) {
-      return NETWORK_BASE_TOKEN[exchange.network];
+      return getNetworkBaseToken(exchange.network);
     }
 
     return exchange.token.toUpperCase();

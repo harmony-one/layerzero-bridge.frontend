@@ -8,6 +8,7 @@ import Web3 from 'web3';
 import { EthMethodsHRC721 } from './EthMethodsHRC721';
 import { EthMethodsHRC1155 } from './EthMethodsHRC1155';
 import { EthMethodsERC1155 } from './EthMethodsERC1155';
+import { networks } from '../../configs';
 
 // @ts-ignore
 const web3URL = window.ethereum ? window.ethereum : process.env.ETH_NODE_URL;
@@ -173,33 +174,45 @@ export const initNetwork = (config: TConfig, url?: string): INetworkMethods => {
   };
 };
 
-let ethNetwork: INetworkMethods, 
-binanceNetwork: INetworkMethods, 
-arbitrumNetwork: INetworkMethods;
+let networksMethods
+  : Array<{
+    type: Exclude<NETWORK_TYPE, NETWORK_TYPE.HARMONY>,
+    methods: INetworkMethods
+  }> = [];
 
 export const initNetworks = (fullCinfig: TFullConfig) => {
-  ethNetwork = initNetwork(fullCinfig.ethClient);
-  binanceNetwork = initNetwork(fullCinfig.binanceClient);
-  arbitrumNetwork = initNetwork({ 
-    ...fullCinfig.arbitrumClient,
-    gasLimit: 2000000,
-    gasPrice: 100000000
-  });
+  networksMethods = Object.keys(fullCinfig)
+    .filter(key => key !== NETWORK_TYPE.HARMONY && networks[key])
+    .map((key: Exclude<NETWORK_TYPE, NETWORK_TYPE.HARMONY>) => {
+      let config = fullCinfig[key];
+
+      if (key === NETWORK_TYPE.ARBITRUM) {
+        config = {
+          ...fullCinfig[key],
+          gasLimit: 2000000,
+          gasPrice: 100000000
+        }
+      }
+
+      return {
+        type: key,
+        methods: initNetwork(config)
+      }
+    })
 };
 
 export const getExNetworkMethods = (
   network?: NETWORK_TYPE,
-): INetworkMethods => {
+): INetworkMethods | undefined => {
   const net: NETWORK_TYPE = network || stores.exchange.network;
 
-  switch (net) {
-    case NETWORK_TYPE.ETHEREUM:
-      return ethNetwork;
-    case NETWORK_TYPE.BINANCE:
-      return binanceNetwork;
-    case NETWORK_TYPE.ARBITRUM:
-      return arbitrumNetwork;
+  const methodsConfig = networksMethods.find(nm => nm.type === net)
+
+  if(methodsConfig) {
+    return methodsConfig.methods
   }
 
-  throw new Error(`network ${stores.exchange.network}`);
+  return undefined
+
+  // throw new Error(`network ${stores.exchange.network}`);
 };

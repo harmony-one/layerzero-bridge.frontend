@@ -7,9 +7,9 @@ import cn from 'classnames';
 import { EXCHANGE_STEPS } from '../../../../stores/Exchange';
 import { NETWORK_TYPE, TOKEN } from '../../../../stores/interfaces';
 import {
-  NETWORK_BASE_TOKEN,
-  NETWORK_ICON,
-  NETWORK_NAME,
+  getNetworkBaseToken,
+  getNetworkIcon,
+  getNetworkName,
 } from '../../../../stores/names';
 import { useStores } from '../../../../stores';
 import { observer } from 'mobx-react';
@@ -152,7 +152,7 @@ export const TokenSettingsModal: React.FC<Props> = observer(({ onClose }) => {
                 icon={
                   <img
                     className={s.imgToken}
-                    src={NETWORK_ICON[exchange.network]}
+                    src={getNetworkIcon(exchange.network)}
                   />
                 }
                 onClick={() => {
@@ -247,14 +247,14 @@ export const TokenSettingsModal: React.FC<Props> = observer(({ onClose }) => {
 
             {exchange.config.tokens.includes(TOKEN.ETH) && (
               <Option
-                label={NETWORK_NAME[exchange.network]}
-                description={NETWORK_BASE_TOKEN[exchange.network]}
+                label={getNetworkName(exchange.network)}
+                description={getNetworkBaseToken(exchange.network)}
                 help="Token"
                 checked={exchange.token === TOKEN.ETH}
                 icon={
                   <img
                     className={s.imgToken}
-                    src={NETWORK_ICON[exchange.network]}
+                    src={getNetworkIcon(exchange.network)}
                   />
                 }
                 onClick={() => {

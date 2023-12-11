@@ -7,7 +7,7 @@ import { EXCHANGE_MODE, NETWORK_TYPE } from 'stores/interfaces';
 import { observer } from 'mobx-react-lite';
 import { useStores } from '../../stores';
 import { formatWithSixDecimals } from '../../utils';
-import { NETWORK_BASE_TOKEN } from '../../stores/names';
+import { getNetworkBaseToken } from '../../stores/names';
 
 export const OperationType = (props: { type: EXCHANGE_MODE }) => {
   return (
@@ -67,7 +67,7 @@ export const Price = observer(
       >
         <Text bold style={{ fontSize: 14 }} nowrap>{`${formatWithSixDecimals(
           props.value,
-        )} ${props.isEth ? NETWORK_BASE_TOKEN[props.network] : 'ONE'}`}</Text>
+        )} ${props.isEth ? getNetworkBaseToken(props.network) : 'ONE'}`}</Text>
         <Text color="NGray" bold size="xsmall">
           ${formatWithSixDecimals(props.value * rate)}
         </Text>

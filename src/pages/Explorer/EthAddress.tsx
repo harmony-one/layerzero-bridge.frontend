@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { IOperation } from '../../stores/interfaces';
 import { useStores } from '../../stores';
-import { NETWORK_ICON } from '../../stores/names';
+import { getNetworkIcon } from '../../stores/names';
 import { Box } from 'grommet';
 import * as styles from './styles.styl';
 import { getChecksumAddress } from '../../blockchain-bridge';
@@ -11,7 +11,7 @@ import * as React from 'react';
 export const EthAddress = observer<any>(
   (params: { address; operation: IOperation }) => {
     const { exchange } = useStores();
-    const icon = NETWORK_ICON[params.operation.network];
+    const icon = getNetworkIcon(params.operation.network);
 
     return (
       <Box

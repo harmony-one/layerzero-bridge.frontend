@@ -16,7 +16,7 @@ import { getStepsTitle } from './steps-constants';
 import { Text } from '../../components/Base';
 import { Price } from './Components';
 import { useStores } from '../../stores';
-import { NETWORK_ICON, NETWORK_PREFIX } from '../../stores/names';
+import { getNetworkIcon, getNetworkPrefix } from '../../stores/names';
 
 import { isLayerZeroOperation } from '../Exchange/Steps';
 import axios from 'axios';
@@ -262,7 +262,7 @@ export const ExpandedRow = observer((props: IExpandedRowProps) => {
                   <img
                     src={
                       isEth(action.type)
-                        ? NETWORK_ICON[props.data.network]
+                        ? getNetworkIcon(props.data.network)
                         : '/one.svg'
                     }
                     style={{
@@ -320,7 +320,7 @@ export const ExpandedRow = observer((props: IExpandedRowProps) => {
                   >
                     {props.data.token === TOKEN.HRC20
                       ? token.symbol.slice(1)
-                      : `${NETWORK_PREFIX[props.data.network]}${sliceByLength(
+                      : `${getNetworkPrefix(props.data.network)}${sliceByLength(
                           token.symbol,
                           7,
                         )}`}

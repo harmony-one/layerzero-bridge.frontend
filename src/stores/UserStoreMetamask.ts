@@ -14,12 +14,12 @@ import {
 import { divDecimals } from '../utils';
 import { EXCHANGE_MODE, ITokenInfo, NETWORK_TYPE, TOKEN } from './interfaces';
 import Web3 from 'web3';
-import { NETWORK_ERC20_TOKEN, NETWORK_NAME } from './names';
+import { getNetworkERC20Token, getNetworkName } from './names';
 import { isAddressEqual } from './UserStore';
 import * as services from '../services';
-import { getChainConfig, numberToHex } from './Exchange/helpers';
+import { getMetamaskConfig } from './Exchange/helpers';
 import { buildTokenId } from '../utils/token';
-import { getTokenConfig } from '../config';
+import { getTokenConfig, numberToHex } from '../configs';
 
 const defaults = {};
 
@@ -268,7 +268,7 @@ export class UserStoreMetamask extends StoreConstructor {
 
   @action
   public async switchNetwork(mode: EXCHANGE_MODE, network: NETWORK_TYPE) {
-    const config = getChainConfig(mode, network);
+    const config = getMetamaskConfig(mode, network);
     try {
       await this.provider.request({
         method: 'wallet_switchEthereumChain',
@@ -556,7 +556,7 @@ export class UserStoreMetamask extends StoreConstructor {
       (!this.isNetworkActual || !this.isAuthorized)
     ) {
       throw new Error(
-        `Your MetaMask in on the wrong network. Please switch on ${NETWORK_NAME[this.stores.exchange.network]
+        `Your MetaMask in on the wrong network. Please switch on ${getNetworkName(this.stores.exchange.network)
         } ${process.env.NETWORK} and try again!`,
       );
     }
@@ -620,7 +620,7 @@ export class UserStoreMetamask extends StoreConstructor {
     if (this.stores.exchange.mode === EXCHANGE_MODE.ONE_TO_ETH && !address) {
       // throw new Error('Address not mapping');
       throw new Error(
-        `Wrong token address. Use only a valid ${NETWORK_ERC20_TOKEN[this.stores.exchange.network]
+        `Wrong token address. Use only a valid ${getNetworkERC20Token(this.stores.exchange.network)
         } token address, not HRC20 address`,
       );
     }
@@ -632,7 +632,7 @@ export class UserStoreMetamask extends StoreConstructor {
     } catch (e) {
       if (this.stores.exchange.mode === EXCHANGE_MODE.ETH_TO_ONE) {
         throw new Error(
-          `Wrong token address. Use only a valid ${NETWORK_ERC20_TOKEN[this.stores.exchange.network]
+          `Wrong token address. Use only a valid ${getNetworkERC20Token(this.stores.exchange.network)
           } token address, not HRC20 address`,
         );
       }
@@ -650,7 +650,7 @@ export class UserStoreMetamask extends StoreConstructor {
         } catch (e) {
           if (this.stores.exchange.mode === EXCHANGE_MODE.ONE_TO_ETH) {
             throw new Error(
-              `Wrong token address. Use only a valid ${NETWORK_ERC20_TOKEN[this.stores.exchange.network]
+              `Wrong token address. Use only a valid ${getNetworkERC20Token(this.stores.exchange.network)
               } token address, not HRC20 address`,
             );
           }
@@ -685,7 +685,7 @@ export class UserStoreMetamask extends StoreConstructor {
         } catch (e) {
           if (this.stores.exchange.mode === EXCHANGE_MODE.ONE_TO_ETH) {
             throw new Error(
-              `Wrong token address. Use only a valid ${NETWORK_ERC20_TOKEN[this.stores.exchange.network]
+              `Wrong token address. Use only a valid ${getNetworkERC20Token(this.stores.exchange.network)
               } token address, not HRC20 address`,
             );
           }
@@ -717,7 +717,7 @@ export class UserStoreMetamask extends StoreConstructor {
       (!this.isNetworkActual || !this.isAuthorized)
     ) {
       throw new Error(
-        `Your MetaMask in on the wrong network. Please switch on ${NETWORK_NAME[this.stores.exchange.network]
+        `Your MetaMask in on the wrong network. Please switch on ${getNetworkName(this.stores.exchange.network)
         } ${process.env.NETWORK} and try again!`,
       );
     }
@@ -807,7 +807,7 @@ export class UserStoreMetamask extends StoreConstructor {
       (!this.isNetworkActual || !this.isAuthorized)
     ) {
       throw new Error(
-        `Your MetaMask in on the wrong network. Please switch on ${NETWORK_NAME[this.stores.exchange.network]
+        `Your MetaMask in on the wrong network. Please switch on ${getNetworkName(this.stores.exchange.network)
         } ${process.env.NETWORK} and try again!`,
       );
     }

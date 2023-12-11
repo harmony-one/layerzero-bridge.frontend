@@ -6,7 +6,7 @@ import { getGasPrice } from './helpers';
 
 import { abi as ProxyERC20Abi } from '../out/ProxyERC20Abi';
 import { abi as ProxyERC721Abi } from '../out/ProxyERC721Abi';
-import { layerZeroConfig, getTokenConfig } from '../../config';
+import { networks, getTokenConfig } from '../../configs';
 import { NETWORK_TYPE, TOKEN } from 'stores/interfaces';
 import BN from 'bn.js';
 
@@ -173,7 +173,7 @@ export class EthMethodsERC20 {
 
     const sendFee = await proxyContract.methods
       .estimateSendFee(
-        layerZeroConfig.harmony.chainId,
+        networks.HARMONY.layerzero.chainId,
         hmyAddrHex, // to user address
         amount,
         false,
@@ -188,7 +188,7 @@ export class EthMethodsERC20 {
     const res = await proxyContract.methods
       .sendFrom(
         accounts[0], // from user address
-        layerZeroConfig.harmony.chainId,
+        networks.HARMONY.layerzero.chainId,
         hmyAddrHex, // to user address
         amount,
         accounts[0], // refund address
@@ -220,7 +220,7 @@ export class EthMethodsERC20 {
 
     const sendFee = await proxyContract.methods
       .estimateSendFee(
-        layerZeroConfig.harmony.chainId,
+        networks.HARMONY.layerzero.chainId,
         hmyAddrHex, // to user address
         mulDecimals(amount, decimals),
         false,
@@ -278,7 +278,7 @@ export class EthMethodsERC20 {
 
     const sendFee = await proxyContract.methods
       .estimateSendFee(
-        layerZeroConfig.harmony.chainId,
+        networks.HARMONY.layerzero.chainId,
         hmyAddrHex, // to user address
         mulDecimals(amount, decimals),
         false,
@@ -302,7 +302,7 @@ export class EthMethodsERC20 {
     try {
       estimateGas = await proxyContract.methods.sendFrom(
         accounts[0], // from user address
-        layerZeroConfig.harmony.chainId,
+        networks.HARMONY.layerzero.chainId,
         hmyAddrHex, // to user address
         mulDecimals(amount, decimals),
         accounts[0], // refund address
@@ -322,7 +322,7 @@ export class EthMethodsERC20 {
     const res = await proxyContract.methods
       .sendFrom(
         accounts[0], // from user address
-        layerZeroConfig.harmony.chainId,
+        networks.HARMONY.layerzero.chainId,
         hmyAddrHex, // to user address
         mulDecimals(amount, decimals),
         accounts[0], // refund address

@@ -56,12 +56,7 @@ export type TConfig = {
   gasLimit?: number;
 };
 
-export type TFullConfig = {
-  ethClient: TConfig;
-  binanceClient: TConfig;
-  arbitrumClient: TConfig;
-  hmyClient: TConfig;
-};
+export type TFullConfig = Record<NETWORK_TYPE, TConfig>
 
 export enum ACTION_TYPE {
   // ALL

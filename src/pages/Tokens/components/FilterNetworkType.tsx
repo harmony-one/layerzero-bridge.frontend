@@ -2,6 +2,7 @@ import React from 'react';
 import { NetworkButton } from './NetworkButton/NetworkButton';
 import { NETWORK_TYPE } from '../../../stores/interfaces';
 import { Box } from 'grommet';
+import { networks } from '../../../configs';
 
 interface Props {
   network: NETWORK_TYPE | 'ALL';
@@ -17,21 +18,15 @@ export const FilterNetworkType: React.FC<Props> = React.memo(
           selectedType={network}
           onClick={() => setNetwork('ALL')}
         />
-        <NetworkButton
-          type={NETWORK_TYPE.BINANCE}
-          selectedType={network}
-          onClick={() => setNetwork(NETWORK_TYPE.BINANCE)}
-        />
-        <NetworkButton
-          type={NETWORK_TYPE.ETHEREUM}
-          selectedType={network}
-          onClick={() => setNetwork(NETWORK_TYPE.ETHEREUM)}
-        />
-        <NetworkButton
-          type={NETWORK_TYPE.ARBITRUM}
-          selectedType={network}
-          onClick={() => setNetwork(NETWORK_TYPE.ARBITRUM)}
-        />
+        {
+          Object.keys(networks)
+            .filter(key => key !== NETWORK_TYPE.HARMONY)
+            .map((key: NETWORK_TYPE) => <NetworkButton
+              type={key}
+              selectedType={network}
+              onClick={() => setNetwork(key)}
+            />)
+        }
       </Box>
     );
   },

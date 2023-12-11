@@ -15,7 +15,7 @@ import { sleep } from '../utils';
 import qs from 'qs';
 import { hmyMethodsERC20Web3 } from '../blockchain-bridge/hmy';
 import { useStores } from 'stores';
-import { tokensConfigs } from '../config';
+import { tokensConfigs } from '../configs';
 
 let serversJson = require('../../appengine-servers.json');
 
@@ -281,7 +281,15 @@ export const getConfig = async (): Promise<TFullConfig> => {
     body: any;
   }>(`${servers[0]}/config`);
 
-  return res.body;
+  const config = { 
+    [NETWORK_TYPE.ARBITRUM]: res.body?.arbitrumClient,
+    [NETWORK_TYPE.HARMONY]: res.body?.hmyClient,
+    [NETWORK_TYPE.BINANCE]: res.body?.binanceClient,
+    [NETWORK_TYPE.ETHEREUM]: res.body?.ethClient,
+    ...res.body,
+  }
+
+  return config;
 };
 
 export const getDepositAmount = async (

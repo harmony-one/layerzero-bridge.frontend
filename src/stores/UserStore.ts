@@ -17,7 +17,7 @@ import * as agent from 'superagent';
 import { EXCHANGE_MODE, IOperation, NETWORK_TYPE, TOKEN } from './interfaces';
 import { divDecimals } from '../utils';
 import { HarmonyAddress } from '@harmony-js/crypto';
-import { NETWORK_ERC20_TOKEN, NETWORK_NAME } from './names';
+import { getNetworkERC20Token, getNetworkName } from './names';
 import { ONE_SECOND } from '../constants/dates';
 
 const Web3 = require('web3');
@@ -412,7 +412,7 @@ export class UserStoreEx extends StoreConstructor {
       ) {
         throw new Error(
           `Your MetaMask in on the wrong network. Please switch on ${
-            NETWORK_NAME[this.stores.exchange.network]
+            getNetworkName(this.stores.exchange.network)
           } ${process.env.NETWORK} and try again!`,
         );
       }
@@ -535,7 +535,7 @@ export class UserStoreEx extends StoreConstructor {
       ) {
         throw new Error(
           `Your MetaMask in on the wrong network. Please switch on ${
-            NETWORK_NAME[this.stores.exchange.network]
+            getNetworkName(this.stores.exchange.network)
           } ${process.env.NETWORK} and try again!`,
         );
       }
@@ -665,7 +665,7 @@ export class UserStoreEx extends StoreConstructor {
       ) {
         throw new Error(
           `Your MetaMask in on the wrong network. Please switch on ${
-            NETWORK_NAME[this.stores.exchange.network]
+            getNetworkName(this.stores.exchange.network)
           } ${process.env.NETWORK} and try again!`,
         );
       }

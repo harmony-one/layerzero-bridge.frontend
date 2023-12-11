@@ -7,7 +7,7 @@ import { useStores } from 'stores';
 import { formatWithSixDecimals } from 'utils';
 import { EXCHANGE_MODE, NETWORK_TYPE, TOKEN } from '../../stores/interfaces';
 import { Price } from '../Explorer/Components';
-import { NETWORK_BASE_TOKEN, NETWORK_NAME } from '../../stores/names';
+import { getNetworkBaseToken, getNetworkName } from '../../stores/names';
 import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
 import { getBech32Address } from '../../blockchain-bridge';
@@ -130,7 +130,7 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
         case TOKEN.ETH:
           return (
             <AssetRowSimple
-              label={`${NETWORK_BASE_TOKEN[exchange.network]} amount`}
+              label={`${getNetworkBaseToken(exchange.network)} amount`}
               value={formatWithSixDecimals(
                 exchange.transaction.amount.toString(),
               )}
@@ -172,7 +172,7 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
     return (
       <Box direction="column">
         <AssetRowAddress
-          label={`${NETWORK_BASE_TOKEN[exchange.network]} address`}
+          label={`${getNetworkBaseToken(exchange.network)} address`}
           address={exchange.transaction.ethAddress}
           link={`${exchange.config.explorerURL}/token/${exchange.transaction.ethAddress}`}
         />
@@ -286,7 +286,7 @@ export const Details = observer<{ showTotal?: boolean; children?: any }>(
                     />
                   </AssetRowCustom>
                 )}
-                <AssetRowCustom label={NETWORK_NAME[exchange.network] + ' gas'}>
+                <AssetRowCustom label={getNetworkName(exchange.network) + ' gas'}>
                   <Price
                     value={Number(exchange.depositAmount.toFixed(2))}
                     isEth={false}

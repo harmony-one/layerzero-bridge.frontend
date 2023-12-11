@@ -12,9 +12,9 @@ import { NETWORK_TYPE, TOKEN } from '../../stores/interfaces';
 import { getBech32Address } from '../../blockchain-bridge';
 import { WalletButton } from './WalletButton';
 import {
-  NETWORK_BASE_TOKEN,
-  NETWORK_ICON,
-  NETWORK_NAME,
+  getNetworkBaseToken,
+  getNetworkIcon,
+  getNetworkName,
 } from '../../stores/names';
 import { AddTokenIcon } from '../../ui/AddToken';
 import { useMediaQuery } from 'react-responsive';
@@ -74,9 +74,9 @@ export const WalletBalances = observer(() => {
 
   const isEthereumNetwork = exchange.network === NETWORK_TYPE.ETHEREUM;
 
-  const externalNetworkName = NETWORK_NAME[exchange.network];
-  const externalNetworkIcon = NETWORK_ICON[exchange.network];
-  const externalNetworkToken = NETWORK_BASE_TOKEN[exchange.network];
+  const externalNetworkName = getNetworkName(exchange.network);
+  const externalNetworkIcon = getNetworkIcon(exchange.network);
+  const externalNetworkToken = getNetworkBaseToken(exchange.network);
 
   const externalSubNetworkName =
     exchange.network === NETWORK_TYPE.ETHEREUM
