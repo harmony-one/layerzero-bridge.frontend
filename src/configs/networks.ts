@@ -78,5 +78,24 @@ export const networks: Record<NETWORK_TYPE, NetworkConfig> = {
         },
         erc20Token: 'ERC20',
         prefix: 'arb'
+    },
+    [NETWORK_TYPE.LINEA]: {
+        chainId: numberToHex(parseInt('59144', 10)),
+        chainName: 'Linea Mainnet',
+        name: 'Linea',
+        icon: '/linea.svg',
+        nativeCurrency: {
+            name: 'ETH',
+            symbol: 'ETH',
+            decimals: 18,
+        },
+        rpcUrls: ['https://rpc.linea.build'],
+        blockExplorerUrls: ['https://lineascan.build'],
+        layerzero: {
+            endpoint: '0xb6319cC6c8c27A8F5dAF0dD3DF91EA35C4720dd7',
+            chainId: 183,
+        },
+        erc20Token: 'ERC20',
+        prefix: 'linea'
     }
 }
