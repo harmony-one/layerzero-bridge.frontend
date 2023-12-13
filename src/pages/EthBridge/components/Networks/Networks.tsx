@@ -6,9 +6,9 @@ import { EXCHANGE_MODE, NETWORK_TYPE } from '../../../../stores/interfaces';
 import { NetworkIcon } from '../NetworkIcon/NetworkIcon';
 import { NetworkHarmony } from '../StepBASE/components/NetworkHarmony/NetworkHarmony';
 import { observer } from 'mobx-react';
-import { networkNameMap } from '../../constants';
 import { Text } from '../../../../components/Base';
 import { Transaction } from 'grommet-icons';
+import { networks } from '../../../../configs';
 
 interface NetworkProps {
   mode: EXCHANGE_MODE;
@@ -31,7 +31,7 @@ const Network: React.FC<NetworkProps> = ({ mode, network, title }) => {
       centerContent={<NetworkIcon network={network} />}
       bottomContent={
         <Text size="small" uppercase>
-          {networkNameMap[network]}
+          {networks[network].name}
         </Text>
       }
     />

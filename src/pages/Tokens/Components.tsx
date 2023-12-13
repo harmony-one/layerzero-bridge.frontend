@@ -8,7 +8,7 @@ import { observer } from 'mobx-react';
 import { useStores } from '../../stores';
 import { formatWithSixDecimals } from '../../utils';
 import { Button } from '../../components/Base/components/Button';
-import { NETWORK_ICON, NETWORK_NAME } from '../../stores/names';
+import { getNetworkIcon, getNetworkName } from '../../stores/names';
 import { useMediaQuery } from 'react-responsive';
 
 export const OperationType = (props: { type: EXCHANGE_MODE }) => {
@@ -101,13 +101,13 @@ export const NetworkButton = observer(
         }}
         onClick={onClick}
       >
-        {NETWORK_ICON[type] ? (
+        {getNetworkIcon(type) ? (
           <img
             style={{ marginRight: 10, height: 20 }}
-            src={NETWORK_ICON[type]}
+            src={getNetworkIcon(type)}
           />
         ) : null}
-        {NETWORK_NAME[type] || 'All'}
+        {getNetworkName(type) || 'All'}
       </Button>
     );
   },

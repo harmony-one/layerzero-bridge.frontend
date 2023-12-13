@@ -10,7 +10,7 @@ import * as styles from './styles.styl';
 import { Button, Text, Title } from 'components/Base';
 import { SearchInput } from 'components/Search';
 import { getBech32Address, getChecksumAddress } from '../../blockchain-bridge';
-import { NETWORK_ICON } from '../../stores/names';
+import { getNetworkIcon } from '../../stores/names';
 import { useMediaQuery } from 'react-responsive';
 import { LayoutCommon } from '../../components/Layouts/LayoutCommon/LayoutCommon';
 
@@ -28,7 +28,7 @@ const EthAddress = observer(
         <img
           className={styles.imgToken}
           style={{ height: 20 }}
-          src={NETWORK_ICON[network]}
+          src={getNetworkIcon(network)}
         />
         <a
           className={styles.addressLink}

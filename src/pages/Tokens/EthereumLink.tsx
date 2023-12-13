@@ -4,7 +4,7 @@ import { Box } from 'grommet';
 import { NETWORK_TYPE } from '../../stores/interfaces';
 import { useStores } from '../../stores';
 import * as styles from './styles.styl';
-import { NETWORK_ICON } from '../../stores/names';
+import { getNetworkIcon } from '../../stores/names';
 import { truncateAddressString } from '../../utils';
 import { TRUNCATE_ADDRESS } from '../../constants';
 
@@ -22,7 +22,7 @@ export const EthereumLink: React.FC<Props> = observer(
           <img
             alt="network"
             style={{ height: 20 }}
-            src={NETWORK_ICON[network]}
+            src={getNetworkIcon(network)}
           />
         </Box>
         <a

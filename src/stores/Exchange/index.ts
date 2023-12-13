@@ -28,7 +28,7 @@ import { send1ETHToken } from './1ETH';
 import { send1ONEToken } from './1ONE';
 import { getChainConfig, getContractMethods, isNFT } from './helpers';
 import { defaultEthClient } from './defaultConfig';
-import { NETWORK_BASE_TOKEN, NETWORK_ICON, NETWORK_NAME } from '../names';
+import { getNetworkBaseToken, getNetworkIcon, getNetworkName } from '../names';
 import { sendHrc721Token } from './hrc721';
 import { sendHrc1155Token } from './hrc1155';
 import { sendErc1155Token } from './erc1155';
@@ -37,7 +37,7 @@ import { MetamaskWarning } from '../../components/MetamaskWarning';
 import { ValidatorsCountWarning } from '../../components/ValidatorsCountWarning';
 import { ConfirmTokenBridge } from '../../components/ConfirmTokenBridge';
 import { EthBridgeStore } from '../../pages/EthBridge/EthBridgeStore';
-import { getTokenConfig, tokensConfigs } from '../../config';
+import { getTokenConfig, tokensConfigs } from '../../configs';
 import { ITokenInfo } from '../../interfaces';
 
 export enum EXCHANGE_STEPS {
@@ -190,7 +190,7 @@ export class Exchange extends StoreConstructor {
                 !this.stores.userMetamask.isAuthorized)
             ) {
               throw new Error(
-                `Your MetaMask in on the wrong network. Please switch on ${NETWORK_NAME[this.stores.exchange.network]
+                `Your MetaMask in on the wrong network. Please switch on ${getNetworkName(this.stores.exchange.network)
                 } ${process.env.NETWORK} and try again!`,
               );
             }
@@ -531,10 +531,10 @@ export class Exchange extends StoreConstructor {
       this.stores.userMetamask.erc20Address = '';
 
       this.stores.userMetamask.setTokenDetails({
-        name: NETWORK_BASE_TOKEN[this.network],
+        name: getNetworkBaseToken(this.network),
         decimals: '18',
         erc20Address: '',
-        symbol: NETWORK_BASE_TOKEN[this.network],
+        symbol: getNetworkBaseToken(this.network),
       });
     }
 
@@ -1091,19 +1091,7 @@ export class Exchange extends StoreConstructor {
       return defaultEthClient;
     }
 
-    if (this.network === NETWORK_TYPE.ETHEREUM) {
-      return this.fullConfig.ethClient;
-    }
-
-    if (this.network === NETWORK_TYPE.BINANCE) {
-      return this.fullConfig.binanceClient;
-    }
-
-    if (this.network === NETWORK_TYPE.ARBITRUM) {
-      return this.fullConfig.arbitrumClient;
-    }
-
-    return this.fullConfig.ethClient;
+    return this.fullConfig[this.network] || this.fullConfig[NETWORK_TYPE.ETHEREUM]
   }
 
   getExplorerByNetwork(network: NETWORK_TYPE) {
@@ -1111,16 +1099,7 @@ export class Exchange extends StoreConstructor {
       return defaultEthClient.explorerURL;
     }
 
-    switch (network) {
-      case NETWORK_TYPE.BINANCE:
-        return this.fullConfig.binanceClient.explorerURL;
-      case NETWORK_TYPE.ETHEREUM:
-        return this.fullConfig.ethClient.explorerURL;
-      case NETWORK_TYPE.ARBITRUM:
-        return this.fullConfig.arbitrumClient.explorerURL;
-      case NETWORK_TYPE.HARMONY:
-        return this.fullConfig.hmyClient.explorerURL;
-    }
+    return this.fullConfig[network]?.explorerURL;
   }
 
   @action.bound
@@ -1391,13 +1370,13 @@ export class Exchange extends StoreConstructor {
 
       case TOKEN.ETH:
         return {
-          label: NETWORK_BASE_TOKEN[exchange.network],
+          label: getNetworkBaseToken(exchange.network),
           maxAmount:
             exchange.mode === EXCHANGE_MODE.ONE_TO_ETH
               ? user.hrc20Balance
               : userMetamask.ethBalance,
-          symbol: NETWORK_BASE_TOKEN[exchange.network],
-          image: NETWORK_ICON[exchange.network],
+          symbol: getNetworkBaseToken(exchange.network),
+          image: getNetworkIcon(exchange.network),
           address: '',
         };
 

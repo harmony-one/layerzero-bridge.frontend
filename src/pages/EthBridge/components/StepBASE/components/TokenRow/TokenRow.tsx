@@ -11,7 +11,7 @@ import { truncateAddressString } from '../../../../../../utils';
 import { CircleQuestion, CircleInformation } from 'grommet-icons';
 import { TipContent } from '../../../../../../components/TipContent';
 import { Link } from 'components/Link';
-import { getTokenConfig } from '../../../../../../config';
+import { getTokenConfig } from '../../../../../../configs';
 import { ENSInput } from '../ENSInput';
 
 const TokenAddresses = observer(() => {

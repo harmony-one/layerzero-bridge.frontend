@@ -3,7 +3,7 @@ import { BridgeControl } from '../../../BridgeControl/BridgeControl';
 import { NetworkIcon } from '../../../NetworkIcon/NetworkIcon';
 import { NETWORK_TYPE } from '../../../../../../stores/interfaces';
 import { Text } from '../../../../../../components/Base';
-import { networkNameMap } from '../../../../constants';
+import { networks } from '../../../../../../configs';
 
 interface Props {
   title: string;
@@ -16,7 +16,7 @@ export const NetworkHarmony: React.FC<Props> = ({ title }) => {
       centerContent={<NetworkIcon network={NETWORK_TYPE.HARMONY} />}
       bottomContent={
         <Text size="small" uppercase>
-          {networkNameMap[NETWORK_TYPE.HARMONY]}
+          {networks[NETWORK_TYPE.HARMONY].name}
         </Text>
       }
     />

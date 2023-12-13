@@ -4,7 +4,7 @@ import * as s from './NetworkButton.styl';
 import { NETWORK_TYPE } from '../../../../stores/interfaces';
 import { Button } from '../../../../components/Base';
 import cn from 'classnames';
-import { NETWORK_ICON, NETWORK_NAME } from '../../../../stores/names';
+import { getNetworkIcon, getNetworkName } from '../../../../stores/names';
 import { ThemeContext } from '../../../../themes/ThemeContext';
 
 interface Props {
@@ -32,13 +32,13 @@ export const NetworkButton: React.FC<Props> = observer(
         buttonClassName={buttonClassName}
         onClick={onClick}
       >
-        {NETWORK_ICON[type] ? (
+        {getNetworkIcon(type) ? (
           <img
             style={{ marginRight: 10, height: 14 }}
-            src={NETWORK_ICON[type]}
+            src={getNetworkIcon(type)}
           />
         ) : null}
-        {NETWORK_NAME[type] || 'All'}
+        {getNetworkName(type) || 'All'}
       </Button>
     );
   },

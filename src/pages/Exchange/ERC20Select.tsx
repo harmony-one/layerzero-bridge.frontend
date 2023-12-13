@@ -17,78 +17,37 @@ import { NETWORK_TYPE, TOKEN } from '../../stores/interfaces';
 import { Spinner } from '../../ui/Spinner';
 import { useMediaQuery } from 'react-responsive';
 import { isRequired, NumberInput } from '../../components/Form';
+import { networks } from '../../configs';
 
-const labels: Record<
-  Exclude<NETWORK_TYPE, NETWORK_TYPE.HARMONY>,
-  Record<string, string>
-> = {
-  [NETWORK_TYPE.ETHEREUM]: {
-    [TOKEN.ERC20]: 'ERC20 token address',
-    [TOKEN.ERC721]: 'ERC721 token address',
-    [TOKEN.HRC721]: 'HRC721 token address',
-    [TOKEN.ERC1155]: 'ERC1155 token address',
-    [TOKEN.HRC1155]: 'HRC1155 token address',
-    [TOKEN.HRC20]: 'HRC20 token address',
-  },
-  [NETWORK_TYPE.BINANCE]: {
-    [TOKEN.ERC20]: 'BEP20 token address',
-    [TOKEN.ERC721]: 'ERC721 token address',
-    [TOKEN.HRC20]: 'HRC20 token address',
-  },
-  [NETWORK_TYPE.ARBITRUM]: {
-    [TOKEN.ERC20]: 'ERC20 token address',
-    [TOKEN.ERC721]: 'ERC721 token address',
-    [TOKEN.HRC20]: 'HRC20 token address',
-  },
-};
+export const getLabel = (networkType: NETWORK_TYPE, tokenType: TOKEN) => {
+  let tokenName = tokenType.toUpperCase();
 
-const placeholder: Record<
-  Exclude<NETWORK_TYPE, NETWORK_TYPE.HARMONY>,
-  Record<string, string>
-> = {
-  [NETWORK_TYPE.ETHEREUM]: {
-    [TOKEN.ERC20]: 'Select your ERC20 token',
-    [TOKEN.ERC721]: 'Select your ERC721 token',
-    [TOKEN.HRC721]: 'Select your HRC721 token',
-    [TOKEN.ERC1155]: 'Select your ERC1155 token',
-    [TOKEN.HRC1155]: 'Select your HRC1155 token',
-    [TOKEN.HRC20]: 'Select your HRC20 token',
-  },
-  [NETWORK_TYPE.BINANCE]: {
-    [TOKEN.ERC20]: 'Select your BEP20 token',
-    [TOKEN.ERC721]: 'Select your ERC721 token',
-    [TOKEN.HRC20]: 'Select your HRC20 token',
-  },
-  [NETWORK_TYPE.ARBITRUM]: {
-    [TOKEN.ERC20]: 'Select your ERC20 token',
-    [TOKEN.ERC721]: 'Select your ERC721 token',
-    [TOKEN.HRC20]: 'Select your HRC20 token',
-  },
-};
+  if (tokenType === TOKEN.ERC20) {
+    tokenName = networks[networkType]?.erc20Token ?? tokenName;
+  }
 
-export const inputPlaceholder: Record<
-  Exclude<NETWORK_TYPE, NETWORK_TYPE.HARMONY>,
-  Record<string, string>
-> = {
-  [NETWORK_TYPE.ETHEREUM]: {
-    [TOKEN.ERC20]: 'Input ERC20 token address',
-    [TOKEN.ERC721]: 'Input ERC721 token address',
-    [TOKEN.HRC721]: 'Input HRC721 token address',
-    [TOKEN.ERC1155]: 'Input ERC1155 token address',
-    [TOKEN.HRC1155]: 'Input HRC1155 token address',
-    [TOKEN.HRC20]: 'Input HRC20 token address',
-  },
-  [NETWORK_TYPE.BINANCE]: {
-    [TOKEN.ERC20]: 'Input BEP20 token address',
-    [TOKEN.ERC721]: 'Input ERC721 token address',
-    [TOKEN.HRC20]: 'Input HRC20 token address',
-  },
-  [NETWORK_TYPE.ARBITRUM]: {
-    [TOKEN.ERC20]: 'Input ERC20 token address',
-    [TOKEN.ERC721]: 'Input ERC721 token address',
-    [TOKEN.HRC20]: 'Input HRC20 token address',
-  },
-};
+  return `${tokenName} token address`
+}
+
+export const getPlaceholder = (networkType: NETWORK_TYPE, tokenType: TOKEN) => {
+  let tokenName = tokenType.toUpperCase();
+
+  if (tokenType === TOKEN.ERC20) {
+    tokenName = networks[networkType]?.erc20Token ?? tokenName;
+  }
+
+  return `Select your ${tokenName} token`
+}
+
+export const getInputPlaceholder = (networkType: NETWORK_TYPE, tokenType: TOKEN) => {
+  let tokenName = tokenType.toUpperCase();
+
+  if (tokenType === TOKEN.ERC20) {
+    tokenName = networks[networkType]?.erc20Token ?? tokenName;
+  }
+
+  return `Input ${tokenName} token address`
+}
 
 export const ERC20Select = observer<{ type: TOKEN; options?: boolean }>(
   ({ type, options }) => {
@@ -112,7 +71,7 @@ export const ERC20Select = observer<{ type: TOKEN; options?: boolean }>(
       <Box direction="column" margin={{ top: 'xlarge' }}>
         <Box direction="row" align="center" justify="between">
           <Text size="large" bold>
-            {labels[exchange.network][type]}
+            {getLabel(exchange.network, type)}
           </Text>
 
           <Checkbox
@@ -145,7 +104,7 @@ export const ERC20Select = observer<{ type: TOKEN; options?: boolean }>(
               onChange={async value => {
                 erc20Select.setToken(value);
               }}
-              placeholder={placeholder[exchange.network][type]}
+              placeholder={getPlaceholder(exchange.network, type)}
             />
             {erc20Select.tokenAddress ? (
               <Box
@@ -177,7 +136,7 @@ export const ERC20Select = observer<{ type: TOKEN; options?: boolean }>(
             <Box margin={{ top: 'xsmall', bottom: 'medium' }}>
               <TextInput
                 disabled={erc20Select.isLoading}
-                placeholder={inputPlaceholder[exchange.network][type]}
+                placeholder={getInputPlaceholder(exchange.network, type)}
                 value={erc20}
                 onChange={setErc20}
               />
@@ -288,8 +247,8 @@ export const ERC20Select = observer<{ type: TOKEN; options?: boolean }>(
         ) : null}
 
         {erc20Select.error &&
-        (erc20Select.error.includes('This HRC20 address corresponds') ||
-          erc20Select.error.includes('This address already using for')) ? (
+          (erc20Select.error.includes('This HRC20 address corresponds') ||
+            erc20Select.error.includes('This address already using for')) ? (
           <Box
             margin={{ top: custom ? '10px' : '0px' }}
             fill={true}

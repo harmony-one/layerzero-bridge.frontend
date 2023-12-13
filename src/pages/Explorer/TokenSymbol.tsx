@@ -7,7 +7,7 @@ import { Box } from 'grommet';
 import { sliceByLength } from '../../utils';
 import { Text } from '../../components/Base';
 import { NETWORK_TYPE, TOKEN } from '../../stores/interfaces';
-import { findTokenConfig } from '../../config';
+import { findTokenConfig } from '../../configs';
 
 interface TokenSymbolProps {
   token: TOKEN;

@@ -55,12 +55,12 @@ export class Portfolio extends StoreConstructor {
   ) {
     const serviceConfig = await operationService.getConfig();
     const ethNetwork = initNetwork(
-      serviceConfig.ethClient,
+      serviceConfig[NETWORK_TYPE.ETHEREUM],
       process.env.ETH_NODE_URL,
     );
 
     const binanceNetwork = initNetwork(
-      serviceConfig.binanceClient,
+      serviceConfig[NETWORK_TYPE.BINANCE],
       process.env.ETH_NODE_URL,
     );
 

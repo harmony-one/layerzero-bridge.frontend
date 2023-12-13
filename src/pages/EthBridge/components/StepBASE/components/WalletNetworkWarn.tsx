@@ -3,7 +3,7 @@ import { StatusWarning } from 'grommet-icons';
 import { Text } from '../../../../../components/Base';
 import { Box } from 'grommet/components/Box';
 import { EXCHANGE_MODE, NETWORK_TYPE } from '../../../../../stores/interfaces';
-import { NETWORK_NAME } from '../../../../../stores/names';
+import { getNetworkName } from '../../../../../stores/names';
 import { useStores } from '../../../../../stores';
 import { observer } from 'mobx-react';
 
@@ -14,18 +14,18 @@ export const WalletNetworkWarn: React.FC<Props> = observer(() => {
 
   const externalNetworkName = useMemo(() => {
     if (exchange.mode === EXCHANGE_MODE.ONE_TO_ETH) {
-      return NETWORK_NAME[NETWORK_TYPE.HARMONY];
+      return getNetworkName(NETWORK_TYPE.HARMONY);
     }
 
-    return NETWORK_NAME[exchange.network];
+    return getNetworkName(exchange.network);
   }, [exchange.mode, exchange.network]);
 
   const destinationNetworkName = useMemo(() => {
     if (exchange.mode === EXCHANGE_MODE.ETH_TO_ONE) {
-      return NETWORK_NAME[NETWORK_TYPE.HARMONY];
+      return getNetworkName(NETWORK_TYPE.HARMONY);
     }
 
-    return NETWORK_NAME[exchange.network];
+    return getNetworkName(exchange.network);
   }, [exchange.mode, exchange.network]);
 
   const externalSubNetworkName =

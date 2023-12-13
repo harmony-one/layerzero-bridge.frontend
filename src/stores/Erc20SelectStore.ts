@@ -1,7 +1,7 @@
 import { StoreConstructor } from './core/StoreConstructor';
 import { action, autorun, computed, observable, reaction } from 'mobx';
 import { NETWORK_TYPE, OpenSeaValideResponse, TOKEN } from './interfaces';
-import { NETWORK_ICON } from './names';
+import { getNetworkIcon } from './names';
 import { tokensMainnet } from '../pages/Exchange/tokens';
 import { ensToTokenId } from '../utils/ens';
 import Web3 from 'web3';
@@ -162,7 +162,7 @@ export class Erc20SelectStore extends StoreConstructor {
           address: t.hrc20Address,
           label: `${t.name} (${t.symbol})`,
           symbol: t.symbol,
-          image: NETWORK_ICON[t.network],
+          image: getNetworkIcon(t.network),
         }));
     }
 
@@ -184,7 +184,7 @@ export class Erc20SelectStore extends StoreConstructor {
         href: '',
         label: `${t.name} (${t.symbol})`,
         symbol: t.symbol,
-        image: NETWORK_ICON[t.network],
+        image: getNetworkIcon(t.network),
       }));
 
     return network === NETWORK_TYPE.ETHEREUM

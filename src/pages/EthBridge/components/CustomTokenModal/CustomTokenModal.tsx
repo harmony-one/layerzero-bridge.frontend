@@ -10,7 +10,6 @@ import { Grid } from 'grommet';
 import { TextInput, Button } from 'components/Base';
 import { Form, isRequired, NumberInput } from '../../../../components/Form';
 import { Spinner } from '../../../../ui';
-import { inputPlaceholder } from '../../../Exchange/ERC20Select';
 import cn from 'classnames';
 import { TokensField } from '../../../Exchange/AmountField';
 import { formatWithSixDecimals, moreThanZero } from '../../../../utils';
@@ -19,6 +18,7 @@ import {
   isNFT,
   isNotNFT,
 } from '../../../../stores/Exchange/helpers';
+import { getInputPlaceholder } from 'pages/Exchange/ERC20Select';
 
 interface Props {
   onClose?: () => void;
@@ -64,7 +64,7 @@ export const CustomTokenModal: React.FC<Props> = observer(({ onClose }) => {
         >
           <Box margin={{ top: 'xsmall', bottom: 'medium' }}>
             <Text color="NGray4">
-              {inputPlaceholder[exchange.network][exchange.token]}
+              {getInputPlaceholder(exchange.network, exchange.token)}
             </Text>
             <TextInput
               disabled={erc20Select.isLoading}

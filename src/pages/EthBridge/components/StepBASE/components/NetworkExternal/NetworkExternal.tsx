@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { Text, Icon } from '../../../../../../components/Base';
 import { BridgeControl } from '../../../BridgeControl/BridgeControl';
-import { networkNameMap } from '../../../../constants';
 import { NetworkIcon } from '../../../NetworkIcon/NetworkIcon';
 import { Menu, Box } from 'grommet';
 import { useStores } from '../../../../../../stores';
 import { NETWORK_TYPE } from '../../../../../../stores/interfaces';
 import { observer } from 'mobx-react';
 import { ThemeContext } from '../../../../../../themes/ThemeContext';
+import { networks } from '../../../../../../configs';
 
 interface NetworkMenuItemProps {
   network: string;
@@ -46,7 +46,7 @@ const NetworkMenu = observer(() => {
 
   const themeContext = useContext(ThemeContext);
 
-  const label = networkNameMap[exchange.network];
+  const label = networks[exchange.network].name;
 
   return (
     <Menu
@@ -61,44 +61,26 @@ const NetworkMenu = observer(() => {
       }}
       justifyContent="center"
       label={label}
-      items={[
-        {
-          label: (
-            <NetworkMenuItem
-              network={networkNameMap[NETWORK_TYPE.BINANCE]}
-              icon={<Icon glyph="Binance" />}
-              token={'BNB'}
-            />
-          ),
-          onClick: () => {
-            exchange.setNetwork(NETWORK_TYPE.BINANCE);
-          },
-        },
-        {
-          label: (
-            <NetworkMenuItem
-              network={networkNameMap[NETWORK_TYPE.ETHEREUM]}
-              icon={<Icon glyph="Ethereum" />}
-              token={'ETH'}
-            />
-          ),
-          onClick: () => {
-            exchange.setNetwork(NETWORK_TYPE.ETHEREUM);
-          },
-        },
-        {
-          label: (
-            <NetworkMenuItem
-              network={networkNameMap[NETWORK_TYPE.ARBITRUM]}
-              icon={<Icon glyph="Arbitrum" />}
-              token={'ETH'}
-            />
-          ),
-          onClick: () => {
-            exchange.setNetwork(NETWORK_TYPE.ARBITRUM);
-          },
-        },
-      ]}
+      items={
+        Object.keys(networks)
+          .filter(key => key !== NETWORK_TYPE.HARMONY)
+          .map((key: NETWORK_TYPE) => {
+            const network = networks[key];
+
+            return {
+              label: (
+                <NetworkMenuItem
+                  network={network.name}
+                  icon={<Icon glyph={network.name} />}
+                  token={network.nativeCurrency.name}
+                />
+              ),
+              onClick: () => {
+                exchange.setNetwork(key);
+              },
+            };
+          })
+      }
     >
       <Box gap="8px" direction="row">
         <Text size="small" uppercase>

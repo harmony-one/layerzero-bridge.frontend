@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { BridgeControl } from '../../BridgeControl/BridgeControl';
 import { observer } from 'mobx-react';
 import { isENSOwner } from '../../../../../utils';
-import { getTokenConfig } from '../../../../../config';
+import { getTokenConfig } from '../../../../../configs';
 import { EXCHANGE_MODE } from '../../../../../stores/interfaces';
 
 const BridgeControlStyled = styled(BridgeControl)`

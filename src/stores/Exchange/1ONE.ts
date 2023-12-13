@@ -10,7 +10,7 @@ import { ITransaction } from './index';
 import { IStores } from '../index';
 import { hmyMethodsERC20Web3 } from '../../blockchain-bridge/hmy';
 import { getExNetworkMethods } from '../../blockchain-bridge/eth';
-import { getTokenConfig } from '../../config';
+import { getTokenConfig } from '../../configs';
 
 export const send1ONEToken = async (params: {
   transaction: ITransaction;

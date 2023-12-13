@@ -5,7 +5,7 @@ import { getAddress } from '@harmony-js/crypto';
 const BN = require('bn.js');
 
 import { abi as ProxyERC20Abi } from '../out/ProxyHRC20Abi';
-import { layerZeroConfig, getTokenConfig } from '../../config';
+import { getTokenConfig } from '../../configs';
 import { TOKEN } from 'stores/interfaces';
 
 interface IHmyMethodsInitParams {
