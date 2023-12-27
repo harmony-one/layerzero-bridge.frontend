@@ -1,11 +1,9 @@
 import React from "react";
 
-export const Arbitrum = (props: React.SVGProps<SVGSVGElement>) => ({
+export const Base = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="128"
-      height="128"
       fill="none"
       viewBox="0 0 128 128"
       width="32"
@@ -20,4 +18,4 @@ export const Arbitrum = (props: React.SVGProps<SVGSVGElement>) => ({
       ></path>
     </svg>
   );
-})
+}
