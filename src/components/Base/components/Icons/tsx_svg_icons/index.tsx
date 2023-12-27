@@ -61,3 +61,4 @@ export * from './CloseCircle';
 export * from './AddCircle';
 export * from './Arbitrum';
 export * from './Linea';
+export * from './Base';

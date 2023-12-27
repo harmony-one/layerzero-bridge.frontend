@@ -3,7 +3,8 @@ export enum NETWORK_TYPE {
   BINANCE = 'BINANCE',
   ARBITRUM = 'ARBITRUM',
   HARMONY = 'HARMONY',
-  LINEA = 'LINEA'
+  LINEA = 'LINEA',
+  BASE = 'BASE',
 }
 
 export enum EXCHANGE_MODE {

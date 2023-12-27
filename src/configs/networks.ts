@@ -97,5 +97,24 @@ export const networks: Record<NETWORK_TYPE, NetworkConfig> = {
         },
         erc20Token: 'ERC20',
         prefix: 'linea'
+    },
+    [NETWORK_TYPE.BASE]: {
+        chainId: numberToHex(parseInt('8453', 10)),
+        chainName: 'Base Mainnet',
+        name: 'Base',
+        icon: '/base.svg',
+        nativeCurrency: {
+            name: 'ETH',
+            symbol: 'ETH',
+            decimals: 18,
+        },
+        rpcUrls: ['https://developer-access-mainnet.base.org'],
+        blockExplorerUrls: ['https://basescan.org'],
+        layerzero: {
+            endpoint: '0xb6319cC6c8c27A8F5dAF0dD3DF91EA35C4720dd7',
+            chainId: 184,
+        },
+        erc20Token: 'ERC20',
+        prefix: 'base'
     }
 }
