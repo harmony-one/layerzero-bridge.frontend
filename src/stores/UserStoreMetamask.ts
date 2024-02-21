@@ -507,25 +507,33 @@ export class UserStoreMetamask extends StoreConstructor {
     if (this.ethAddress && this.isNetworkActual) {
       try {
         if (this.erc20Address) {
-          const erc20Balance = await exNetwork.ethMethodsERC20.checkEthBalance(
-            this.erc20Address,
-            this.ethAddress,
-          );
+          try {
+            const erc20Balance = await exNetwork.ethMethodsERC20.checkEthBalance(
+              this.erc20Address,
+              this.ethAddress,
+            );
 
-          this.erc20Balance = divDecimals(
-            erc20Balance,
-            this.erc20TokenDetails.decimals,
-          );
+            this.erc20Balance = divDecimals(
+              erc20Balance,
+              this.erc20TokenDetails.decimals,
+            );
+          } catch (e) {
+            console.error('getBalances erc20Address error', e);
+          }
         }
 
-        let res = 0;
+        try {
+          let res = 0;
 
-        if (this.stores.exchange.network === NETWORK_TYPE.ETHEREUM) {
-          res = await exNetwork.ethMethodsLINK.checkEthBalance(this.ethAddress);
-          this.ethLINKBalance = divDecimals(res, 18);
+          if (this.stores.exchange.network === NETWORK_TYPE.ETHEREUM) {
+            res = await exNetwork.ethMethodsLINK.checkEthBalance(this.ethAddress);
+            this.ethLINKBalance = divDecimals(res, 18);
 
-          res = await exNetwork.ethMethodsBUSD.checkEthBalance(this.ethAddress);
-          this.ethBUSDBalance = divDecimals(res, 18);
+            res = await exNetwork.ethMethodsBUSD.checkEthBalance(this.ethAddress);
+            this.ethBUSDBalance = divDecimals(res, 18);
+          }
+        } catch (e) {
+          console.error('getBalances LINK error', e);
         }
 
         this.ethBalance = await exNetwork.getEthBalance(this.ethAddress);
