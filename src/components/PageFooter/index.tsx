@@ -94,7 +94,7 @@ const PageFooter: React.FC<Props> = () => {
           className={cn(styles.footerText)}
         >
           <p>
-            © Harmony 2022&nbsp;<span className={cn(styles.footerDot)}>.</span>
+            © Harmony 2024&nbsp;<span className={cn(styles.footerDot)}>.</span>
             &nbsp;hello@harmony.one
           </p>
         </Box>

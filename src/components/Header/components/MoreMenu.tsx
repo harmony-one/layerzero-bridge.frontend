@@ -30,7 +30,7 @@ export const MoreMenu: React.FC = React.memo(() => {
     {
       label: <MenuLabel>Help</MenuLabel>,
       onClick: makeNavigateCb(
-        'https://docs.harmony.one/home/general/layerzero-bridge/help',
+        'https://docs.harmony.one/home/general/layerzero-bridge/bridging-tutorial',
       ),
       justify: 'center',
     },
