@@ -139,41 +139,43 @@ export const getOperationFee = (operation: IOperation) => {
 // };
 
 const LayerZeroLink = ({ action, data }) => {
-  const [link, setLink] = React.useState(action.payload?.link);
-  const [lz, setLZ] = React.useState({
-    status: STATUS.WAITING,
-  } as isLayerZeroOperation);
+  // const [link, setLink] = React.useState(action.payload?.link);
+  // const [lz, setLZ] = React.useState({
+  //   status: STATUS.WAITING,
+  // } as isLayerZeroOperation);
 
-  const load = React.useCallback(
-    async (stopRepeat = false) => {
-      let hash = action.transactionHash;
+  // const load = React.useCallback(
+  //   async (stopRepeat = false) => {
+  //     let hash = action.transactionHash;
 
-      axios
-        .get(`https://api-mainnet.layerzero-scan.com/tx/${hash}`)
-        .then(res => {
-          const lz: isLayerZeroOperation = res.data?.messages[0];
+  //     axios
+  //       .get(`https://api-mainnet.layerzero-scan.com/tx/${hash}`)
+  //       .then(res => {
+  //         const lz: isLayerZeroOperation = res.data?.messages[0];
 
-          if (!lz) {
-            setLZ({ status: STATUS.WAITING } as any);
-            // if (!stopRepeat) {
-            //   setTimeout(() => load(true), 10000);
-            // }
-          } else {
-            setLink(
-              `https://layerzeroscan.com/${lz.srcChainId}/address/${lz.srcUaAddress}/message/${lz.dstChainId}/address/${lz.dstUaAddress}/nonce/${lz.srcUaNonce}`,
-            );
-            setLZ(lz);
-          }
-        });
-    },
-    [link],
-  );
+  //         if (!lz) {
+  //           setLZ({ status: STATUS.WAITING } as any);
+  //           // if (!stopRepeat) {
+  //           //   setTimeout(() => load(true), 10000);
+  //           // }
+  //         } else {
+  //           setLink(
+  //             `https://layerzeroscan.com/${lz.srcChainId}/address/${lz.srcUaAddress}/message/${lz.dstChainId}/address/${lz.dstUaAddress}/nonce/${lz.srcUaNonce}`,
+  //           );
+  //           setLZ(lz);
+  //         }
+  //       });
+  //   },
+  //   [link],
+  // );
 
-  React.useEffect(() => {
-    if (!link) {
-      load();
-    }
-  }, [link]);
+  // React.useEffect(() => {
+  //   if (!link) {
+  //     load();
+  //   }
+  // }, [link]);
+
+  const link = `https://layerzeroscan.com/tx/${action.transactionHash}`;
 
   return link ? (
     <a className={styles.addressLink} href={link} target="_blank">
