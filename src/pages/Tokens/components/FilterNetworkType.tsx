@@ -21,7 +21,8 @@ export const FilterNetworkType: React.FC<Props> = React.memo(
         {
           Object.keys(networks)
             .filter(key => key !== NETWORK_TYPE.HARMONY)
-            .map((key: NETWORK_TYPE) => <NetworkButton
+            .map((key: NETWORK_TYPE, idx) => <NetworkButton
+              key={idx}
               type={key}
               selectedType={network}
               onClick={() => setNetwork(key)}
