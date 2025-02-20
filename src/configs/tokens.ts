@@ -974,4 +974,22 @@ export const tokensConfigs: ITokenInfo[] = [
     	image: '/moodengsol.jpg',
     	adapterParams: '0x',
     },
+    {
+      hrc20Address: '0xCb44A16833a6067855e7fF997200fDf7cd2Dcef5',
+      erc20Address: '0x940181a94a35a4569e4529a3cdfb74e38fd98631',
+      proxyERC20: '0xCaac020Dd77eD89A29ff30f369F6A17B43A8b53E',
+      proxyHRC20: '0x24B147d54C1047bD2fA7E885Cd286D19E403ABAD',
+      name: 'AERO (Base)',
+      symbol: 'AERO',
+      decimals: '18',
+      totalLocked: '0',
+      totalSupply: '0',
+      totalLockedNormal: '0',
+      totalLockedUSD: '0',
+      token: TOKEN.ERC20,
+      type: TOKEN.ERC20,
+      network: NETWORK_TYPE.BASE,
+      image: '/aero.svg',
+      adapterParams: '0x',
+    }
   ];
