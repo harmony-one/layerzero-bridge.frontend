@@ -8,6 +8,7 @@ interface TokenHorizontalProps {
   icon: string;
   label: string;
   balance: number | string;
+  legacy?: boolean;
   onClick: () => void;
 }
 
@@ -17,6 +18,7 @@ export const TokenHorizontal: React.FC<TokenHorizontalProps> = ({
   label,
   balance = 0,
   icon,
+  legacy = false,
   onClick,
 }) => {
   return (
@@ -37,6 +39,11 @@ export const TokenHorizontal: React.FC<TokenHorizontalProps> = ({
         <Text color="NGray4" size="xsmall">
           {label}
         </Text>
+        {
+          legacy && <Text color="Red" size="xsmall">
+            Legacy Asset
+          </Text>
+        }
       </Box>
       <Box margin={{ left: 'auto' }}>
         <Text size="xsmall" lh="19px">

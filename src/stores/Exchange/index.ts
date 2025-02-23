@@ -1362,11 +1362,15 @@ export class Exchange extends StoreConstructor {
             exchange.mode === EXCHANGE_MODE.ONE_TO_ETH
               ? user.hrc20Balance
               : userMetamask.erc20Balance,
+          totalTransferred:
+              exchange.mode === EXCHANGE_MODE.ONE_TO_ETH
+                ? user.totalTransferred
+                : "0",
           symbol:
             (token && token.symbol) || userMetamask.erc20TokenDetails?.symbol,
           image: token && token.image,
           address: token && token.erc20Address,
-        };
+        } as ITokenInfo;
 
       case TOKEN.ETH:
         return {

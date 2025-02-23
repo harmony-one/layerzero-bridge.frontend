@@ -17,8 +17,17 @@ const HarmonyLogo = () => {
       : 'harmony-logo-blue.svg';
 
   return (
-    <Box>
+    <Box direction='row' align="center">
       <img height="30px" width="200px" alt="harmony logo" src={src} />
+      <p
+        style={{
+          whiteSpace: 'nowrap',
+          margin: "4px 20px 0 20px"
+        }}
+      >
+        powered by
+      </p>
+      <img height="30px" width="200px" alt="lz logo" src="https://layerzero.network/static/logo.svg" />
     </Box>
   );
 };
@@ -35,7 +44,7 @@ const StyledGrid = styled(Grid)`
   }
 `;
 
-interface Props {}
+interface Props { }
 
 export const Header: React.FC<Props> = React.memo(() => {
   const { actionModals } = useStores();

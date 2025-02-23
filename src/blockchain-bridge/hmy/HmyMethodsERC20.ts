@@ -3,6 +3,8 @@ import { Contract } from '@harmony-js/contract';
 import { getAddress } from '@harmony-js/crypto';
 import { connectToOneWallet } from './helpers';
 import { mulDecimals } from '../../utils';
+import { getTokenConfig } from '../../configs';
+import { abi as ProxyERC20Abi } from '../out/ProxyHRC20Abi';
 
 interface IHmyMethodsInitParams {
   hmy: Harmony;
@@ -180,6 +182,17 @@ export class HmyMethodsERC20 {
     const addrHex = this.hmy.crypto.getAddress(addr).checksum;
 
     return await hmyTokenContract.methods.balanceOf(addrHex).call(this.options);
+  };
+
+  getTotalTransferred = async (hrc20Address: string) => {
+    const token = getTokenConfig(hrc20Address);
+
+    const proxyContract = this.hmy.contracts.createContract(
+      ProxyERC20Abi as any,
+      token.proxyHRC20,
+    );
+
+    return await proxyContract.methods.totalTransferred().call();
   };
 
   totalSupply = async hrc20Address => {

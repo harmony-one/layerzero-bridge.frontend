@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo } from 'react';
+import React, { useRef, useCallback, useContext, useMemo } from 'react';
 import { Text } from '../../../../../../components/Base';
 import { BridgeControl } from '../../../BridgeControl/BridgeControl';
 import {
@@ -15,9 +15,13 @@ import { TOKEN } from '../../../../../../stores/interfaces';
 import styled from 'styled-components';
 import cn from 'classnames';
 import { ThemeContext } from '../../../../../../themes/ThemeContext';
-import { Button } from 'grommet';
+import { Box, Button } from 'grommet';
+import { getTokenConfig } from '../../../../../../configs';
+import { Tip } from 'grommet/components/Tip';
+import { TipContent } from 'components/TipContent';
+import { CircleQuestion } from 'grommet-icons';
 
-interface Props {}
+interface Props { }
 
 const BridgeControlStyled = styled(BridgeControl)`
   max-width: 180px;
@@ -25,11 +29,18 @@ const BridgeControlStyled = styled(BridgeControl)`
 
 export const TokenAmount: React.FC<Props> = observer(() => {
   const { exchange } = useStores();
+  const tipRef = useRef<HTMLDivElement>();
 
-  const maxAmount = exchange.tokenInfo.maxAmount;
+  //@ts-ignore
+  const totalTransferred = exchange.tokenInfo.totalTransferred;
+  const checkTotalTransferred = getTokenConfig(exchange.tokenInfo.address)?.checkTotalTransferred;
+
+  const maxAmount = checkTotalTransferred ?
+    Math.min(Number(exchange.tokenInfo.maxAmount), Number(totalTransferred)) :
+    Number(exchange.tokenInfo.maxAmount);
 
   const handleMaxAmount = useCallback(() => {
-    exchange.transaction.amount = maxAmount;
+    exchange.transaction.amount = String(maxAmount);
   }, [exchange.transaction.amount, maxAmount]);
 
   const themeContext = useContext(ThemeContext);
@@ -65,11 +76,39 @@ export const TokenAmount: React.FC<Props> = observer(() => {
         />
       }
       bottomContent={
-        <Button onClick={handleMaxAmount}>
-          <Text size="xxsmall" color="NBlue">
-            {formatWithSixDecimals(maxAmount)} Max Available
-          </Text>
-        </Button>
+        <Box ref={ref => (tipRef.current = ref)}>
+          <Button onClick={handleMaxAmount}>
+            <Text size="xxsmall" color="NBlue">
+              {formatWithSixDecimals(maxAmount)} Max Available
+            </Text>
+          </Button>
+
+          {checkTotalTransferred &&
+            <Box>
+              <Text size="xxsmall" color="Basic500">
+                {formatWithSixDecimals(exchange.tokenInfo.maxAmount)} Your balance
+              </Text>
+
+              <Box direction="row" gap="4px">
+                <Text size="xxsmall" color="Basic500">
+                  {formatWithSixDecimals(totalTransferred || 0)} Available for bridge
+                </Text>
+                <Tip
+                  dropProps={{ align: { bottom: 'top' }, target: tipRef.current }}
+                  plain
+                  content={
+                    <TipContent round="7px" pad="xsmall">
+                      <Text size="xsmall">
+                        The amount of USDC.e available for withdrawal is limited by the number of tokens locked on the external chain. If it is not enough, use another chain for withdrawal.
+                      </Text>
+                    </TipContent>
+                  }
+                >
+                  <CircleQuestion size="12px" />
+                </Tip>
+              </Box>
+            </Box>}
+        </Box>
       }
     />
   );
