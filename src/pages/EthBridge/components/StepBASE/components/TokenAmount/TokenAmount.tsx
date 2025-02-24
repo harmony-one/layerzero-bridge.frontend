@@ -1,5 +1,5 @@
 import React, { useRef, useCallback, useContext, useMemo } from 'react';
-import { Text } from '../../../../../../components/Base';
+import { DisableWrap, Text } from '../../../../../../components/Base';
 import { BridgeControl } from '../../../BridgeControl/BridgeControl';
 import {
   isLess,
@@ -11,7 +11,7 @@ import { formatWithSixDecimals, moreThanZero } from '../../../../../../utils';
 import { useStores } from '../../../../../../stores';
 import * as s from './TokenAmount.styl';
 import { observer } from 'mobx-react';
-import { TOKEN } from '../../../../../../stores/interfaces';
+import { EXCHANGE_MODE, TOKEN } from '../../../../../../stores/interfaces';
 import styled from 'styled-components';
 import cn from 'classnames';
 import { ThemeContext } from '../../../../../../themes/ThemeContext';
@@ -33,7 +33,8 @@ export const TokenAmount: React.FC<Props> = observer(() => {
 
   //@ts-ignore
   const totalTransferred = exchange.tokenInfo.totalTransferred;
-  const checkTotalTransferred = getTokenConfig(exchange.tokenInfo.address)?.checkTotalTransferred;
+  const token = getTokenConfig(exchange.tokenInfo.address);
+  const checkTotalTransferred = token?.checkTotalTransferred && exchange.mode === EXCHANGE_MODE.ONE_TO_ETH;
 
   const maxAmount = checkTotalTransferred ?
     Math.min(Number(exchange.tokenInfo.maxAmount), Number(totalTransferred)) :
@@ -73,11 +74,12 @@ export const TokenAmount: React.FC<Props> = observer(() => {
           placeholder="0"
           rules={[isRequired, isPositive, moreThanZero, isLessThenMaxAmount]}
           style={{ width: '100%', textAlign: 'center' }}
+          disabled={token?.legacy}
         />
       }
       bottomContent={
         <Box ref={ref => (tipRef.current = ref)}>
-          <Button onClick={handleMaxAmount}>
+          <Button disabled={token?.legacy} onClick={handleMaxAmount}>
             <Text size="xxsmall" color="NBlue">
               {formatWithSixDecimals(maxAmount)} Max Available
             </Text>

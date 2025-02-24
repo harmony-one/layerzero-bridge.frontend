@@ -17,17 +17,28 @@ const HarmonyLogo = () => {
       : 'harmony-logo-blue.svg';
 
   return (
-    <Box direction='row' align="center">
+    <Box direction='row' align="center" gap="20px">
       <img height="30px" width="200px" alt="harmony logo" src={src} />
-      <p
-        style={{
-          whiteSpace: 'nowrap',
-          margin: "4px 20px 0 20px"
-        }}
-      >
-        powered by
-      </p>
-      <img height="30px" width="200px" alt="lz logo" src="https://layerzero.network/static/logo.svg" />
+      |
+      <Box direction='row' align="center">
+        <p
+          style={{
+            whiteSpace: 'nowrap',
+            margin: "1px 9px 0 0"
+          }}
+        >
+          {/* [ */}
+          {/* <img height="50px" alt="lz logo" src="https://img.cryptorank.io/coins/layer_zero1668092808242.png" /> */}
+          powered by
+          {/* ] */}
+        </p>
+        <img height="30px" width="200px" alt="lz logo" src={
+          themeContext.themeType === 'dark'
+            ? "https://layerzero.network/static/logo.svg"
+            : "https://docs.layerzero.network/img/LayerZero_Logo_Black.svg"
+        }
+        />
+      </Box>
     </Box>
   );
 };
