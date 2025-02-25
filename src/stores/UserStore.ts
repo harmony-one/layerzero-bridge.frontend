@@ -301,6 +301,7 @@ export class UserStoreEx extends StoreConstructor {
               6,
             );
           } catch (e) {
+            console.log('getTotalTransferred ERROr', e);
             this.totalTransferred = "0";
           }
         }

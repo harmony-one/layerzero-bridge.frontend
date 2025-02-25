@@ -20,11 +20,11 @@ const HarmonyLogo = () => {
     <Box direction='row' align="center" gap="20px">
       <img height="30px" width="200px" alt="harmony logo" src={src} />
       |
-      <Box direction='row' align="center">
+      <Box direction='row' align="center" margin={{ top: '4px' }}>
         <p
           style={{
             whiteSpace: 'nowrap',
-            margin: "1px 9px 0 0"
+            margin: "-3px 9px 0 0"
           }}
         >
           {/* [ */}
@@ -32,12 +32,14 @@ const HarmonyLogo = () => {
           powered by
           {/* ] */}
         </p>
-        <img height="30px" width="200px" alt="lz logo" src={
-          themeContext.themeType === 'dark'
-            ? "https://layerzero.network/static/logo.svg"
-            : "https://docs.layerzero.network/img/LayerZero_Logo_Black.svg"
-        }
-        />
+        <a href="https://layerzero.network/" target='_blank' style={{ cursor: 'pointer', zIndex: 19 }}>
+          <img height="30px" width="auto" alt="lz logo" src={
+            themeContext.themeType === 'dark'
+              ? "https://layerzero.network/static/logo.svg"
+              : "https://docs.layerzero.network/img/LayerZero_Logo_Black.svg"
+          }
+          />
+        </a>
       </Box>
     </Box>
   );

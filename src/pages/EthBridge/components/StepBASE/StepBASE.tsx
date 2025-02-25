@@ -25,7 +25,7 @@ interface Props { }
 export const StepBASE: React.FC<Props> = observer(() => {
   const { exchange, userMetamask } = useStores();
 
-  const token = getTokenConfig(exchange.tokenInfo.address);
+  const token = exchange.tokenInfo.address ? getTokenConfig(exchange.tokenInfo.address): null;
 
   const handleClickContinue = useCallback(() => {
     const conf = exchange.step.buttons[0];

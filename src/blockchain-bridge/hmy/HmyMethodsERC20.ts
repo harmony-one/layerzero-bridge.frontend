@@ -192,6 +192,8 @@ export class HmyMethodsERC20 {
       token.proxyHRC20,
     );
 
+    console.log('getTotalTransferred', token.proxyHRC20);
+
     return await proxyContract.methods.totalTransferred().call();
   };
 
