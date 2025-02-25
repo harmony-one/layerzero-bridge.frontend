@@ -174,6 +174,7 @@ export const TokenChooseModal: React.FC<Props> = observer(({ onClose }) => {
             return (
               <TokenHorizontal
                 key={tokenId}
+                legacy={token.legacy}
                 className={s.borderBottom}
                 symbol={token.symbol}
                 label={label}

@@ -6,4 +6,5 @@ export interface ITokenInfo {
   symbol: string;
   image: string;
   address: string;
+  totalTransferred?: string;
 }

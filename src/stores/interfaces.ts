@@ -178,6 +178,7 @@ export interface ITokenInfo {
   totalSupply: string;
   totalLockedNormal: string;
   totalLockedUSD: string;
+  totalTransferred?: string;
   token: TOKEN;
   type: TOKEN;
   network: NETWORK_TYPE;
@@ -190,6 +191,8 @@ export interface ITokenInfo {
   };
   adapterParams?: string;
   adapterParamsEth?:string;
+  checkTotalTransferred?: boolean;
+  legacy?: boolean;
 }
 
 export interface IIdentityTokenInfo {

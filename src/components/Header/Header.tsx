@@ -17,8 +17,30 @@ const HarmonyLogo = () => {
       : 'harmony-logo-blue.svg';
 
   return (
-    <Box>
+    <Box direction='row' align="center" gap="20px">
       <img height="30px" width="200px" alt="harmony logo" src={src} />
+      |
+      <Box direction='row' align="center" margin={{ top: '4px' }}>
+        <p
+          style={{
+            whiteSpace: 'nowrap',
+            margin: "-3px 9px 0 0"
+          }}
+        >
+          {/* [ */}
+          {/* <img height="50px" alt="lz logo" src="https://img.cryptorank.io/coins/layer_zero1668092808242.png" /> */}
+          powered by
+          {/* ] */}
+        </p>
+        <a href="https://layerzero.network/" target='_blank' style={{ cursor: 'pointer', zIndex: 19 }}>
+          <img height="30px" width="auto" alt="lz logo" src={
+            themeContext.themeType === 'dark'
+              ? "https://layerzero.network/static/logo.svg"
+              : "https://docs.layerzero.network/img/LayerZero_Logo_Black.svg"
+          }
+          />
+        </a>
+      </Box>
     </Box>
   );
 };
@@ -35,7 +57,7 @@ const StyledGrid = styled(Grid)`
   }
 `;
 
-interface Props {}
+interface Props { }
 
 export const Header: React.FC<Props> = React.memo(() => {
   const { actionModals } = useStores();

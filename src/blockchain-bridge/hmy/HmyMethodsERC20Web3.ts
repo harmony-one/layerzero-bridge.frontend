@@ -269,6 +269,17 @@ export class HmyMethodsERC20Web3 {
     return await hmyTokenContract.methods.balanceOf(addrHex).call();
   };
 
+  getTotalTransferred = async (hrc20Address: string) => {
+    const token = getTokenConfig(hrc20Address);
+
+    const proxyContract = new this.web3.eth.Contract(
+      ProxyERC20Abi as any,
+      token.proxyHRC20,
+    );
+
+    return await proxyContract.methods.totalTransferred().call();
+  };
+
   totalSupply = async hrc20Address => {
     const tokenJson = require('../out/MyERC20');
     const hmyTokenContract = new this.web3.eth.Contract(

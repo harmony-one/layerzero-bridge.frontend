@@ -904,9 +904,10 @@ export const tokensConfigs: ITokenInfo[] = [
     },
     {
       hrc20Address: '0x9c5C877DB2A5a37733Fe1a0bdcae8411Cdc8c5B3',
-      erc20Address: '0x176211869ca2b568f2a7d4ee941e073a821ee1ff',
+      erc20Address: '0x0000000000000000000000000000000000000000',
       proxyERC20: '0x8a0167fC1Ef2E9492a1Eb978A9dA9137Ba25BB1B',
-      proxyHRC20: '0x07FaF189c899E4Ae36cb3Dc698dd1f9C0823308b',
+      // proxyHRC20: '0x07FaF189c899E4Ae36cb3Dc698dd1f9C0823308b',
+      proxyHRC20: '',
       name: 'USD Coin (Linea)',
       symbol: 'USDC',
       decimals: '6',
@@ -919,6 +920,7 @@ export const tokensConfigs: ITokenInfo[] = [
       network: NETWORK_TYPE.LINEA,
       image: '/usdc.svg',
       adapterParams: '0x',
+      legacy: true,
     },
     {
       hrc20Address: '0xCF3e3622F749764ceAbF259a1aced1bE43A49E2f',
@@ -936,7 +938,26 @@ export const tokensConfigs: ITokenInfo[] = [
       type: TOKEN.ERC20,
       network: NETWORK_TYPE.LINEA,
       image: '/usdt.svg',
+      adapterParams: '0x'
+    },
+    {
+      hrc20Address: '0x211c4b7E1be2f73f11B0039927154311Fc38991D',
+      erc20Address: '0x176211869cA2b568f2A7D4EE941E073a821EE1ff',
+      proxyERC20: '0x8a0167fC1Ef2E9492a1Eb978A9dA9137Ba25BB1B',
+      proxyHRC20: '0x7cd384A427736367d3854640BD892702343f1644',
+      name: 'USDC.e',
+      symbol: 'USDC',
+      decimals: '6',
+      totalLocked: '0',
+      totalSupply: '0',
+      totalLockedNormal: '0',
+      totalLockedUSD: '0',
+      token: TOKEN.ERC20,
+      type: TOKEN.ERC20,
+      network: NETWORK_TYPE.LINEA,
+      image: '/usdc.svg',
       adapterParams: '0x',
+      checkTotalTransferred: true
     },
     {
     	hrc20Address: '0xC8468C26345dcC4DaE328BeFA0e8cF4Dd968BEa9',

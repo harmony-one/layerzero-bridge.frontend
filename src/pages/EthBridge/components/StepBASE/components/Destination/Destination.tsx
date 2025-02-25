@@ -15,6 +15,7 @@ import { Tip } from 'grommet/components/Tip';
 import { ThemeContext } from '../../../../../../themes/ThemeContext';
 import { TipContent } from 'components/TipContent';
 import { MetamaskButton } from '../../../../../../components/MetamaskButton';
+import { getTokenConfig } from '../../../../../../configs';
 
 interface Props {}
 
@@ -31,6 +32,14 @@ export const Destination: React.FC<Props> = observer(() => {
   const themeContext = useContext(ThemeContext);
 
   const tipRef = useRef<HTMLDivElement>();
+
+  const token = getTokenConfig(exchange.tokenInfo.address);
+
+  if(token?.legacy) {
+    return null;
+  }
+
+
   return (
     <Box direction="column" align="center" gap="16px" fill="horizontal">
       <BridgeControl

@@ -63,6 +63,7 @@ export class UserStoreEx extends StoreConstructor {
   @observable public hrc1155Address = '';
   @observable public hrc721Address = '';
   @observable public hrc20Balance = '';
+  @observable public totalTransferred = '';
 
   @observable public isInfoReading = false;
   @observable public isInfoNewReading = false;
@@ -287,6 +288,22 @@ export class UserStoreEx extends StoreConstructor {
             hrc20Balance,
             this.stores.userMetamask.erc20TokenDetails.decimals,
           );
+        }
+
+        if(this.hrc20Address) {
+          try {
+            const totalTransferred = await hmyMethodsERC20.hmyMethods.getTotalTransferred(
+              this.hrc20Address,
+            );
+
+            this.totalTransferred = divDecimals(
+              totalTransferred,
+              6,
+            );
+          } catch (e) {
+            console.log('getTotalTransferred ERROr', e);
+            this.totalTransferred = "0";
+          }
         }
 
         let resBalance = 0;

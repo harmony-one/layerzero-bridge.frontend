@@ -11,18 +11,21 @@ import { observer } from 'mobx-react';
 import { Divider } from '../../../../components/Divider/Divider';
 import { ModalIds, ModalRegister } from '../../../../modals';
 import { autorun } from 'mobx';
-import { TOKEN } from '../../../../stores/interfaces';
+import { EXCHANGE_MODE, TOKEN } from '../../../../stores/interfaces';
 import { StepContainer } from '../StepContainer';
 import { WalletNetworkWarn } from './components/WalletNetworkWarn';
 import { SwitchNetworkButton } from '../SwitchNetworkButton';
 import { MetamaskButton } from '../../../../components/MetamaskButton';
 import { ENSTokenModal } from '../ENSTokenModal/ENSTokenModal';
 import { TokenChooseModal } from '../TokenChooseModal/TokenChooseModal';
+import { getTokenConfig } from '../../../../configs';
 
-interface Props {}
+interface Props { }
 
 export const StepBASE: React.FC<Props> = observer(() => {
   const { exchange, userMetamask } = useStores();
+
+  const token = exchange.tokenInfo.address ? getTokenConfig(exchange.tokenInfo.address): null;
 
   const handleClickContinue = useCallback(() => {
     const conf = exchange.step.buttons[0];
@@ -111,16 +114,32 @@ export const StepBASE: React.FC<Props> = observer(() => {
         <Destination />
       </Box>
 
-      <Box direction="row" height="66px">
-        <Button
-          fontSize="14px"
-          className={s.buttonContainer}
-          buttonClassName={s.bridgeButton}
-          onClick={handleClickContinue}
-        >
-          Continue
-        </Button>
-      </Box>
+      {!!token?.legacy &&
+        (exchange.mode === EXCHANGE_MODE.ONE_TO_ETH ?
+          <Box align='center' justify='center' margin={{ bottom: "large"}} >
+            This token is depegged. Please convert it to USDC.e via
+            <a href={`https://usdc-converter.web.app/?token=${token.hrc20Address}`} target='_blank'>
+              converter app
+            </a>
+          </Box> :
+          <Box align='center' justify='center' margin={{ bottom: "large"}}>
+            This token is depegged. Please use USDC.e instead
+          </Box>
+        )
+      }
+
+      {token?.legacy ?
+        null :
+        <Box direction="row" height="66px">
+          <Button
+            fontSize="14px"
+            className={s.buttonContainer}
+            buttonClassName={s.bridgeButton}
+            onClick={handleClickContinue}
+          >
+            Continue
+          </Button>
+        </Box>}
       <ModalRegister
         modalId={ModalIds.BRIDGE_ENS_TOKEN}
         layerProps={{ full: 'vertical' }}
