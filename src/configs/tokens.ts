@@ -975,10 +975,10 @@ export const tokensConfigs: ITokenInfo[] = [
     	adapterParams: '0x',
     },
     {
-      hrc20Address: '0xCb44A16833a6067855e7fF997200fDf7cd2Dcef5',
+      hrc20Address: '0x6ba55C2cE48d76d4CD34c7171e96c74d69632E9b',
       erc20Address: '0x940181a94a35a4569e4529a3cdfb74e38fd98631',
-      proxyERC20: '0x10378F13F7c2611e3cdea352E6E6f0Ff0a73A248',
-      proxyHRC20: '0x24B147d54C1047bD2fA7E885Cd286D19E403ABAD',
+      proxyERC20: '0x6f6487c1ffdf13e3e5b4b1c8fab24945dbceac88',
+      proxyHRC20: '0x0531b9CFa5a6DA7dB99ADFe8A6De2C7364fc5E43',
       name: 'AERO (Base)',
       symbol: 'AERO',
       decimals: '18',

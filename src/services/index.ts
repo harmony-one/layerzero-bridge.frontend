@@ -254,8 +254,6 @@ export const getTokensInfo = async (
     }
   })
 
-  res.body.content = tokensConfigs;
-
   return res.body;
 };
 
