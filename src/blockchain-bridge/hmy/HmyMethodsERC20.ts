@@ -187,12 +187,16 @@ export class HmyMethodsERC20 {
   getTotalTransferred = async (hrc20Address: string) => {
     const token = getTokenConfig(hrc20Address);
 
+    if(!token) {
+      return 0;
+    }
+
     const proxyContract = this.hmy.contracts.createContract(
       ProxyERC20Abi as any,
-      token.proxyHRC20,
+      token?.proxyHRC20,
     );
 
-    console.log('getTotalTransferred', token.proxyHRC20);
+    // console.log('getTotalTransferred', token.proxyHRC20);
 
     return await proxyContract.methods.totalTransferred().call();
   };
