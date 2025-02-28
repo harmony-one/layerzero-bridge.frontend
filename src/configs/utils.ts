@@ -11,7 +11,7 @@ export const numberToHex = (value: number): string => {
 export const getTokenConfig = (addr: string): ITokenInfo => {
     let token: ITokenInfo;
 
-    if(!addr) {
+    if(![TOKEN.ONE, TOKEN.ETH].includes(stores.exchange.token) && !addr) {
       return null;
     }
   
