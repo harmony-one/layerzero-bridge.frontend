@@ -16,11 +16,10 @@ const TerserPlugin = require('terser-webpack-plugin');
 // plugins
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const TimingCompilationPlugin = require('./TimingCompilationPlugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
+const CSSMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const ignoredFiles = require('react-dev-utils/ignoredFiles');
 
 // dev server proxy
 const createDevServerConfig = require('./webpackDevServer.config');
@@ -36,14 +35,15 @@ const configProd = {
   app: [`${sourcePath}/index.tsx`],
   appFilename: 'static/js/app-[hash].js',
   vendorFilename: 'static/js/vendor-[contenthash].js',
-  devtool: '',
   plugins: [
     new CleanWebpackPlugin(),
     // Minify the code.
-    new ManifestPlugin({
+    new WebpackManifestPlugin({
       fileName: 'asset-manifest.json',
     }),
-    new CopyWebpackPlugin([{ from: 'public', to: '' }]),
+    new CopyWebpackPlugin({
+      patterns: [{ from: 'public', to: '' }]
+    }),
   ],
   maxAssetSize: 10 * 1048576,
 };
@@ -51,14 +51,15 @@ const configProd = {
 // DEV
 const configDev = {
   app: ['react-dev-utils/webpackHotDevClient', `${sourcePath}/index.tsx`],
-  appFilename: 'app-debug.js',
+  appFilename: 'app-debug-[name].js',
   vendorFilename: 'vendor-debug.js',
-  // devtool: 'source-map',
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'eval-cheap-source-map',
   cssUse: [],
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new CopyWebpackPlugin([{ from: 'public', to: '' }]),
+    new CopyWebpackPlugin({
+      patterns: [{ from: 'public', to: '' }]
+    }),
   ],
   maxAssetSize: 40 * 1048576,
 };
@@ -115,10 +116,10 @@ module.exports = {
   },
   optimization: {
     minimizer: [
-      new OptimizeCSSAssetsPlugin({}),
+      new CSSMinimizerWebpackPlugin({}),
       new TerserPlugin({
-        sourceMap: true, // Must be set to true if using source-maps in production
         terserOptions: {
+          sourceMap: true, // Must be set to true if using source-maps in production
           compress: {
             drop_console: true,
           },
@@ -147,17 +148,6 @@ module.exports = {
         },
       },
     },
-    // splitChunks: {
-    //   cacheGroups: {
-    //     vendors: {
-    //       test: /[\\/]node_modules[\\/]/,
-    //       reuseExistingChunk: true,
-    //       chunks: 'all',
-    //       // filename: config.vendorFilename,
-    //       priority: -10,
-    //     },
-    //   },
-    // },
   },
   performance: {
     hints: 'warning', // enum
@@ -167,7 +157,11 @@ module.exports = {
       return assetFilename.endsWith('.css') || assetFilename.endsWith('.js');
     },
   },
+  stats: 'errors-only',
   devServer: serverConfig,
+  watchOptions: {
+    ignored: ignoredFiles(paths.appSrc),
+  },
   plugins: (function() {
     let plugins = [];
     plugins.push(
@@ -180,7 +174,6 @@ module.exports = {
         Promise: 'es6-promise', //add Promises for IE !!!
       }),
       new webpack.DefinePlugin(env.stringified),
-      new TimingCompilationPlugin(),
       // new BundleAnalyzerPlugin()
     );
     if (config.plugins) {

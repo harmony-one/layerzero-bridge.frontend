@@ -9,48 +9,47 @@ const urls = prepareUrls(protocol, host, port);
 const proxySetting = require(paths.appPackageJson).proxy;
 const proxyConfig = prepareProxy(proxySetting, paths.appPublic);
 const proxy = proxyConfig;
-const allowedHost = urls.lanUrlForConfig;
-
-const ignoredFiles = require('react-dev-utils/ignoredFiles');
+const allowedHosts = urls.lanUrlForConfig;
 
 function onProxyRes(proxyResponse) {
-    if (proxyResponse.headers['set-cookie']) {
-        const cookies = proxyResponse.headers['set-cookie'].map(cookie =>
-            cookie.replace(/; (secure|HttpOnly|SameSite=Strict)/gi, '')
-        );
+  if (proxyResponse.headers['set-cookie']) {
+    const cookies = proxyResponse.headers['set-cookie'].map(cookie =>
+      cookie.replace(/; (secure|HttpOnly|SameSite=Strict)/gi, '')
+    );
 
-        proxyResponse.headers['set-cookie'] = cookies;
-    }
+    proxyResponse.headers['set-cookie'] = cookies;
+  }
 }
 
 function onProxyReq(proxyResponse, req) {
-    if (req.headers.cookie) {
-        proxyResponse.setHeader('cookie', req.headers.cookie);
-    }
+  if (req.headers.cookie) {
+    proxyResponse.setHeader('cookie', req.headers.cookie);
+  }
 }
 
 module.exports = function() {
   return {
-    stats: "errors-only",
     // disableHostCheck: !proxy ||
     //   process.env.DANGEROUSLY_DISABLE_HOST_CHECK === 'true',
-    disableHostCheck: true,
     compress: false,
-    clientLogLevel: 'none',
-    contentBase: paths.appPublic,
-    watchContentBase: true,
-    hot: true,
-    publicPath: '/',
-    watchOptions: {
-      ignored: ignoredFiles(paths.appSrc),
+    client: {
+      logging: 'none'
     },
-    https: protocol === 'https',
-    host: host,
+    hot: true,
+    static: {
+      directory: paths.appPublic,
+      publicPath: '/',
+    },
+    server: protocol,
+    watchFiles: ['src/**/*'],
+    host,
     port: 3000,
-    overlay: false,
+    client: {
+      overlay: false,
+    },
     historyApiFallback: {
       disableDotRule: true,
     },
-    public: allowedHost,
+    allowedHosts,
   };
 };

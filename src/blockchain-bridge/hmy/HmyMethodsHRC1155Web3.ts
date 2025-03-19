@@ -1,4 +1,3 @@
-import { mulDecimals } from '../../utils';
 import Web3 from 'web3';
 import { Contract } from 'web3-eth-contract';
 import { getAddress } from '@harmony-js/crypto';
@@ -8,14 +7,14 @@ const BN = require('bn.js');
 
 interface IHmyMethodsInitParams {
   web3: Web3;
-  hmyManagerContract: Contract;
+  hmyManagerContract: Contract<any>;
   hmyManagerContractAddress: string;
   options?: { gasPrice: number; gasLimit: number };
 }
 
 export class HmyMethodsHRC1155Web3 {
   private web3: Web3;
-  private hmyManagerContract: Contract;
+  private hmyManagerContract: Contract<any>;
   private hmyManagerContractAddress: string;
 
   // private options = { gasPrice: 1000000000, gasLimit: 6721900 };

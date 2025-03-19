@@ -1,5 +1,5 @@
 import { sliceByLength } from 'utils';
-import ReactTooltip from 'react-tooltip';
+import RCTooltip from 'rc-tooltip';
 import * as React from 'react';
 
 export const SliceTooltip = (props: { value: any; maxLength: number }) => {
@@ -7,14 +7,13 @@ export const SliceTooltip = (props: { value: any; maxLength: number }) => {
     return props.value;
   }
 
-  return props.value.length > props.maxLength ? (
-    <>
-      <a data-tip={props.value}>
-        {sliceByLength(props.value, props.maxLength)}
-      </a>
-      <ReactTooltip place="top" type="dark" effect="solid" />
-    </>
-  ) : (
-    props.value
-  );
+  if (props.value.length > props.maxLength) {
+    return (
+      <RCTooltip overlay={<span>{props.value}</span>} placement="top">
+        <>{sliceByLength(props.value, props.maxLength)}</>
+      </RCTooltip>
+    )
+  }
+
+  return props.value
 };

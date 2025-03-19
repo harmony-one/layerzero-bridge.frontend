@@ -1262,7 +1262,7 @@ export class Exchange extends StoreConstructor {
                   width: '500px',
                   showOther: true,
                   onApply: () => {
-                    res();
+                    res(1);
                     return Promise.resolve();
                   },
                   onClose: () => {

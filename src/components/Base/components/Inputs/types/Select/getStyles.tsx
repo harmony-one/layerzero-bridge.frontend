@@ -1,6 +1,5 @@
 import { CSSProperties } from 'react';
 import { StylesConfig } from 'react-select';
-import { styleFn } from 'react-select/src/styles';
 import { getSize } from '../../common';
 import { getInputBorder } from '../TextInput';
 
@@ -38,7 +37,7 @@ const injectCustomStyles = (
 
       const injectedCustomStyles =
         typeof customStyles[part] === 'function'
-          ? (customStyles[part] as styleFn)(baseStyles, selectState)
+          ? (customStyles[part])(baseStyles, selectState)
           : (customStyles[part] as CSSProperties);
 
       return {
@@ -52,88 +51,106 @@ const injectCustomStyles = (
 };
 
 const defaultPreset: StylesConfig = {
-  option: (provided, state) => ({
-    ...provided,
-    backgroundColor: state.isFocused
-      ? state.theme.selectPresetDefault.option.backgroundColorFocused
-      : state.isSelected
-      ? state.theme.selectPresetDefault.option.backgroundColorSelected
-      : 'transparent',
-    color: state.theme.textColor,
-    padding: '16px',
-    fontSize: '14px',
-    fontFamily: state.theme.fontBase,
-  }),
-  control: (provided, props) => ({
-    ...provided,
-    width: getSize(props.selectProps.size, props.theme),
-    fontFamily: props.theme.fontBase,
-    border: 'none',
-    borderTop: getInputBorder(props, 'Top'),
-    borderRight: getInputBorder(props, 'Right'),
-    borderBottom: getInputBorder(props, 'Bottom'),
-    borderLeft: getInputBorder(props, 'Left'),
-    // padding: '3px',
-    minHeight: props.theme.styled.input.minLength || 38,
-    boxShadow: 'none',
-    fontSize: '12px',
-    backgroundColor: props.theme.selectPresetDefault.control.backgroundColor,
-    color: props.theme.selectPresetDefault.control.color,
-    paddingLeft: '14px',
-    borderRadius: '15px',
-    borderColor: `${props.theme.selectPresetDefault.control.borderColor} !important`,
-  }),
-  menu: (provided, props) => ({
-    ...provided,
-    borderRadius: '15px',
-    border: props.theme.styled.input.border,
-    overflow: 'hidden',
-    padding: 0,
-    borderColor: `${props.theme.selectPresetDefault.menu.borderColor} !important`,
-    backgroundColor: props.theme.selectPresetDefault.menu.backgroundColor,
-  }),
+  option: (provided, state) => {
+    const theme = state.theme as any
+    return {
+      ...provided,
+      backgroundColor: state.isFocused
+        ? theme.selectPresetDefault.option.backgroundColorFocused
+        : state.isSelected
+        ? theme.selectPresetDefault.option.backgroundColorSelected
+        : 'transparent',
+      color: theme.textColor,
+      padding: '16px',
+      fontSize: '14px',
+      fontFamily: theme.fontBase,
+    }
+  },
+  control: (provided, props) => {
+    const theme = props.theme as any
+    return {
+      ...provided,
+      width: getSize(props.selectProps.size, props.theme),
+      fontFamily: theme.fontBase,
+      border: 'none',
+      borderTop: getInputBorder(props as any, 'Top'),
+      borderRight: getInputBorder(props as any, 'Right'),
+      borderBottom: getInputBorder(props as any, 'Bottom'),
+      borderLeft: getInputBorder(props as any, 'Left'),
+      // padding: '3px',
+      minHeight: theme.styled.input.minLength || 38,
+      boxShadow: 'none',
+      fontSize: '12px',
+      backgroundColor: theme.selectPresetDefault.control.backgroundColor,
+      color: theme.selectPresetDefault.control.color,
+      paddingLeft: '14px',
+      borderRadius: '15px',
+      borderColor: `${theme.selectPresetDefault.control.borderColor} !important`,
+    }
+  },
+  menu: (provided, props) => {
+    const theme = props.theme as any
+    return {
+      ...provided,
+      borderRadius: '15px',
+      border: theme.styled.input.border,
+      overflow: 'hidden',
+      padding: 0,
+      borderColor: `${theme.selectPresetDefault.menu.borderColor} !important`,
+      backgroundColor: theme.selectPresetDefault.menu.backgroundColor,
+    }
+  },
   indicatorSeparator: () => ({
     display: 'none',
   }),
 };
 
 const filterPreset: StylesConfig = {
-  option: (provided, state) => ({
-    ...provided,
-    backgroundColor: state.isFocused
-      ? state.theme.selectPresetFilter.option.backgroundColorFocused
-      : state.isSelected
-      ? state.theme.selectPresetFilter.option.backgroundColorSelected
-      : 'transparent',
-    color: state.theme.textColor,
-    padding: '8px',
-    fontSize: '13px',
-    fontFamily: state.theme.fontBase,
-  }),
-  control: (provided, props) => ({
-    ...provided,
-    width: getSize(props.selectProps.size, props.theme),
-    fontFamily: props.theme.fontBase,
-    fontSize: '12px',
-    border: `1px solid ${props.theme.selectPresetFilter.control.borderColor}`,
-    backgroundColor: props.theme.selectPresetFilter.control.backgroundColor,
-    color: props.theme.palette.NWhite,
-    padding: '0',
-    paddingLeft: '14px',
-    borderRadius: '15px',
-    borderColor: `${props.theme.selectPresetFilter.control.borderColor} !important`,
-    boxShadow: 'none',
-    minHeight: '44px',
-  }),
-  menu: (provided, props) => ({
-    ...provided,
-    borderRadius: '15px',
-    border: `1px solid ${props.theme.selectPresetFilter.menu.borderColor}`,
-    overflow: 'hidden',
-    padding: 0,
-    borderColor: `${props.theme.selectPresetFilter.menu.borderColor} !important`,
-    backgroundColor: props.theme.selectPresetFilter.menu.backgroundColor,
-  }),
+  option: (provided, state) => {
+    const theme = state.theme as any
+    return {
+      ...provided,
+      backgroundColor: state.isFocused
+        ? theme.selectPresetFilter.option.backgroundColorFocused
+        : state.isSelected
+        ? theme.selectPresetFilter.option.backgroundColorSelected
+        : 'transparent',
+      color: theme.textColor,
+      padding: '8px',
+      fontSize: '13px',
+      fontFamily: theme.fontBase,
+    }
+  },
+  control: (provided, props) => {
+    const theme = props.theme as any
+    return {
+      ...provided,
+      width: getSize(props.selectProps.size, theme),
+      fontFamily: theme.fontBase,
+      fontSize: '12px',
+      border: `1px solid ${theme.selectPresetFilter.control.borderColor}`,
+      backgroundColor: theme.selectPresetFilter.control.backgroundColor,
+      color: theme.palette.NWhite,
+      padding: '0',
+      paddingLeft: '14px',
+      borderRadius: '15px',
+      borderColor: `${theme.selectPresetFilter.control.borderColor} !important`,
+      boxShadow: 'none',
+      minHeight: '44px',
+    }
+  },
+  menu: (provided, props) => {
+    const theme = props.theme as any
+    return {
+      ...provided,
+      borderRadius: '15px',
+      border: `1px solid ${theme.selectPresetFilter.menu.borderColor}`,
+      overflow: 'hidden',
+      padding: 0,
+      borderColor: `${theme.selectPresetFilter.menu.borderColor} !important`,
+      backgroundColor: theme.selectPresetFilter.menu.backgroundColor,
+    }
+  },
   indicatorSeparator: () => ({
     display: 'none',
   }),

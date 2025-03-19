@@ -50,6 +50,7 @@ export interface ITextProps {
   className?: string;
   uppercase?: boolean;
   nowrap?: boolean;
+  children?: React.ReactNode;
 }
 
 const TextWrap = styled.div<ITextProps>`

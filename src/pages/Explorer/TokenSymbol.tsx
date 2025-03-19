@@ -2,7 +2,6 @@ import { observer } from 'mobx-react-lite';
 import { useStores } from '../../stores';
 import * as React from 'react';
 import { useEffect, useMemo } from 'react';
-import ReactTooltip from 'react-tooltip';
 import { Box } from 'grommet';
 import { sliceByLength } from '../../utils';
 import { Text } from '../../components/Base';
@@ -19,10 +18,6 @@ interface TokenSymbolProps {
 export const TokenSymbol = observer((props: TokenSymbolProps) => {
   const { tokens } = useStores();
   const { network, token, erc20Address = '', hrc20Address = '' } = props;
-
-  useEffect(() => {
-    ReactTooltip.rebuild();
-  });
 
   const tokenInfo = useMemo(() => {
     return findTokenConfig({ erc20Address, hrc20Address, network });

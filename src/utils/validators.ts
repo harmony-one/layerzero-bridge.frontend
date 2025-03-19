@@ -197,7 +197,7 @@ export const isENSOwner = (userAddress: string, contractAddress: string) => {
           return '';
         });
 
-      if (ownerAddress.toLowerCase() !== userAddress.toLowerCase()) {
+      if (String(ownerAddress).toLowerCase() !== userAddress.toLowerCase()) {
         throw new Error(`You don't have access to this record`);
       }
 

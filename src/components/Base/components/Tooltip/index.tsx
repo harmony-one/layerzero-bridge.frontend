@@ -8,7 +8,7 @@ import './styles.scss';
 
 import { TooltipBody } from './Body';
 
-const RCTooltip: any = require('rc-tooltip');
+import RCTooltip from 'rc-tooltip';
 
 @observer
 class TooltipClass extends React.Component<ITooltipProps> {

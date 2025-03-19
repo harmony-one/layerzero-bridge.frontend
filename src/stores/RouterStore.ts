@@ -1,7 +1,7 @@
 import { createBrowserHistory } from 'history';
 import { generatePath } from 'react-router';
 import qs from 'qs';
-import { RouterStore, syncHistoryWithStore } from 'mobx-react-router';
+import { RouterStore, syncHistoryWithStore } from '@ibm/mobx-react-router';
 
 export default class CustomRouterStore extends RouterStore {
   constructor() {

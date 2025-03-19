@@ -73,7 +73,7 @@ export class ListStoreConstructor<T> extends StoreConstructor {
   ) => Promise<{ content: T[]; [name: string]: any }>;
   public debouncedFetch: any;
   public pollingInterval: number;
-  tId: number;
+  tId: NodeJS.Timeout;
 
   reactionId: any;
 

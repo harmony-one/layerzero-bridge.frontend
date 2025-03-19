@@ -4,7 +4,7 @@ import { Button, Text } from '../../components/Base';
 import * as React from 'react';
 import { NETWORK_TYPE } from '../../stores/interfaces';
 import * as styles from './add-token.styl';
-import ReactTooltip from 'react-tooltip';
+import RCTooltip from 'rc-tooltip';
 import { observer } from 'mobx-react-lite';
 import { useStores } from '../../stores';
 import { useEffect } from 'react';
@@ -50,10 +50,9 @@ export const AddTokenIcon = (data: {
       );
     }}
   >
-    <a data-tip={`Add ${data.symbol} to Harmony MetaMask`}>
+    <RCTooltip overlay={<span>Add {data.symbol} to Harmony MetaMask</span>} placement="top">
       <Icon size="12px" glyph="Plus" />
-    </a>
-    <ReactTooltip place="top" type="dark" effect="solid" />
+    </RCTooltip>
   </Box>
 );
 

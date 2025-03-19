@@ -14,7 +14,7 @@ if (cookieThemeType === 'dark' || cookieThemeType === 'light') {
   defaultThemeType = cookieThemeType;
 }
 
-export const ThemeProvider: React.FC = ({ children }) => {
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [themeType, setThemeType] = useState<ThemeType>(defaultThemeType);
 
   useEffect(() => {

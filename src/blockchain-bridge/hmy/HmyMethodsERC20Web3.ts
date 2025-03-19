@@ -342,8 +342,8 @@ export class HmyMethodsERC20Web3 {
       .lockNative(mulDecimals(amount, 18), hmyAddrHex)
       .send({
         from: accounts[0],
-        gasLimit: process.env.GAS_LIMIT,
-        gasPrice: Number(process.env.GAS_PRICE),
+        gas: process.env.GAS_LIMIT,
+        gasPrice: process.env.GAS_PRICE,
         value: mulDecimals(amount, 18),
       })
       .on('transactionHash', sendTxCallback);

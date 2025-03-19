@@ -46,6 +46,7 @@ interface IButtonProps {
   fontSize?: string;
   onClick?(): any | Promise<any>;
   onError?(message: string): any;
+  children?: React.ReactNode;
 }
 
 function getButtonTextColor(props: any) {
