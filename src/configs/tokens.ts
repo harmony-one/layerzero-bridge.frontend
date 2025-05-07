@@ -944,7 +944,7 @@ export const tokensConfigs: ITokenInfo[] = [
       hrc20Address: '0x211c4b7E1be2f73f11B0039927154311Fc38991D',
       erc20Address: '0x176211869cA2b568f2A7D4EE941E073a821EE1ff',
       proxyERC20: '0x8a0167fC1Ef2E9492a1Eb978A9dA9137Ba25BB1B',
-      proxyHRC20: '0x7cd384A427736367d3854640BD892702343f1644',
+      proxyHRC20: '0x857736F8c7906D34470540dc4EbBAa6B9d26bdB8',
       name: 'USDC.e',
       symbol: 'USDC',
       decimals: '6',
